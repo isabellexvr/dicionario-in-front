@@ -3,12 +3,15 @@ import Input from "./smallComponents/Input";
 import useGetWords from "../../services/hooks/api/words/useGetWords.js";
 import { useEffect, useState } from "react";
 import PORTUGUESEALPHABET from "../../constants/portugueseAlphabet.js";
+import { useNavigate } from "react-router-dom";
 
 export default function SideBar() {
   const { getWords, getWordsLoading, getWordsError } = useGetWords();
   const [words, setWords] = useState([]);
   const [shownWords, setShownWords] = useState([]);
   const [selectedLetter, setSelectedLetter] = useState("A");
+
+  const navigate = useNavigate();
 
   useEffect(() => {
     async function getApiWords() {
@@ -62,7 +65,7 @@ export default function SideBar() {
             </AlphabetContainer>
             <WordsContainer>
               {shownWords.map((w, i) => (
-                <Word key={i}>{w}</Word>
+                <Word onClick={()=> navigate(`/palavra/${w}`)}  key={i}>{w}</Word>
               ))}
             </WordsContainer>
           </>
@@ -91,6 +94,7 @@ const SideBarContainer = styled.div`
 const DictionaryContainer = styled.div`
   display: flex;
   width: 100%;
+  margin-top: 2vw;
   background-color: red;
   position: relative;
   //padding-left: 3.7vw;
@@ -104,8 +108,11 @@ const AlphabetContainer = styled.div`
   align-items: flex-end;
   position: fixed;
   left: 0;
-  font-weight: 500;
-  font-size: 1vw;
+  top: 3.5vw;
+  font-weight: 600;
+  font-size: 1.2vw;
+  height: 100vh;
+  overflow-y: scroll;
 `;
 
 const Letter = styled.button`
@@ -116,24 +123,30 @@ const Letter = styled.button`
   display: flex;
   justify-content: center;
   border-radius: 0px 1vw 1vw 0px;
-  height: 1.4vw;
+  height: 1.65vw;
   cursor: pointer;
-  margin-bottom: 0.25vw;
+  margin-bottom: 0.4vw;
   align-items: center;
+
 `;
 const WordsContainer = styled.div`
   display: flex;
   flex-direction: column;
   align-items: flex-start;
-  width: 85%;
+  width: 83%;
   justify-content: center;
   position: absolute;
   right: 0;
+  font-size: 1.1vw;
 `;
 
 const Word = styled.h1`
   width: 100%;
-  margin-bottom: 0.7vw;
+  margin-bottom: 1.5vw;
     color: #d8dfea;
     font-weight: 600;
+    cursor: pointer;
+    :hover{
+    background-color: #fcf05d;
+  }
 `;
