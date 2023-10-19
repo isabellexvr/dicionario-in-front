@@ -1,7 +1,18 @@
 import api from "../api.js"
 
-export default async function wordsApi(){
-    const res = await api.get("/words");
-    console.log(res)
-    return res.data
+const wordsApi = {
+    allWords: async () => {
+        const res = await api.get("/words");
+        return res.data;
+    },
+    wordById: async (id) => {
+        const res = await api.get(`/words/${id}`);
+        return res.data;
+    },
+    wordByName: async(name) => {
+        const res = await api.get(`/words/${name}`);
+        return res.data;
+    }
 }
+
+export default wordsApi

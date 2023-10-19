@@ -7,7 +7,7 @@ export default function useGetWords() {
     loading: getWordsLoading,
     error: getWordsError,
     connect: getWords,
-  } = useAsync(() => wordsApi(), false);
+  } = useAsync(() => wordsApi.allWords(), false);
 
   return {
     getWordsData,
