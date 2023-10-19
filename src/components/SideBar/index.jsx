@@ -4,6 +4,7 @@ import useGetWords from "../../services/hooks/api/words/useGetWords.js";
 import { useEffect, useState } from "react";
 import PORTUGUESEALPHABET from "../../constants/portugueseAlphabet.js";
 import { useNavigate } from "react-router-dom";
+import {FaMagnifyingGlass} from "react-icons/fa6"
 
 export default function SideBar() {
   const { getWords, getWordsLoading, getWordsError } = useGetWords();
@@ -43,7 +44,7 @@ export default function SideBar() {
 
   return (
     <SideBarContainer>
-      <Input />
+      <Input setSelectedLetter={setSelectedLetter} setShownWords={setShownWords} allWords={words} placeholder="Pesquise aqui...">{<FaMagnifyingGlass/>}</Input>
       <DictionaryContainer>
         {getWordsLoading ? (
           <>carregando...</>
@@ -78,11 +79,10 @@ export default function SideBar() {
 const SideBarContainer = styled.div`
   background-color: #48556a;
   width: 30vw;
-
   position: fixed;
   left: 0;
   top: 0;
-  overflow-y: scroll;
+
   //mudar scroll
   height: 100vh;
   display: flex;
@@ -94,10 +94,11 @@ const SideBarContainer = styled.div`
 const DictionaryContainer = styled.div`
   display: flex;
   width: 100%;
-  margin-top: 2vw;
-  background-color: red;
+  margin-top: 6vw;
+  //background-color: red;
   position: relative;
   //padding-left: 3.7vw;
+  height: 100%;
 `;
 
 const AlphabetContainer = styled.div`
@@ -108,11 +109,11 @@ const AlphabetContainer = styled.div`
   align-items: flex-end;
   position: fixed;
   left: 0;
-  top: 3.5vw;
+  top: 6vw;
   font-weight: 600;
   font-size: 1.2vw;
   height: 100vh;
-  overflow-y: scroll;
+ 
 `;
 
 const Letter = styled.button`
@@ -134,10 +135,12 @@ const WordsContainer = styled.div`
   flex-direction: column;
   align-items: flex-start;
   width: 83%;
-  justify-content: center;
   position: absolute;
   right: 0;
   font-size: 1.1vw;
+  margin-top: 2vw;
+  height: 100%;
+  overflow-y: scroll;
 `;
 
 const Word = styled.h1`
