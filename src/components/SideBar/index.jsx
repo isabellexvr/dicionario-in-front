@@ -4,7 +4,9 @@ import useGetWords from "../../services/hooks/api/words/useGetWords.js";
 import { useEffect, useState } from "react";
 import PORTUGUESEALPHABET from "../../constants/portugueseAlphabet.js";
 import { useNavigate } from "react-router-dom";
-import {FaMagnifyingGlass} from "react-icons/fa6"
+import { FaMagnifyingGlass } from "react-icons/fa6";
+import { FallingLines } from "react-loader-spinner";
+import colors from "../../constants/colors";
 
 export default function SideBar() {
   const { getWords, getWordsLoading, getWordsError } = useGetWords();
@@ -44,10 +46,25 @@ export default function SideBar() {
 
   return (
     <SideBarContainer>
-      <Input setSelectedLetter={setSelectedLetter} setShownWords={setShownWords} allWords={words} placeholder="Pesquise aqui...">{<FaMagnifyingGlass/>}</Input>
+      <Input
+        setSelectedLetter={setSelectedLetter}
+        setShownWords={setShownWords}
+        allWords={words}
+        placeholder="Pesquise aqui..."
+      >
+        {<FaMagnifyingGlass />}
+      </Input>
       <DictionaryContainer>
         {getWordsLoading ? (
-          <>carregando...</>
+          <LoadingContainer>
+            <h1>Carregando...</h1>
+            <FallingLines
+              color={colors.lightGrey}
+              width="100"
+              visible={true}
+              ariaLabel="falling-lines-loading"
+            />
+          </LoadingContainer>
         ) : (
           <>
             <AlphabetContainer>
@@ -66,7 +83,9 @@ export default function SideBar() {
             </AlphabetContainer>
             <WordsContainer>
               {shownWords.map((w, i) => (
-                <Word onClick={()=> navigate(`/palavra/${w}`)}  key={i}>{w}</Word>
+                <Word onClick={() => navigate(`/palavra/${w}`)} key={i}>
+                  {w}
+                </Word>
               ))}
             </WordsContainer>
           </>
@@ -102,7 +121,7 @@ const DictionaryContainer = styled.div`
 `;
 
 const AlphabetContainer = styled.div`
-  width: 3.2vw;
+  width: 3.5vw;
   color: #d8dfea;
   display: flex;
   flex-direction: column;
@@ -111,9 +130,9 @@ const AlphabetContainer = styled.div`
   left: 0;
   top: 6vw;
   font-weight: 600;
-  font-size: 1.2vw;
+  font-size: 1.1vw;
   height: 100vh;
- 
+  overflow-y: scroll;
 `;
 
 const Letter = styled.button`
@@ -126,30 +145,45 @@ const Letter = styled.button`
   border-radius: 0px 1vw 1vw 0px;
   height: 1.65vw;
   cursor: pointer;
-  margin-bottom: 0.4vw;
+  margin-bottom: 0.15vw;
   align-items: center;
-
 `;
 const WordsContainer = styled.div`
   display: flex;
   flex-direction: column;
   align-items: flex-start;
-  width: 83%;
+  width: 80%;
   position: absolute;
   right: 0;
   font-size: 1.1vw;
   margin-top: 2vw;
   height: 100%;
   overflow-y: scroll;
+  >h1{
+    :hover {
+    background-color: #fcf05d;
+  }
+  }
 `;
 
 const Word = styled.h1`
   width: 100%;
-  margin-bottom: 1.5vw;
-    color: #d8dfea;
-    font-weight: 600;
-    cursor: pointer;
-    :hover{
-    background-color: #fcf05d;
+  margin-bottom: 1.7vw;
+  color: #d8dfea;
+  font-weight: 600;
+  cursor: pointer;
+  
+`;
+
+const LoadingContainer = styled.div`
+  width: 100%;
+  height: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-direction: column;
+  >h1{
+    color: ${colors.lightGrey};
+    margin-bottom: 1vw;
   }
 `;

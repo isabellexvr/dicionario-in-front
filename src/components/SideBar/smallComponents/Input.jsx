@@ -4,7 +4,7 @@ import colors from "../../../constants/colors";
 export default function Input({setSelectedLetter, setShownWords, allWords, children, placeholder}){
     function handleInput(data){
         //setSelectedLetter(data);
-        console.log(allWords)
+        //console.log(allWords)
         const newArr = allWords.filter(w => w.includes(data));
         setShownWords(newArr);
     }
@@ -51,7 +51,8 @@ const SearchInput = styled.input`
     justify-content: center;
     align-items: center;
     width: 100%;
-    height: 50px;
+    height: 3vw;
     border-radius: 0.6vw;
+    font-size: 1.2vw;
 
 `
