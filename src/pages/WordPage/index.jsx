@@ -3,6 +3,7 @@ import styled from "styled-components";
 import colors from "../../constants/colors";
 import useGetWordByName from "../../services/hooks/api/words/useGetWordByName";
 import { useEffect, useState } from "react";
+import Background from "../../constants/Background";
 
 export default function WordPage() {
   const { palavra } = useParams();
@@ -26,7 +27,7 @@ export default function WordPage() {
   }, [palavra]);
 
   return (
-    <WordPageContainer>
+    <Background>
       <Word>{palavra}</Word>
       {wordInfo.definicao !== undefined && (
         <WordDefinitionContainer>
@@ -35,18 +36,11 @@ export default function WordPage() {
         </WordDefinitionContainer>
       )}
       
-    </WordPageContainer>
+    </Background>
   );
 }
 
-const WordPageContainer = styled.section`
-  background-color: ${colors.lightGrey};
-  height: 100vh;
-  padding-top: 3vw;
-  padding-left: 34vw;
-  box-sizing: border-box;
-  font-family: 'Roboto', sans-serif;
-`;
+
 
 const Word = styled.h1`
   font-size: 3vw;

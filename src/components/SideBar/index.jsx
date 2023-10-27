@@ -118,6 +118,7 @@ const DictionaryContainer = styled.div`
   position: relative;
   //padding-left: 3.7vw;
   height: 100%;
+
 `;
 
 const AlphabetContainer = styled.div`
@@ -132,7 +133,11 @@ const AlphabetContainer = styled.div`
   font-weight: 600;
   font-size: 1.1vw;
   height: 100vh;
-  overflow-y: scroll;
+
+  :hover{
+    background-color: #fcf05d;
+    color: #48556a;
+  }
 `;
 
 const Letter = styled.button`
@@ -145,8 +150,11 @@ const Letter = styled.button`
   border-radius: 0px 1vw 1vw 0px;
   height: 1.65vw;
   cursor: pointer;
-  margin-bottom: 0.15vw;
+  margin-bottom: 0.2vw;
   align-items: center;
+  :hover{
+    background-color: #fcf05d;
+  }
 `;
 const WordsContainer = styled.div`
   display: flex;
@@ -159,10 +167,8 @@ const WordsContainer = styled.div`
   margin-top: 2vw;
   height: 100%;
   overflow-y: scroll;
-  >h1{
-    :hover {
-    background-color: #fcf05d;
-  }
+  :hover{
+    background-color: red;
   }
 `;
 

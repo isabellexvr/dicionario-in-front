@@ -1,22 +1,16 @@
 import styled from "styled-components";
 import colors from "../../constants/colors";
+import Background from "../../constants/Background";
 
 export default function HomePage() {
   return (
-    <HomePageContainer>
+    <Background>
       <Word>Dicionário de Iluminação Natural</Word>
-    </HomePageContainer>
+    </Background>
   );
 }
 
-const HomePageContainer = styled.section`
-  background-color: ${colors.lightGrey};
-  height: 100vh;
-  padding-top: 3vw;
-  padding-left: 34vw;
-  box-sizing: border-box;
-  font-family: "Roboto", sans-serif;
-`;
+
 const Word = styled.h1`
   font-size: 3vw;
   background-color: ${colors.lightYellow};
