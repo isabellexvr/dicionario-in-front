@@ -5,7 +5,7 @@ import styled from "styled-components";
 export default function SignUp(){
     return(
         <Background>
-            <SignForm title="Cadastro" >
+            <SignForm title="CADASTRO" >
 
             </SignForm>
         </Background>

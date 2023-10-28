@@ -30,10 +30,11 @@ const HeaderContainer = styled.div`
 
 `;
 
-const HighlightButton = styled.button`
+export const HighlightButton = styled.button`
   all: unset;
-  width: 7.9vw;
-  height: 3.2vw;
+  //width: 7.9vw;
+  //height: 3.2vw;
+  padding: 0.85vw;
   border-radius: 0.8vw;
   background-color: ${colors.darkGrey};
   display: flex;
@@ -42,6 +43,7 @@ const HighlightButton = styled.button`
   color: ${colors.lightGrey};
   font-weight: 600;
   cursor: pointer; 
+  font-size: 1.25vw;
 `;
 
 const CommonButton = styled.button`
@@ -52,4 +54,6 @@ const CommonButton = styled.button`
     font-weight: 600;
     cursor: pointer; 
     margin-right: 1.5vw;
+    font-size: 1.25vw;
+
 `
