@@ -5,6 +5,7 @@ import WordPage from "./pages/WordPage";
 import Header from "./components/Header";
 import SignUp from "./pages/SignUpPage";
 import UserInfoProvider from "./contexts/UserInfoContext";
+import SignInPage from "./pages/SignInPage";
 
 function App() {
   return (
@@ -18,6 +19,7 @@ function App() {
             <Route path=":palavra" element={<WordPage />} />
           </Route>
           <Route path="cadastro" element={<SignUp />} />
+          <Route path="login" element={<SignInPage />} />
         </Routes>
       </BrowserRouter>
     </UserInfoProvider>

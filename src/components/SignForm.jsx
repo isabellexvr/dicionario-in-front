@@ -2,9 +2,7 @@ import styled from "styled-components";
 import colors from "../constants/colors";
 import { HighlightButton } from "./Header";
 import { useState } from "react";
-import usePostUser from "../services/hooks/api/users/usePostUser";
 import forms from "../helpers/forms";
-import useUserInfo from "../contexts/hooks/useUserInfo"
 import { useNavigate } from "react-router-dom";
 
 /* model usuarios {
@@ -17,22 +15,16 @@ import { useNavigate } from "react-router-dom";
     comentarios comentarios[]
   } */
 
-export default function SignForm({ title, inputs }) {
+export default function SignForm({ title, inputs, api, setState, navigateTo }) {
   const [form, setForm] = useState({});
 
-  const { postUserLoading, postUserError, postUser } = usePostUser();
-
-  const { setUserInfo } = useUserInfo();
-
   const navigate = useNavigate();
-
-  console.log(form)
 
   return (
     <SignFormContainer>
       <Title>{title}</Title>
       <FormContainer>
-        <Form onSubmit={(e) => forms.sendForm(e, postUser, setUserInfo, form, navigate, "/")}>
+        <Form onSubmit={(e) => forms.sendForm(e, api, setState, form, navigate, navigateTo)}>
           {inputs.map((i, index) => (
             <Input
               key={index}

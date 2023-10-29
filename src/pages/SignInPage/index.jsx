@@ -1,25 +1,21 @@
 import SignForm from "../../components/SignForm";
 import Background from "../../constants/Background";
-import styled from "styled-components";
 import useUserInfo from "../../contexts/hooks/useUserInfo";
-import usePostUser from "../../services/hooks/api/users/usePostUser";
+import useSignInUser from "../../services/hooks/api/users/useSignInUser";
 
-export default function SignUp() {
-
-  const { postUserLoading, postUserError, postUser } = usePostUser();
+export default function SignInPage() {
   const { setUserInfo } = useUserInfo();
+  const { signInUserLoading, signInUserError, signInUser } = useSignInUser();
 
   return (
     <Background>
       <SignForm
-        title="CADASTRO"
+        title="LOGIN"
         inputs={[
-          { placeholder: "Nome Completo", type: "text", name: "nome" },
-          { placeholder: "Nome de Usuário", type: "text", name: "userName" },
           { placeholder: "E-mail", type: "email", name: "email" },
           { placeholder: "Senha", type: "password", name: "senha" },
         ]}
-        api={postUser}
+        api={signInUser}
         setState={setUserInfo}
         navigateTo="/"
       ></SignForm>

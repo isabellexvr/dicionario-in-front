@@ -8,8 +8,8 @@ export default function Header() {
     <HeaderContainer>
         <CommonButton onClick={() => navigate("/")} >Início</CommonButton>
         <CommonButton>Sobre</CommonButton>
-        <CommonButton>Login</CommonButton>
-      <HighlightButton>Cadastro</HighlightButton>
+        <CommonButton onClick={() => navigate("/login")} >Login</CommonButton>
+      <HighlightButton onClick={() => navigate("/cadastro")} >Cadastro</HighlightButton>
     </HeaderContainer>
   );
 }

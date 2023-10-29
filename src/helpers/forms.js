@@ -6,7 +6,8 @@ const forms = {
         e.preventDefault();
         try {
           const res = await api(body);
-          setState(res.data);
+          console.log(res)
+          setState(res);
           navigate(whereTo);
         } catch (err) {
           console.log(err);
