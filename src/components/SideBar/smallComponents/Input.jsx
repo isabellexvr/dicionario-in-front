@@ -3,8 +3,6 @@ import colors from "../../../constants/colors";
 
 export default function Input({setSelectedLetter, setShownWords, allWords, children, placeholder}){
     function handleInput(data){
-        //setSelectedLetter(data);
-        //console.log(allWords)
         const newArr = allWords.filter(w => w.includes(data));
         setShownWords(newArr);
     }
@@ -14,7 +12,12 @@ export default function Input({setSelectedLetter, setShownWords, allWords, child
            <label>{children}</label>
             <SearchInput 
             placeholder={placeholder}
-            onChange={(e) => handleInput(e.target.value)}
+            onChange={(e) => {
+                if(e.target.value == ""){
+                    setShownWords(allWords)
+                }else{
+                   handleInput(e.target.value)}} 
+                }
             /> 
         </div>
         

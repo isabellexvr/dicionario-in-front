@@ -11,13 +11,10 @@ export default function WordPage() {
   const { getWordByName, getWordByNameLoading, getWordByNameError } =
     useGetWordByName();
   const [wordInfo, setWordInfo] = useState({});
-
-  //dar get na palavra
   useEffect(() => {
     async function getApiWordByName() {
       try {
         const data = await getWordByName(palavra);
-        console.log("dados da palavra: ", data)
         setWordInfo(data);
       } catch (err) {
         console.log(err);

@@ -126,13 +126,13 @@ const AlphabetContainer = styled.div`
   color: #d8dfea;
   display: flex;
   flex-direction: column;
-  align-items: flex-end;
+  justify-content: space-between;
   position: fixed;
   left: 0;
-  top: 6vw;
+  top: 10vh;
   font-weight: 600;
-  font-size: 1.1vw;
-  height: 100vh;
+  font-size: 1vw;
+  height: 88.5vh;
 
   :hover{
     background-color: #fcf05d;
@@ -150,7 +150,6 @@ const Letter = styled.button`
   border-radius: 0px 1vw 1vw 0px;
   height: 1.65vw;
   cursor: pointer;
-  margin-bottom: 0.2vw;
   align-items: center;
   :hover{
     background-color: #fcf05d;
