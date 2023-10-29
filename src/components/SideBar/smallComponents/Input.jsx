@@ -26,9 +26,9 @@ export default function Input({setSelectedLetter, setShownWords, allWords, child
 }
 
 const InputContainer = styled.div`
-    width: 26vw;
+    width: 85%;
     margin-top: 1.3vw;
-    position: fixed;
+    //position: fixed;
     top: 0;
     >.input{
         position: relative;

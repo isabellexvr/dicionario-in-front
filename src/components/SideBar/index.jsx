@@ -101,40 +101,52 @@ const SideBarContainer = styled.div`
   position: fixed;
   left: 0;
   top: 0;
-
-  //mudar scroll
   height: 100vh;
   display: flex;
   flex-direction: column;
   align-items: center;
+
   font-family: "Roboto", sans-serif;
+  ::-webkit-scrollbar-track {
+    background-color: ${colors.darkGrey};
+  }
+  ::-webkit-scrollbar {
+    width: 1px;
+  }
+  ::-webkit-scrollbar-thumb {
+    background: #6a6a6a79;
+  }
 `;
 
 const DictionaryContainer = styled.div`
   display: flex;
-  width: 100%;
-  margin-top: 6vw;
+  width: 85%;
+  //margin-top: 9vh;
   //background-color: red;
   position: relative;
   //padding-left: 3.7vw;
-  height: 100%;
-
+  height: 35%;
+  //flex-direction: column;
+  border: 4px solid ${colors.mediumGrey};
+  box-sizing: border-box;
+  border-radius: 1vw;
+  align-items: center;
+  justify-content: space-between;
+  margin-top: 1vw;
 `;
 
 const AlphabetContainer = styled.div`
-  width: 3.5vw;
+  width: 3.8vw;
   color: #d8dfea;
   display: flex;
   flex-direction: column;
   justify-content: space-between;
-  position: fixed;
-  left: 0;
-  top: 10vh;
   font-weight: 600;
   font-size: 1vw;
-  height: 88.5vh;
+  height: 80%;
+  overflow-y: scroll;
 
-  :hover{
+  :hover {
     background-color: #fcf05d;
     color: #48556a;
   }
@@ -150,8 +162,9 @@ const Letter = styled.button`
   border-radius: 0px 1vw 1vw 0px;
   height: 1.65vw;
   cursor: pointer;
+  margin-bottom: 1vw;
   align-items: center;
-  :hover{
+  :hover {
     background-color: #fcf05d;
   }
 `;
@@ -160,13 +173,13 @@ const WordsContainer = styled.div`
   flex-direction: column;
   align-items: flex-start;
   width: 80%;
-  position: absolute;
+  //position: absolute;
   right: 0;
   font-size: 1.1vw;
-  margin-top: 2vw;
-  height: 100%;
+  //margin-top: 2vw;
+  height: 80%;
   overflow-y: scroll;
-  :hover{
+  :hover {
     background-color: red;
   }
 `;
@@ -177,7 +190,6 @@ const Word = styled.h1`
   color: #d8dfea;
   font-weight: 600;
   cursor: pointer;
-  
 `;
 
 const LoadingContainer = styled.div`
@@ -187,7 +199,7 @@ const LoadingContainer = styled.div`
   justify-content: center;
   align-items: center;
   flex-direction: column;
-  >h1{
+  > h1 {
     color: ${colors.lightGrey};
     margin-bottom: 1vw;
   }
