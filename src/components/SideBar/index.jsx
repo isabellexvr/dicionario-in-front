@@ -11,6 +11,7 @@ import colors from "../../constants/colors";
 export default function SideBar() {
   const { getWords, getWordsLoading, getWordsError } = useGetWords();
   const [words, setWords] = useState([]);
+  const [showSidebar, setShowSidebar] = useState(true);
   const [shownWords, setShownWords] = useState([]);
   const [selectedLetter, setSelectedLetter] = useState("A");
 
@@ -45,7 +46,7 @@ export default function SideBar() {
   }
 
   return (
-    <SideBarContainer>
+    <SideBarContainer opened={showSidebar} >
       <Input
         setSelectedLetter={setSelectedLetter}
         setShownWords={setShownWords}
@@ -95,9 +96,13 @@ export default function SideBar() {
   );
 }
 
+const CompressedSideBar = styled.div`
+  
+`
+
 const SideBarContainer = styled.div`
   background-color: #48556a;
-  width: 30vw;
+  width:${p => p.opened ? "30vw" : "5vw"};
   position: fixed;
   left: 0;
   top: 0;
@@ -143,7 +148,7 @@ const AlphabetContainer = styled.div`
   justify-content: space-between;
   font-weight: 600;
   font-size: 1vw;
-  height: 80%;
+  height: 90%;
   overflow-y: scroll;
 
   :hover {
@@ -177,7 +182,7 @@ const WordsContainer = styled.div`
   right: 0;
   font-size: 1.1vw;
   //margin-top: 2vw;
-  height: 80%;
+  height: 90%;
   overflow-y: scroll;
   :hover {
     background-color: red;
