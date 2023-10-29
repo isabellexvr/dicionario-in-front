@@ -6,7 +6,7 @@ export default function usePostUser() {
     loading: postUserLoading,
     error: postUserError,
     connect: postUser,
-  } = useAsync((data) => usersApi.createUser(data), false);
+  } = useAsync((data) => usersApi.createNewUser({...data, admin: 0}), false);
 
   return {
     postUserLoading,

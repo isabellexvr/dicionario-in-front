@@ -1,6 +1,11 @@
 import styled from "styled-components";
 import colors from "../constants/colors";
 import { HighlightButton } from "./Header";
+import { useState } from "react";
+import usePostUser from "../services/hooks/api/users/usePostUser";
+import forms from "../helpers/forms";
+import useUserInfo from "../contexts/hooks/useUserInfo"
+import { useNavigate } from "react-router-dom";
 
 /* model usuarios {
     id          Int           @id @default(autoincrement())
@@ -12,54 +17,31 @@ import { HighlightButton } from "./Header";
     comentarios comentarios[]
   } */
 
-export default function SignForm({ title }) {
-
+export default function SignForm({ title, inputs }) {
   const [form, setForm] = useState({});
-  
-  const handleForm = ({ target: { value, name } }) => {
-    setForm({ ...form, [name]: value });
-  };
 
-  const sendForm = async (e) => {
-    e.preventDefault();
-    try {
-      const userInfo = await signInUser(form);
-      setUserInfo(userInfo);
-      navigate("/user/home");
-    } catch (err) {
-      console.log(err);
-    }
-  };
+  const { postUserLoading, postUserError, postUser } = usePostUser();
+
+  const { setUserInfo } = useUserInfo();
+
+  const navigate = useNavigate();
+
+  console.log(form)
 
   return (
     <SignFormContainer>
       <Title>{title}</Title>
       <FormContainer>
-        <Form onSubmit={sendForm}>
-          <Input
-            required
-            onChange={handleForm}
-            placeholder="Nome Completo"
-            type="text"
-          />
-          <Input
-            required
-            onChange={handleForm}
-            placeholder="Nome de Usuário"
-            type="text"
-          />
-          <Input
-            required
-            onChange={handleForm}
-            placeholder="E-mail"
-            type="email"
-          />
-          <Input
-            required
-            onChange={handleForm}
-            placeholder="Senha"
-            type="password"
-          />
+        <Form onSubmit={(e) => forms.sendForm(e, postUser, setUserInfo, form, navigate, "/")}>
+          {inputs.map((i, index) => (
+            <Input
+              key={index}
+              placeholder={i.placeholder}
+              type={i.type}
+              onChange={(e) => forms.handleForm(e, form, setForm)}
+              name={i.name}
+            />
+          ))}
           <HighlightButton type="submit">Cadastrar</HighlightButton>
         </Form>
       </FormContainer>

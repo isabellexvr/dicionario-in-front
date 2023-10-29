@@ -3,22 +3,24 @@ import { BrowserRouter, Routes, Route } from "react-router-dom";
 import HomePage from "./pages/HomePage";
 import WordPage from "./pages/WordPage";
 import Header from "./components/Header";
-import SignUp from "./pages/SignUp";
+import SignUp from "./pages/SignUpPage";
+import UserInfoProvider from "./contexts/UserInfoContext";
 
 function App() {
-
   return (
-    <BrowserRouter>
-    <Header/>
-      <SideBar />
-      <Routes>
-        <Route path="/" element={<HomePage />} />
-        <Route path="palavra">
-          <Route path=":palavra" element={<WordPage />} />
-        </Route>
-        <Route path="cadastro" element={<SignUp/>}/>
-      </Routes>
-    </BrowserRouter>
+    <UserInfoProvider>
+      <BrowserRouter>
+        <Header />
+        <SideBar />
+        <Routes>
+          <Route path="/" element={<HomePage />} />
+          <Route path="palavra">
+            <Route path=":palavra" element={<WordPage />} />
+          </Route>
+          <Route path="cadastro" element={<SignUp />} />
+        </Routes>
+      </BrowserRouter>
+    </UserInfoProvider>
   );
 }
 
