@@ -24,8 +24,6 @@ export default function Header() {
           <h1>
             Olá, <strong>{userInfos.nome}</strong>
           </h1>
-
-          <CommonButton>Sobre</CommonButton>
           <CommonButton>Perfil</CommonButton>
           <HighlightButton onClick={() => navigate("/")}>
             Início
@@ -69,6 +67,14 @@ const HeaderContainer = styled.div`
       font-weight: 700;
     }
   }
+  @media (max-width: 600px) {
+    height: 15vw;
+    width: 90vw;
+    >h1{
+      font-size: 5.5vw;
+      margin-right: 5vw;
+    }
+  }
 `;
 
 export const HighlightButton = styled.button`
@@ -86,6 +92,11 @@ export const HighlightButton = styled.button`
   cursor: pointer;
   font-size: 1.25vw;
   margin-right: 1.5vw;
+  @media (max-width: 600px) {
+    font-size: 4vw;
+    padding: 1.5vw;
+    border-radius: 1vw;
+  }
 `;
 
 const CommonButton = styled.button`
@@ -97,4 +108,10 @@ const CommonButton = styled.button`
   cursor: pointer;
   margin-right: 1.5vw;
   font-size: 1.25vw;
+  @media (max-width: 600px) {
+    font-size: 4vw;
+    padding: 1.5vw;
+    border-radius: 1vw;
+    margin-right: 7vw;
+  }
 `;
