@@ -6,13 +6,21 @@ const forms = {
         e.preventDefault();
         try {
           const res = await api(body);
-          console.log(res)
           setState(res);
           navigate(whereTo);
         } catch (err) {
           console.log(err);
         }
-    }
+    },
+    sendFormWithoutState: async (e, api, body, navigate, whereTo) => {
+      e.preventDefault();
+      try {
+        await api(body);
+        if(navigate) navigate(whereTo);
+      } catch (err) {
+        console.log(err);
+      }
+  },
 }
 
 export default forms;

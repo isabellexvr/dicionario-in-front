@@ -6,12 +6,16 @@ import { useEffect, useState } from "react";
 import Background from "../../constants/Background";
 import { AiOutlineStar, AiFillStar } from "react-icons/ai";
 import { BiCommentDetail } from "react-icons/bi";
+import CommentsBar from "../../components/CommentsBar";
+import useUserInfo from "../../contexts/hooks/useUserInfo";
 
 export default function WordPage({ showSidebar, setShowSidebar }) {
   const { palavra } = useParams();
 
   const { getWordByName, getWordByNameLoading, getWordByNameError } =
     useGetWordByName();
+  const { userInfo } = useUserInfo();
+  console.log("olha eu aqui ", userInfo);
 
   const [wordInfo, setWordInfo] = useState({});
   const [definicoes, setDefinicoes] = useState([]);
@@ -23,7 +27,6 @@ export default function WordPage({ showSidebar, setShowSidebar }) {
       try {
         const data = await getWordByName(palavra);
         setWordInfo(data);
-        console.log(data);
         const thereAreMany = data.definicao.search("(1)");
         if (thereAreMany == 1) {
           const arr = data.definicao.split(regex);
@@ -70,7 +73,7 @@ export default function WordPage({ showSidebar, setShowSidebar }) {
           </WordDetailsContainer>
           {showComments && (
             <>
-              <Comments>a</Comments>
+              <CommentsBar wordId={wordInfo.id} logged={userInfo} />
             </>
           )}
         </>
@@ -112,14 +115,6 @@ const Word = styled.h1`
       }
     }
   }
-`;
-
-const Comments = styled.div`
-  background-color: ${colors.mediumGrey};
-  height: 65%;
-  width: 25%;
-  border-radius: 1vw ;
-  margin-left: 1vw;
 `;
 
 const Details = styled.div`
