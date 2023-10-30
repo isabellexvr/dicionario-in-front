@@ -9,15 +9,15 @@ import { FallingLines } from "react-loader-spinner";
 import colors from "../../constants/colors";
 import { RiMenu4Line, RiLogoutCircleLine } from "react-icons/ri";
 import { FiSun, FiMoon } from "react-icons/fi";
-import useUserInfo from "../../contexts/hooks/useUserInfo"
+import useUserInfo from "../../contexts/hooks/useUserInfo";
 
-export default function SideBar({showSidebar, setShowSidebar}) {
+export default function SideBar({ showSidebar, setShowSidebar }) {
   const { getWords, getWordsLoading, getWordsError } = useGetWords();
   const [words, setWords] = useState([]);
   const [searching, setSearching] = useState(false);
   const [shownWords, setShownWords] = useState([]);
   const [selectedLetter, setSelectedLetter] = useState("A");
-  const {setUserInfo} = useUserInfo();
+  const { setUserInfo } = useUserInfo();
 
   const navigate = useNavigate();
 
@@ -38,7 +38,7 @@ export default function SideBar({showSidebar, setShowSidebar}) {
   }, []);
 
   function attWords(letter) {
-    setSearching(true)
+    setSearching(true);
     const toShow = words.filter(
       (w) => w[0] == letter.toLowerCase() || w[0] == letter
     );
@@ -98,17 +98,17 @@ export default function SideBar({showSidebar, setShowSidebar}) {
                 </WordsContainer>
               </>
             )}
-             
           </DictionaryContainer>
           <OpenedSidebarBottom>
             <FiMoon />
-            <RiLogoutCircleLine onClick={() => {
-              localStorage.removeItem("userInfo")
-              setUserInfo({})
-              navigate("/")
-            }} />
+            <RiLogoutCircleLine
+              onClick={() => {
+                localStorage.removeItem("userInfo");
+                setUserInfo({});
+                navigate("/");
+              }}
+            />
           </OpenedSidebarBottom>
-          
         </>
       ) : (
         <CompressedSideBar>
@@ -126,12 +126,12 @@ export default function SideBar({showSidebar, setShowSidebar}) {
 }
 
 const OpenedSidebarBottom = styled.div`
-height: 15%;
-width: 75%;
-display: flex;
-align-items: center;
-justify-content: space-around;
-  >svg{
+  height: 15%;
+  width: 75%;
+  display: flex;
+  align-items: center;
+  justify-content: space-around;
+  > svg {
     color: ${colors.lightGrey};
     font-size: 2vw;
     cursor: pointer;
@@ -139,7 +139,14 @@ justify-content: space-around;
     border-radius: 0.5vw;
     padding: 0.5vw;
   }
-`
+  @media (max-width: 600px) {
+    > svg {
+
+    font-size: 7vw;
+
+  }
+  }
+`;
 
 const CompressedSideBar = styled.div`
   height: 100%;
@@ -159,12 +166,27 @@ const CompressedSideBar = styled.div`
     align-items: center;
     justify-content: flex-start;
     flex-direction: column;
-    height: 93%;
+    height: 90%;
     > svg {
-      margin-top: 2vw;
+      margin-top: 3vw;
     }
   }
-  > .bottom {
+  @media (max-width: 600px) {
+    > .top {
+      display: flex;
+      align-items: center;
+      justify-content: flex-start;
+      flex-direction: column;
+      > svg {
+        font-size: 7vw;
+        margin-top: 6vw;
+      }
+    }
+    > .bottom {
+      > svg {
+        font-size: 7vw;
+      }
+    }
   }
 `;
 
@@ -201,23 +223,34 @@ const SideBarContainer = styled.div`
   ::-webkit-scrollbar-thumb {
     background: #6a6a6a79;
   }
+  @media (max-width: 600px) {
+    width: ${(p) => (p.opened ? "100vw" : "15vw")};
+    > .menu-icon {
+      > svg {
+        font-size: 7vw;
+      }
+      padding-top: 3vw;
+    }
+  }
 `;
 
 const DictionaryContainer = styled.div`
   display: flex;
   width: 85%;
-  //margin-top: 9vh;
-  //background-color: red;
   position: relative;
-  //padding-left: 3.7vw;
   height: 65%;
-  //flex-direction: column;
   border: 4px solid ${colors.mediumGrey};
   box-sizing: border-box;
   border-radius: 1vw;
   align-items: center;
   justify-content: space-between;
   margin-top: 1.2vw;
+  @media (max-width: 600px) {
+    height: 75%;
+    margin-top: 3vw;
+    align-items: flex-start;
+    overflow-y: scroll;
+  }
 `;
 
 const AlphabetContainer = styled.div`
@@ -230,10 +263,15 @@ const AlphabetContainer = styled.div`
   font-size: 1vw;
   height: 90%;
   overflow-y: scroll;
-
   :hover {
     background-color: #fcf05d;
     color: #48556a;
+  }
+  @media (max-width: 600px) {
+    width: 30%;
+    font-size: 4vw;
+    overflow-y: scroll;
+    height: 150%;
   }
 `;
 
@@ -252,20 +290,29 @@ const Letter = styled.button`
   :hover {
     background-color: #fcf05d;
   }
+  @media (max-width: 600px) {
+    height: 30%;
+    margin-bottom: 3vw;
+    border-radius: 0px 2vw 2vw 0px;
+  }
 `;
 const WordsContainer = styled.div`
   display: flex;
   flex-direction: column;
   align-items: flex-start;
   width: 80%;
-  //position: absolute;
   right: 0;
   font-size: 1.1vw;
-  //margin-top: 2vw;
   height: 90%;
   overflow-y: scroll;
   :hover {
     background-color: red;
+  }
+  @media (max-width: 600px) {
+    font-size: 4vw;
+    height: 100%;
+    padding: 2vw;
+    box-sizing: border-box;
   }
 `;
 

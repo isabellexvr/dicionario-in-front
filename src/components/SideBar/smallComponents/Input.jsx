@@ -52,6 +52,14 @@ const InputContainer = styled.div`
       cursor: pointer;
     }
   }
+  @media (max-width: 600px) {
+    > .input {
+    > label {
+      font-size: 7vw;
+      top: 55%;
+    }
+  }
+  }
 `;
 
 const SearchInput = styled.input`
@@ -67,4 +75,11 @@ const SearchInput = styled.input`
   height: 3vw;
   border-radius: 0.6vw;
   font-size: 1.2vw;
+  @media (max-width: 600px) {
+    height: 15vw;
+    font-size: 5vw;
+    padding: 4vw;
+
+    border-radius: 3vw;
+  }
 `;
