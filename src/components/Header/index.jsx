@@ -11,21 +11,25 @@ export default function Header() {
   const [userInfos, setUserInfos] = useState({});
 
   useEffect(() => {
-    const decoded = jwtDecode(userInfo);
-    setUserInfos(decoded);
+    if (typeof userInfo !== "string") {
+      const decoded = jwtDecode(userInfo);
+      setUserInfos(decoded);
+    }
   }, [userInfo]);
-  console.log(userInfos);
 
   return (
     <HeaderContainer>
-      {userInfo !== undefined ? (
+      {(typeof userInfo == "string") ? (
         <>
-          <h1>Olá, <strong>{userInfos.nome}</strong></h1>
+          <h1>
+            Olá, <strong>{userInfos.nome}</strong>
+          </h1>
 
-          
           <CommonButton>Sobre</CommonButton>
           <CommonButton>Perfil</CommonButton>
-          <HighlightButton onClick={() => navigate("/")}>Início</HighlightButton>
+          <HighlightButton onClick={() => navigate("/")}>
+            Início
+          </HighlightButton>
         </>
       ) : (
         <>
@@ -61,7 +65,7 @@ const HeaderContainer = styled.div`
     height: 100%;
     margin-right: 2.5vw;
     font-size: 1.7vw;
-    >strong{
+    > strong {
       font-weight: 700;
     }
   }
