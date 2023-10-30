@@ -15,7 +15,6 @@ export default function WordPage({ showSidebar, setShowSidebar }) {
   const { getWordByName, getWordByNameLoading, getWordByNameError } =
     useGetWordByName();
   const { userInfo } = useUserInfo();
-  console.log("olha eu aqui ", userInfo);
 
   const [wordInfo, setWordInfo] = useState({});
   const [definicoes, setDefinicoes] = useState([]);
