@@ -7,11 +7,13 @@ import { useNavigate } from "react-router-dom";
 import { FaMagnifyingGlass } from "react-icons/fa6";
 import { FallingLines } from "react-loader-spinner";
 import colors from "../../constants/colors";
+import { RiMenu4Line } from "react-icons/ri";
+import { FiSun, FiMoon } from "react-icons/fi";
 
-export default function SideBar() {
+export default function SideBar({showSidebar, setShowSidebar}) {
   const { getWords, getWordsLoading, getWordsError } = useGetWords();
   const [words, setWords] = useState([]);
-  const [showSidebar, setShowSidebar] = useState(true);
+  const [searching, setSearching] = useState(false);
   const [shownWords, setShownWords] = useState([]);
   const [selectedLetter, setSelectedLetter] = useState("A");
 
@@ -22,13 +24,15 @@ export default function SideBar() {
       try {
         const data = await getWords();
         const onlyWords = data.map((d) => d.Verbete);
-        const toShow = onlyWords.filter(
+/*         const toShow = onlyWords.filter(
           (w) =>
             w.includes(selectedLetter.toLowerCase()) ||
             w.includes(selectedLetter)
         );
-        setShownWords(toShow);
+        setShownWords(toShow); */
         setWords(onlyWords);
+        console.log(onlyWords)
+        setShownWords(onlyWords);
       } catch (err) {
         console.log(err);
       }
@@ -36,73 +40,116 @@ export default function SideBar() {
     if (words.length <= 0) {
       getApiWords();
     }
-  }, [selectedLetter]);
+  }, []);
 
   function attWords(letter) {
+    setSearching(true)
     const toShow = words.filter(
       (w) => w[0] == letter.toLowerCase() || w[0] == letter
     );
     setShownWords(toShow);
+    setSearching(false);
   }
 
   return (
-    <SideBarContainer opened={showSidebar} >
-      <Input
-        setSelectedLetter={setSelectedLetter}
-        setShownWords={setShownWords}
-        allWords={words}
-        placeholder="Pesquise aqui..."
-      >
-        {<FaMagnifyingGlass />}
-      </Input>
-      <DictionaryContainer>
-        {getWordsLoading ? (
-          <LoadingContainer>
-            <h1>Carregando...</h1>
-            <FallingLines
-              color={colors.lightGrey}
-              width="100"
-              visible={true}
-              ariaLabel="falling-lines-loading"
-            />
-          </LoadingContainer>
-        ) : (
-          <>
-            <AlphabetContainer>
-              {PORTUGUESEALPHABET.map((l, i) => (
-                <Letter
-                  onClick={() => {
-                    setSelectedLetter(l);
-                    attWords(l);
-                  }}
-                  selectedLetter={selectedLetter == l}
-                  key={i}
-                >
-                  {l}
-                </Letter>
-              ))}
-            </AlphabetContainer>
-            <WordsContainer>
-              {shownWords.map((w, i) => (
-                <Word onClick={() => navigate(`/palavra/${w}`)} key={i}>
-                  {w}
-                </Word>
-              ))}
-            </WordsContainer>
-          </>
-        )}
-      </DictionaryContainer>
+    <SideBarContainer opened={showSidebar}>
+      {showSidebar ? (
+        <>
+          <div className="menu-icon">
+            <RiMenu4Line onClick={() => setShowSidebar(!showSidebar)} />
+          </div>
+
+          <Input
+            setSelectedLetter={setSelectedLetter}
+            setShownWords={setShownWords}
+            allWords={words}
+            placeholder="Pesquise aqui..."
+          >
+            {<FaMagnifyingGlass />}
+          </Input>
+          <DictionaryContainer>
+            {getWordsLoading ? (
+              <LoadingContainer>
+                <h1>Carregando...</h1>
+                <FallingLines
+                  color={colors.lightGrey}
+                  width="100"
+                  visible={true}
+                  ariaLabel="falling-lines-loading"
+                />
+              </LoadingContainer>
+            ) : (
+              <>
+                <AlphabetContainer>
+                  {PORTUGUESEALPHABET.map((l, i) => (
+                    <Letter
+                      onClick={() => {
+                        setSelectedLetter(l);
+                        attWords(l);
+                      }}
+                      selectedLetter={selectedLetter == l}
+                      key={i}
+                    >
+                      {l}
+                    </Letter>
+                  ))}
+                </AlphabetContainer>
+                <WordsContainer>
+                  {shownWords.map((w, i) => (
+                    <Word onClick={() => navigate(`/palavra/${w}`)} key={i}>
+                      {w}
+                    </Word>
+                  ))}
+                </WordsContainer>
+              </>
+            )}
+          </DictionaryContainer>
+        </>
+      ) : (
+        <CompressedSideBar>
+          <div className="top">
+            <RiMenu4Line onClick={() => setShowSidebar(!showSidebar)} />
+            {<FaMagnifyingGlass />}
+          </div>
+          <div className="bottom">
+            <FiMoon />
+          </div>
+        </CompressedSideBar>
+      )}
     </SideBarContainer>
   );
 }
 
 const CompressedSideBar = styled.div`
-  
-`
+  height: 100%;
+  svg {
+    color: ${colors.lightGrey};
+    font-size: 2vw;
+    cursor: pointer;
+
+    border-radius: 0.5vw;
+    padding: 0.5vw;
+    :hover {
+      background-color: ${colors.lightYellow};
+    }
+  }
+  > .top {
+    display: flex;
+    align-items: center;
+    justify-content: flex-start;
+    flex-direction: column;
+    height: 93%;
+    > svg {
+      margin-top: 2vw;
+    }
+  }
+  > .bottom {
+  }
+`;
 
 const SideBarContainer = styled.div`
   background-color: #48556a;
-  width:${p => p.opened ? "30vw" : "5vw"};
+  width: ${(p) => (p.opened ? "30vw" : "5vw")};
   position: fixed;
   left: 0;
   top: 0;
@@ -110,6 +157,18 @@ const SideBarContainer = styled.div`
   display: flex;
   flex-direction: column;
   align-items: center;
+
+  > .menu-icon {
+    > svg {
+      color: ${colors.lightGrey};
+      font-size: 2vw;
+      cursor: pointer;
+    }
+    width: 90%;
+    display: flex;
+    justify-content: flex-end;
+    padding-top: 1vw;
+  }
 
   font-family: "Roboto", sans-serif;
   ::-webkit-scrollbar-track {

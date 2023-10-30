@@ -5,7 +5,7 @@ import useGetWordByName from "../../services/hooks/api/words/useGetWordByName";
 import { useEffect, useState } from "react";
 import Background from "../../constants/Background";
 
-export default function WordPage() {
+export default function WordPage({ showSidebar, setShowSidebar }) {
   const { palavra } = useParams();
 
   const { getWordByName, getWordByNameLoading, getWordByNameError } =
@@ -24,20 +24,14 @@ export default function WordPage() {
   }, [palavra]);
 
   return (
-    <Background>
+    <Background showSidebar={showSidebar}>
       <Word>{palavra}</Word>
       {wordInfo.definicao !== undefined && (
-        <WordDefinitionContainer>
-
-        {wordInfo.definicao}
-        </WordDefinitionContainer>
+        <WordDefinitionContainer>{wordInfo.definicao}</WordDefinitionContainer>
       )}
-      
     </Background>
   );
 }
-
-
 
 const Word = styled.h1`
   font-size: 3vw;
@@ -60,7 +54,6 @@ const WordDefinitionContainer = styled.div`
   justify-content: center;
   padding: 2vw;
   box-sizing: border-box;
-  >p{
-    
+  > p {
   }
-`
+`;

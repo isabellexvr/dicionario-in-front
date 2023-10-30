@@ -2,9 +2,9 @@ import styled from "styled-components";
 import colors from "../../constants/colors";
 import Background from "../../constants/Background";
 
-export default function HomePage() {
+export default function HomePage({showSidebar, setShowSidebar}) {
   return (
-    <Background>
+    <Background showSidebar={showSidebar}>
       <Word>Dicionário de Iluminação Natural</Word>
     </Background>
   );
