@@ -12,8 +12,9 @@ const PageContainer = styled.section`
   box-sizing: border-box;
   font-family: "Roboto", sans-serif;
   display: flex;
-  flex-direction: column;
+  //flex-direction: column;
   align-items: center;
   justify-content: center;
-  padding-left: ${(p) => (p.showSidebar ? "30vw" : "10vw")};
+  padding-left: ${(p) => (p.showSidebar ? "20vw" : "5vw")};
+ // overflow-y: scroll;
 `;
