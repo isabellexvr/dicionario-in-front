@@ -11,7 +11,7 @@ export default function Header() {
   const [userInfos, setUserInfos] = useState({});
 
   useEffect(() => {
-    if (typeof userInfo !== "string") {
+    if (typeof userInfo == "string") {
       const decoded = jwtDecode(userInfo);
       setUserInfos(decoded);
     }

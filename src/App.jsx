@@ -1,5 +1,5 @@
 import SideBar from "./components/SideBar";
-import { BrowserRouter, Routes, Route } from "react-router-dom";
+import { BrowserRouter, Routes, Route, Outlet } from "react-router-dom";
 import HomePage from "./pages/HomePage";
 import WordPage from "./pages/WordPage";
 import Header from "./components/Header";
@@ -7,6 +7,8 @@ import SignUp from "./pages/SignUpPage";
 import UserInfoProvider from "./contexts/UserInfoContext";
 import SignInPage from "./pages/SignInPage";
 import { useState } from "react";
+import AdminPage from "./pages/AdminPage";
+import useToken from "./services/hooks/useToken";
 
 function App() {
   const [showSidebar, setShowSidebar] = useState(false);
@@ -36,6 +38,24 @@ function App() {
               }
             />
           </Route>
+          <Route
+            path="/user"
+            element={
+              <AuthorizedRoute>
+                <Outlet />
+              </AuthorizedRoute>
+            }
+          >
+            <Route
+              element={
+                <AdminPage
+                  showSidebar={showSidebar}
+                  setShowSidebar={setShowSidebar}
+                />
+              }
+              path="admin"
+            />
+          </Route>
           <Route path="cadastro" element={<SignUp />} />
           <Route path="login" element={<SignInPage />} />
         </Routes>
@@ -45,3 +65,13 @@ function App() {
 }
 
 export default App;
+
+function AuthorizedRoute({ children }) {
+  const token = useToken();
+
+  if (!token) {
+    return <Navigate to="/sign-in" />;
+  }
+
+  return <>{children}</>;
+}

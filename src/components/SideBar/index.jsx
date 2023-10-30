@@ -7,8 +7,9 @@ import { useNavigate } from "react-router-dom";
 import { FaMagnifyingGlass } from "react-icons/fa6";
 import { FallingLines } from "react-loader-spinner";
 import colors from "../../constants/colors";
-import { RiMenu4Line } from "react-icons/ri";
+import { RiMenu4Line, RiLogoutCircleLine } from "react-icons/ri";
 import { FiSun, FiMoon } from "react-icons/fi";
+import useUserInfo from "../../contexts/hooks/useUserInfo"
 
 export default function SideBar({showSidebar, setShowSidebar}) {
   const { getWords, getWordsLoading, getWordsError } = useGetWords();
@@ -16,6 +17,7 @@ export default function SideBar({showSidebar, setShowSidebar}) {
   const [searching, setSearching] = useState(false);
   const [shownWords, setShownWords] = useState([]);
   const [selectedLetter, setSelectedLetter] = useState("A");
+  const {setUserInfo} = useUserInfo();
 
   const navigate = useNavigate();
 
@@ -96,7 +98,17 @@ export default function SideBar({showSidebar, setShowSidebar}) {
                 </WordsContainer>
               </>
             )}
+             
           </DictionaryContainer>
+          <OpenedSidebarBottom>
+            <FiMoon />
+            <RiLogoutCircleLine onClick={() => {
+              localStorage.removeItem("userInfo")
+              setUserInfo({})
+              navigate("/")
+            }} />
+          </OpenedSidebarBottom>
+          
         </>
       ) : (
         <CompressedSideBar>
@@ -112,6 +124,22 @@ export default function SideBar({showSidebar, setShowSidebar}) {
     </SideBarContainer>
   );
 }
+
+const OpenedSidebarBottom = styled.div`
+height: 15%;
+width: 75%;
+display: flex;
+align-items: center;
+justify-content: space-around;
+  >svg{
+    color: ${colors.lightGrey};
+    font-size: 2vw;
+    cursor: pointer;
+
+    border-radius: 0.5vw;
+    padding: 0.5vw;
+  }
+`
 
 const CompressedSideBar = styled.div`
   height: 100%;
@@ -182,14 +210,14 @@ const DictionaryContainer = styled.div`
   //background-color: red;
   position: relative;
   //padding-left: 3.7vw;
-  height: 35%;
+  height: 65%;
   //flex-direction: column;
   border: 4px solid ${colors.mediumGrey};
   box-sizing: border-box;
   border-radius: 1vw;
   align-items: center;
   justify-content: space-between;
-  margin-top: 1vw;
+  margin-top: 1.2vw;
 `;
 
 const AlphabetContainer = styled.div`
