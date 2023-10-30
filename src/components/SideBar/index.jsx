@@ -24,14 +24,7 @@ export default function SideBar({showSidebar, setShowSidebar}) {
       try {
         const data = await getWords();
         const onlyWords = data.map((d) => d.Verbete);
-/*         const toShow = onlyWords.filter(
-          (w) =>
-            w.includes(selectedLetter.toLowerCase()) ||
-            w.includes(selectedLetter)
-        );
-        setShownWords(toShow); */
         setWords(onlyWords);
-        console.log(onlyWords)
         setShownWords(onlyWords);
       } catch (err) {
         console.log(err);
