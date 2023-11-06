@@ -1,4 +1,4 @@
-import { useParams } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 import styled from "styled-components";
 import colors from "../../constants/colors";
 import useGetWordByName from "../../services/hooks/api/words/useGetWordByName";
@@ -19,7 +19,9 @@ export default function WordPage({ showSidebar, setShowSidebar }) {
   const [wordInfo, setWordInfo] = useState({});
   const [definicoes, setDefinicoes] = useState([]);
   const [showComments, setShowComments] = useState(false);
+  console.log("word info: ", wordInfo);
   const regex = /\(\d\) /g;
+  const navigate = useNavigate();
 
   useEffect(() => {
     async function getApiWordByName() {
@@ -57,12 +59,25 @@ export default function WordPage({ showSidebar, setShowSidebar }) {
             </Word>
             <Details>
               <h1>DEFINIÇÕES</h1>
-              {definicoes.map((d, i) => (
-                <h2>
-                  <strong>{i + 1}</strong>. {d}
-                  {"\n"}
-                </h2>
-              ))}
+              {definicoes.length == 1 && definicoes[0] == "v." ? (
+                <h3
+                  onClick={() =>
+                    navigate(`/palavra/${wordInfo.remissivaImperativa}`)
+                  }
+                >
+                  {wordInfo.remissivaImperativa}
+                </h3>
+              ) : (
+                <>
+                  {" "}
+                  {definicoes.map((d, i) => (
+                    <h2>
+                      <strong>{i + 1}</strong>. {d}
+                      {"\n"}
+                    </h2>
+                  ))}
+                </>
+              )}
             </Details>
             <Details>
               <h1>CLASSE GRAMATICAL</h1>
@@ -135,5 +150,11 @@ const Details = styled.div`
     > strong {
       font-weight: 800;
     }
+  }
+  > h3 {
+    text-decoration: underline;
+    cursor: pointer;
+    margin-top: 0.5vw;
+    line-height: 1.6vw;
   }
 `;

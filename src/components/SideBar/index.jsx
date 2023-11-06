@@ -25,6 +25,7 @@ export default function SideBar({ showSidebar, setShowSidebar }) {
     async function getApiWords() {
       try {
         const data = await getWords();
+        console.log(data);
         const onlyWords = data.map((d) => d.Verbete);
         setWords(onlyWords);
         setShownWords(onlyWords);
@@ -305,9 +306,12 @@ const WordsContainer = styled.div`
   font-size: 1.1vw;
   height: 90%;
   overflow-y: scroll;
-  :hover {
-    background-color: red;
-  }
+/*   :hover {
+    background-color: ${colors.yellow};
+    h1{
+      color: ${colors.darkGrey};
+    }
+  } */
   @media (max-width: 600px) {
     font-size: 4vw;
     height: 100%;
@@ -322,6 +326,10 @@ const Word = styled.h1`
   color: #d8dfea;
   font-weight: 600;
   cursor: pointer;
+  :hover{
+    color: ${colors.darkGrey};
+  }
+  
 `;
 
 const LoadingContainer = styled.div`
