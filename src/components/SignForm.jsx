@@ -5,7 +5,7 @@ import { useState } from "react";
 import forms from "../helpers/forms";
 import { useNavigate } from "react-router-dom";
 
-export default function SignForm({ title, inputs, api, setState, navigateTo }) {
+export default function SignForm({ verb, title, inputs, api, setState, navigateTo }) {
   const [form, setForm] = useState({});
 
   const navigate = useNavigate();
@@ -24,7 +24,7 @@ export default function SignForm({ title, inputs, api, setState, navigateTo }) {
               name={i.name}
             />
           ))}
-          <HighlightButton type="submit">Cadastrar</HighlightButton>
+          <HighlightButton type="submit">{verb}</HighlightButton>
         </Form>
       </FormContainer>
     </SignFormContainer>
@@ -38,9 +38,9 @@ const SignFormContainer = styled.div`
   display: flex;
   align-items: center;
   @media (max-width: 600px) {
-    width: 75%;
+    width: 83%;
     height: 50%;
-    margin-left: 10vw;
+    margin-left: 15vw;
   }
 `;
 

@@ -5,13 +5,13 @@ import useUserInfo from "../../contexts/hooks/useUserInfo";
 import usePostUser from "../../services/hooks/api/users/usePostUser";
 
 export default function SignUp() {
-
   const { postUserLoading, postUserError, postUser } = usePostUser();
   const { setUserInfo } = useUserInfo();
 
   return (
     <Background>
       <SignForm
+        verb="Cadastrar"
         title="CADASTRO"
         inputs={[
           { placeholder: "Nome Completo", type: "text", name: "nome" },
