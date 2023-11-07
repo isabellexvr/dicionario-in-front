@@ -20,12 +20,10 @@ export default function SideBar({ showSidebar, setShowSidebar }) {
   const { setUserInfo } = useUserInfo();
 
   const navigate = useNavigate();
-
   useEffect(() => {
     async function getApiWords() {
       try {
         const data = await getWords();
-        console.log(data);
         const onlyWords = data.map((d) => d.Verbete);
         setWords(onlyWords);
         setShownWords(onlyWords);
@@ -92,7 +90,15 @@ export default function SideBar({ showSidebar, setShowSidebar }) {
                 </AlphabetContainer>
                 <WordsContainer>
                   {shownWords.map((w, i) => (
-                    <Word onClick={() => navigate(`/palavra/${w}`)} key={i}>
+                    <Word
+                      onClick={() => {
+                        if (screen.width <= 600) {
+                          setShowSidebar(!showSidebar);
+                        }
+                        navigate(`/palavra/${w}`);
+                      }}
+                      key={i}
+                    >
                       {w}
                     </Word>
                   ))}
@@ -132,6 +138,8 @@ const OpenedSidebarBottom = styled.div`
   display: flex;
   align-items: center;
   justify-content: space-around;
+  z-index: 1;
+
   > svg {
     color: ${colors.lightGrey};
     font-size: 2vw;
@@ -142,10 +150,8 @@ const OpenedSidebarBottom = styled.div`
   }
   @media (max-width: 600px) {
     > svg {
-
-    font-size: 7vw;
-
-  }
+      font-size: 7vw;
+    }
   }
 `;
 
@@ -246,11 +252,14 @@ const DictionaryContainer = styled.div`
   align-items: center;
   justify-content: space-between;
   margin-top: 1.2vw;
+  z-index: 2;
+
   @media (max-width: 600px) {
     height: 75%;
     margin-top: 3vw;
     align-items: flex-start;
     overflow-y: scroll;
+    z-index: 2;
   }
 `;
 
@@ -272,7 +281,7 @@ const AlphabetContainer = styled.div`
     width: 30%;
     font-size: 4vw;
     overflow-y: scroll;
-    height: 150%;
+    height: 100%;
   }
 `;
 
@@ -292,8 +301,11 @@ const Letter = styled.button`
     background-color: #fcf05d;
   }
   @media (max-width: 600px) {
-    height: 30%;
-    margin-bottom: 3vw;
+    height: 45%;
+    padding-top: 1.5vw;
+    padding-bottom: 1.5vw;
+    margin-bottom: 2vw;
+    margin-top: 2vw;
     border-radius: 0px 2vw 2vw 0px;
   }
 `;
@@ -305,18 +317,17 @@ const WordsContainer = styled.div`
   right: 0;
   font-size: 1.1vw;
   height: 90%;
+  z-index: 2;
+
   overflow-y: scroll;
-/*   :hover {
-    background-color: ${colors.yellow};
-    h1{
-      color: ${colors.darkGrey};
-    }
-  } */
+
   @media (max-width: 600px) {
     font-size: 4vw;
     height: 100%;
     padding: 2vw;
+
     box-sizing: border-box;
+    z-index: 1;
   }
 `;
 
@@ -326,10 +337,15 @@ const Word = styled.h1`
   color: #d8dfea;
   font-weight: 600;
   cursor: pointer;
-  :hover{
+  :hover {
     color: ${colors.darkGrey};
   }
-  
+  z-index: 2;
+
+  @media (max-width: 600px) {
+    margin-top: 2vw;
+    margin-bottom: 2vw;
+  }
 `;
 
 const LoadingContainer = styled.div`

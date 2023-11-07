@@ -48,7 +48,7 @@ export default function WordPage({ showSidebar, setShowSidebar }) {
       {wordInfo.Verbete && (
         <>
           <WordDetailsContainer>
-            <Word>
+            <Word showSidebar={showSidebar} >
               {wordInfo.Verbete}
               <div className="icons">
                 <AiOutlineStar />
@@ -104,6 +104,10 @@ const WordDetailsContainer = styled.div`
   display: flex;
   flex-direction: column;
   align-items: center;
+  @media (max-width: 600px) {
+    width: 80%;
+    margin-left: 10%;
+  }
 `;
 
 const Word = styled.h1`
@@ -115,6 +119,7 @@ const Word = styled.h1`
   color: ${colors.darkGrey};
   font-size: 3vw;
   position: relative;
+  z-index: 0;
   > .icons {
     position: absolute;
     right: 0;
@@ -129,10 +134,31 @@ const Word = styled.h1`
       }
     }
   }
+  @media (max-width: 600px) {
+    
+    font-size: 10vw;
+    height: 13%;
+    width: 90%;
+    margin-bottom: 2vw;
+    margin-top: 6vw;
+    flex-direction: column;
+    align-items: flex-start;
+    //background-color: red;
+    display: ${p => p.showSidebar ? "none" : "initial"};
+    > .icons {
+      font-size: 8vw;
+      width: 100%;
+      position: inherit;
+      justify-content: flex-end;
+      > svg:first-child {
+      margin-right: 1vw;
+    }
+    }
+  }
 `;
 
 const Details = styled.div`
-  width: 75%;
+  width: 85%;
   margin-top: 2vw;
   display: flex;
   flex-direction: column;
@@ -156,5 +182,20 @@ const Details = styled.div`
     cursor: pointer;
     margin-top: 0.5vw;
     line-height: 1.6vw;
+  }
+  @media (max-width: 600px) {
+    > h1 {
+    font-size: 5vw;
+    margin-bottom: 3vw;
+    margin-top: 2vw;
+  }
+  > h2 {
+    //margin-top: 2vw;
+    line-height: 5vw;
+    text-align: justify;
+    > strong {
+      font-weight: 800;
+    }
+  }
   }
 `;
