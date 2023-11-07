@@ -41,23 +41,32 @@ export default function CommentsBar({ wordId, logged }) {
         ))}
       </div>
 
-      <NewComment
-        onSubmit={(e) => forms.sendFormWithoutState(e, postComment, newComment)}
-      >
-        <input
-          name="comentario"
-          onChange={(e) =>
-            forms.handleForm(
-              e,
-              { comentario: newComment, palavraId: wordId },
-              setNewComment
-            )
-          }
-          type="text"
-          placeholder="Comente aqui..."
-        />
-        <button type="submit">Comentar</button>
-      </NewComment>
+      {typeof logged == "string" ? (
+        <>
+          {" "}
+          <NewComment
+            onSubmit={(e) =>
+              forms.sendFormWithoutState(e, postComment, newComment)
+            }
+          >
+            <input
+              name="comentario"
+              onChange={(e) =>
+                forms.handleForm(
+                  e,
+                  { comentario: newComment, palavraId: wordId },
+                  setNewComment
+                )
+              }
+              type="text"
+              placeholder="Comente aqui..."
+            />
+            <button type="submit">Comentar</button>
+          </NewComment>
+        </>
+      ) : (
+        <LoginWarning>Faça Login Para Comentar</LoginWarning>
+      )}
     </Comments>
   );
 }
@@ -78,6 +87,11 @@ const Comments = styled.div`
     flex-direction: column;
     overflow-y: scroll;
   }
+  @media (max-width: 600px) {
+    height: fit-content;
+    width: 80%;
+    margin-left: 10%;
+  }
 `;
 
 const Comment = styled.div`
@@ -97,6 +111,21 @@ const Comment = styled.div`
   > p {
     margin-top: 0.5vw;
     font-size: 1.1vw;
+  }
+  @media (max-width: 600px) {
+    padding: 4vw;
+    > h1 {
+      font-size: 4vw;
+      margin-top: 2vw;
+    }
+    > h2 {
+      font-size: 3.2vw;
+      margin-top: 0.5vw;
+    }
+    > p {
+      margin-top: 2vw;
+      font-size: 3vw;
+    }
   }
 `;
 
@@ -135,4 +164,28 @@ const NewComment = styled.form`
     color: white;
     font-weight: 600;
   }
+  @media (max-width: 600px) {
+    height: 20%;
+
+    width: 94%;
+
+    > input {
+      font-size: 3vw;
+      padding: 1.5vw;
+    }
+    > button {
+      font-size: 3vw;
+    }
+  }
+`;
+
+const LoginWarning = styled.div`
+  background-color: ${colors.darkGrey};
+  color: ${colors.lightGrey};
+width: 100%;
+height: 20%;
+display: flex;
+justify-content: center;
+align-items: center;
+font-weight: 700;
 `;

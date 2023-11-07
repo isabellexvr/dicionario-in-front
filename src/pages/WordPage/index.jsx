@@ -19,7 +19,6 @@ export default function WordPage({ showSidebar, setShowSidebar }) {
   const [wordInfo, setWordInfo] = useState({});
   const [definicoes, setDefinicoes] = useState([]);
   const [showComments, setShowComments] = useState(false);
-  console.log("word info: ", wordInfo);
   const regex = /\(\d\) /g;
   const navigate = useNavigate();
 
@@ -106,6 +105,7 @@ const WordDetailsContainer = styled.div`
   align-items: center;
   @media (max-width: 600px) {
     width: 80%;
+    height: fit-content;
     margin-left: 10%;
   }
 `;

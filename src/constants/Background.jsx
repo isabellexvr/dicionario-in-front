@@ -12,9 +12,12 @@ const PageContainer = styled.section`
   box-sizing: border-box;
   font-family: "Roboto", sans-serif;
   display: flex;
-  //flex-direction: column;
+  //
   align-items: center;
   justify-content: center;
   padding-left: ${(p) => (p.showSidebar ? "20vw" : "5vw")};
  // overflow-y: scroll;
+ @media (max-width: 600px) {
+    flex-direction: column;
+  }
 `;
