@@ -5,16 +5,6 @@ import { useState } from "react";
 import forms from "../helpers/forms";
 import { useNavigate } from "react-router-dom";
 
-/* model usuarios {
-    id          Int           @id @default(autoincrement())
-    userName    String        @unique @db.VarChar(50)
-    nome        String
-    email       String        @unique
-    senha       String        @unique
-    admin       Int           @db.SmallInt
-    comentarios comentarios[]
-  } */
-
 export default function SignForm({ title, inputs, api, setState, navigateTo }) {
   const [form, setForm] = useState({});
 
@@ -47,10 +37,15 @@ const SignFormContainer = styled.div`
   border-radius: 1.5vw;
   display: flex;
   align-items: center;
+  @media (max-width: 600px) {
+    width: 75%;
+    height: 50%;
+    margin-left: 10vw;
+  }
 `;
 
 const Title = styled.div`
-  width: 30%;
+  width: 20%;
   height: 100%;
   background-color: ${colors.darkGrey};
   display: flex;
@@ -59,7 +54,13 @@ const Title = styled.div`
   border-radius: 1.5vw 0px 0px 1.5vw;
   color: ${colors.lightGrey};
   font-weight: 800;
-  font-size: 2.5vw;
+  font-size: 4vw;
+  writing-mode: vertical-rl; /* Vertical text writing mode */
+  text-orientation: upright; /* Maintain upright orientation */
+  @media (max-width: 600px) {
+    font-size: 7vw;
+
+  }
 `;
 
 const FormContainer = styled.div`
@@ -71,6 +72,7 @@ const FormContainer = styled.div`
 
   align-items: center;
   justify-content: center;
+
 `;
 
 const Form = styled.form`
@@ -84,6 +86,11 @@ const Form = styled.form`
     opacity: 0.5;
     color: ${colors.darkGrey};
   }
+  @media (max-width: 600px) {
+    width: 90%;
+    font-size: 4vw;
+    
+  }
 `;
 
 const Input = styled.input`
@@ -93,5 +100,12 @@ const Input = styled.input`
   width: 80%;
   margin-bottom: 6%;
   font-size: 1.5vw;
-  color: ${colors.darkGrey};
+  color: ${colors.darkGrey};  
+  @media (max-width: 600px) {
+    width: 90%;
+    font-size: 4vw;
+    height: 15%;
+    margin-bottom: 13%;
+  }
+
 `;

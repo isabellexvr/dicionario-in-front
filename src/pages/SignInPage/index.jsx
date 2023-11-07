@@ -10,7 +10,7 @@ export default function SignInPage() {
   return (
     <Background>
       <SignForm
-        title="LOGIN"
+        title={`LOGIN`}
         inputs={[
           { placeholder: "E-mail", type: "email", name: "email" },
           { placeholder: "Senha", type: "password", name: "senha" },

@@ -19,4 +19,14 @@ const Word = styled.h1`
   border-radius: 1.5vw;
   color: ${colors.darkGrey};
   font-weight: 600;
+  @media (max-width: 600px) {
+    font-size: 13vw;
+    width: 70%;
+    margin-left: 10vw;
+    border-radius: 5vw;
+    padding: 4vw;
+    line-height: 13vw;
+    text-align: center;
+
+  }
 `;
