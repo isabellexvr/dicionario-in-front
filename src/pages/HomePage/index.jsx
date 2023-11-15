@@ -27,22 +27,7 @@ export default function HomePage({ showSidebar, setShowSidebar }) {
 
   return (
     <Background showSidebar={showSidebar}>
-      <CarouselContainer responsive={responsive}>
-        <Carousel responsive={responsive}>
-          <div>
-            <Word>Item 1</Word>
-          </div>
-          <div>
-            <Word>Item 2</Word>
-          </div>
-          <div>
-            <Word>Item 3</Word>
-          </div>
-          <div>
-            <Word>Item 4</Word>
-          </div>
-        </Carousel>
-      </CarouselContainer>
+      <Word>Dicionário Lumeeiro de Iluminação Natural</Word>
     </Background>
   );
 }

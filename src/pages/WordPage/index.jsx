@@ -48,7 +48,6 @@ export default function WordPage({ showSidebar, setShowSidebar }) {
       try {
         const data = await getWordByName(palavra);
         setWordInfo(data);
-        //console.log(data);
 
         const tabsArr = Object.keys(data).filter((e) => {
           if (data[e] == null) {
@@ -202,8 +201,7 @@ const LeftArrow = styled.div`
 `;
 
 const CarouselContainer = styled.div`
-  width: 100%; /* Adjust this width based on your layout */
-  //margin: 0 auto;
+  width: 100%; 
   position: absolute;
   top: -2.9vw;
   left: 0;
@@ -249,32 +247,34 @@ const WordDetailsContainer = styled.div`
   }
   border: 2px solid ${colors.mediumGrey};
   width: 50%;
-  height: 50%;
+  height: fit-content;
+
   border-radius: 0 0 1vw 1vw;
   display: flex;
   flex-direction: column;
   align-items: center;
   position: relative;
-  padding-top: 1vw;
+  padding-top: 2vw;
+  padding-bottom: 2vw;
   box-sizing: border-box;
   @media (max-width: 600px) {
     width: 80%;
     height: fit-content;
-  z-index: 0;
+    z-index: 0;
     margin-left: 10%;
   }
-
 `;
 
 const Word = styled.h1`
   font-family: "Roboto", sans-serif;
-  width: 80%;
+  width: 85%;
   height: 20%;
   display: flex;
   align-items: flex-end;
   color: ${colors.darkGrey};
-  font-size: 3vw;
+  font-size: 3.2vw;
   position: relative;
+  font-weight: 800;
   z-index: 0;
   > .icons {
     position: absolute;
@@ -283,7 +283,7 @@ const Word = styled.h1`
     font-size: 2.5vw;
     display: flex;
     justify-content: space-between;
-    width: 12%;
+    width: 18%;
     > svg:first-child {
       :hover {
         color: red;

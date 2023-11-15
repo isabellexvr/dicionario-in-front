@@ -17,6 +17,7 @@ const PageContainer = styled.section`
   justify-content: center;
   padding-left: ${(p) => (p.showSidebar ? "20vw" : "5vw")};
  // overflow-y: scroll;
+ padding-top: 7vw;
  @media (max-width: 600px) {
     flex-direction: column;
   }

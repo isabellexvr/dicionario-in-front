@@ -10,11 +10,14 @@ import colors from "../../constants/colors";
 import { RiMenu4Line, RiLogoutCircleLine } from "react-icons/ri";
 import { FiSun, FiMoon } from "react-icons/fi";
 import useUserInfo from "../../contexts/hooks/useUserInfo";
+import useSearch from "../../services/hooks/api/words/useSearch";
 
 export default function SideBar({ showSidebar, setShowSidebar }) {
+
   const { getWords, getWordsLoading, getWordsError } = useGetWords();
+  const { search, searchLoading, searchError } = useSearch();
+
   const [words, setWords] = useState([]);
-  const [searching, setSearching] = useState(false);
   const [shownWords, setShownWords] = useState([]);
   const [selectedLetter, setSelectedLetter] = useState("A");
   const { setUserInfo } = useUserInfo();
@@ -37,12 +40,10 @@ export default function SideBar({ showSidebar, setShowSidebar }) {
   }, []);
 
   function attWords(letter) {
-    setSearching(true);
     const toShow = words.filter(
       (w) => w[0] == letter.toLowerCase() || w[0] == letter
     );
     setShownWords(toShow);
-    setSearching(false);
   }
 
   return (
@@ -54,15 +55,16 @@ export default function SideBar({ showSidebar, setShowSidebar }) {
           </div>
 
           <Input
-            setSelectedLetter={setSelectedLetter}
             setShownWords={setShownWords}
             allWords={words}
-            placeholder="Pesquise aqui..."
+            placeholder="Pesquise palavras ou palavras-chave..."
+            search={search}
+            searchLoading={searchLoading}
           >
             {<FaMagnifyingGlass />}
           </Input>
           <DictionaryContainer>
-            {getWordsLoading ? (
+            {getWordsLoading || searchLoading ? (
               <LoadingContainer>
                 <h1>Carregando...</h1>
                 <FallingLines

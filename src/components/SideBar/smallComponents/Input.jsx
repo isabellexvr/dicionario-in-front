@@ -3,17 +3,26 @@ import colors from "../../../constants/colors";
 import { useState } from "react";
 
 export default function Input({
-  setSelectedLetter,
   setShownWords,
   allWords,
   children,
   placeholder,
+  search,
+  searchLoading,
 }) {
-  function handleInput(data) {
-    const newArr = allWords.filter((w) => w.includes(data));
-    setShownWords(newArr);
+  async function handleInput() {
+    try {
+      const res = await search(searchInput);
+      const arr = res.map((e) => e.Verbete);
+      console.log(arr);
+      setShownWords(arr);
+    } catch (err) {
+      console.log(err);
+    }
   }
+
   const [searchInput, setSearchInput] = useState("");
+
   function handleSearchInput(e) {
     if (e.target.value == "") {
       setShownWords(allWords);
@@ -21,17 +30,27 @@ export default function Input({
       setSearchInput(e.target.value);
     }
   }
+
   return (
     <InputContainer>
       <div className="input">
-        <label
+        <button
+          type="submit"
           onClick={() => {
             handleInput(searchInput);
           }}
         >
           {children}
-        </label>
-        <SearchInput placeholder={placeholder} onChange={handleSearchInput} />
+        </button>
+        <SearchInput
+          onKeyDown={(e) => {
+            if (e.key == "Enter") {
+              handleInput(searchInput);
+            }
+          }}
+          placeholder={placeholder}
+          onChange={handleSearchInput}
+        />
       </div>
     </InputContainer>
   );
@@ -42,7 +61,8 @@ const InputContainer = styled.div`
   margin-top: 1.3vw;
   > .input {
     position: relative;
-    > label {
+    > button {
+      all: unset;
       position: absolute;
       right: 1vw;
       top: 50%;
@@ -52,13 +72,16 @@ const InputContainer = styled.div`
       cursor: pointer;
     }
   }
+  ::placeholder {
+    font-size: 1.1vw;
+  }
   @media (max-width: 600px) {
     > .input {
-    > label {
-      font-size: 7vw;
-      top: 55%;
+      > button {
+        font-size: 7vw;
+        top: 55%;
+      }
     }
-  }
   }
 `;
 
@@ -75,6 +98,7 @@ const SearchInput = styled.input`
   height: 3vw;
   border-radius: 0.6vw;
   font-size: 1.2vw;
+
   @media (max-width: 600px) {
     height: 15vw;
     font-size: 5vw;
