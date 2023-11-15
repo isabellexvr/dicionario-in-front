@@ -2,12 +2,28 @@ import { useNavigate, useParams } from "react-router-dom";
 import styled from "styled-components";
 import colors from "../../constants/colors";
 import useGetWordByName from "../../services/hooks/api/words/useGetWordByName";
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import Background from "../../constants/Background";
 import { AiOutlineStar, AiFillStar } from "react-icons/ai";
 import { BiCommentDetail } from "react-icons/bi";
 import CommentsBar from "../../components/CommentsBar";
 import useUserInfo from "../../contexts/hooks/useUserInfo";
+import { mapTabs, responsive } from "./helpers";
+import Carousel from "react-multi-carousel";
+import "react-multi-carousel/lib/styles.css";
+import { FaArrowAltCircleRight, FaArrowAltCircleLeft } from "react-icons/fa";
+
+const CustomRightArrow = ({ onClick, ...rest }) => (
+  <RightArrow onClick={() => onClick()}>
+    <FaArrowAltCircleRight />
+  </RightArrow>
+);
+
+const CustomLeftArrow = ({ onClick, ...rest }) => (
+  <LeftArrow onClick={() => onClick()}>
+    <FaArrowAltCircleLeft />
+  </LeftArrow>
+);
 
 export default function WordPage({ showSidebar, setShowSidebar }) {
   const { palavra } = useParams();
@@ -18,7 +34,11 @@ export default function WordPage({ showSidebar, setShowSidebar }) {
 
   const [wordInfo, setWordInfo] = useState({});
   const [definicoes, setDefinicoes] = useState([]);
+  const [definicaoIN, setDefinicaoIN] = useState("");
   const [showComments, setShowComments] = useState(false);
+  const [tabs, setTabs] = useState([]);
+  const [selectedTab, setSelectedTab] = useState(0);
+
   const regex = /\(\d\) /g;
   const navigate = useNavigate();
 
@@ -27,6 +47,30 @@ export default function WordPage({ showSidebar, setShowSidebar }) {
       try {
         const data = await getWordByName(palavra);
         setWordInfo(data);
+        console.log(data);
+
+        const tabsArr = Object.keys(data).filter((e) => {
+          if (data[e] == null) {
+            return false;
+          } else if (
+            e == "Verbete" ||
+            e == "definicao" ||
+            e == "id" ||
+            e == "topicoIluminacaoNatural" ||
+            e == "obsrcc" ||
+            e == "comentariosExtraBrutos"
+          ) {
+            return false;
+          } else {
+            return true;
+          }
+        });
+
+        const defArr = ["Definições"];
+        const mappedTabsArr = mapTabs(tabsArr);
+
+        setTabs(defArr.concat(mappedTabsArr));
+
         const thereAreMany = data.definicao.search("(1)");
         if (thereAreMany == 1) {
           const arr = data.definicao.split(regex);
@@ -47,7 +91,26 @@ export default function WordPage({ showSidebar, setShowSidebar }) {
       {wordInfo.Verbete && (
         <>
           <WordDetailsContainer>
-            <Word showSidebar={showSidebar} >
+            <CarouselContainer>
+              <Carousel
+                customRightArrow={<CustomRightArrow />}
+                customLeftArrow={<CustomLeftArrow/>}
+                partialVisible
+                removeArrowOnDeviceType={["tablet", "mobile"]}
+                responsive={responsive}
+              >
+                {tabs.map((t, i) => (
+                  <Tab
+                    onClick={() => setSelectedTab(i)}
+                    isSelected={selectedTab == i}
+                    key={i}
+                  >
+                    {t}
+                  </Tab>
+                ))}
+              </Carousel>
+            </CarouselContainer>
+            <Word showSidebar={showSidebar}>
               {wordInfo.Verbete}
               <div className="icons">
                 <AiOutlineStar />
@@ -78,11 +141,6 @@ export default function WordPage({ showSidebar, setShowSidebar }) {
                 </>
               )}
             </Details>
-            <Details>
-              <h1>CLASSE GRAMATICAL</h1>
-              <h2>{wordInfo.classeGram}</h2>
-            </Details>
-            {}
           </WordDetailsContainer>
           {showComments && (
             <>
@@ -95,14 +153,93 @@ export default function WordPage({ showSidebar, setShowSidebar }) {
   );
 }
 
+const RightArrow = styled.div`
+  font-size: 1.5em; // Set your desired size
+  color: black; // Set your desired color
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  position: absolute;
+
+  font-size: 2.2vw;
+  right: 1%;
+  > svg {
+    opacity: 0.4;
+  }
+  :hover {
+    opacity: 0.7;
+  }
+`;
+
+const LeftArrow = styled.div`
+    font-size: 1.5em; // Set your desired size
+  color: black; // Set your desired color
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  position: absolute;
+
+  font-size: 2.2vw;
+  left: 1%;
+  > svg {
+    opacity: 0.4;
+  }
+  :hover {
+    opacity: 0.7;
+  }
+`
+
+const CarouselContainer = styled.div`
+  width: 100%; /* Adjust this width based on your layout */
+  margin: 0 auto;
+  position: absolute;
+  top: -2.9vw;
+`;
+
+const Tab = styled.div`
+  background-color: ${colors.darkGrey};
+  display: flex;
+  opacity: ${(p) => (p.isSelected ? "1" : "0.5")};
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  color: white;
+  font-weight: 600;
+  margin-right: 1vw;
+  height: 2.8vw;
+  padding: 0vw 1vw 0vw 1vw;
+  box-sizing: border-box;
+  border-radius: 0.7vw 0.7vw 0 0;
+  font-size: 1.1vw;
+  @media (max-width: 600px) {
+    font-size: 3vw;
+    width: 17vw;
+    height: 5vw;
+  }
+`;
 const WordDetailsContainer = styled.div`
+  ::-webkit-scrollbar-track {
+    background-color: ${colors.lightYellow};
+  }
+  ::-webkit-scrollbar {
+    width: 1px;
+    height: 100px;
+  }
+  ::-webkit-scrollbar-thumb {
+    background: ${colors.yellow};
+  }
   border: 2px solid ${colors.mediumGrey};
   width: 50%;
-  height: 65%;
-  border-radius: 1vw;
+  height: 50%;
+  border-radius: 0 0 1vw 1vw;
   display: flex;
   flex-direction: column;
   align-items: center;
+  position: relative;
+  padding-top: 1vw;
+  box-sizing: border-box;
   @media (max-width: 600px) {
     width: 80%;
     height: fit-content;
@@ -135,7 +272,6 @@ const Word = styled.h1`
     }
   }
   @media (max-width: 600px) {
-    
     font-size: 10vw;
     height: 13%;
     width: 90%;
@@ -144,15 +280,15 @@ const Word = styled.h1`
     flex-direction: column;
     align-items: flex-start;
     //background-color: red;
-    display: ${p => p.showSidebar ? "none" : "initial"};
+    display: ${(p) => (p.showSidebar ? "none" : "initial")};
     > .icons {
       font-size: 8vw;
       width: 100%;
       position: inherit;
       justify-content: flex-end;
       > svg:first-child {
-      margin-right: 1vw;
-    }
+        margin-right: 1vw;
+      }
     }
   }
 `;
@@ -165,7 +301,7 @@ const Details = styled.div`
   color: ${colors.darkThemeGrey};
   > h1 {
     font-weight: 800;
-    font-size: 1.5vw;
+    font-size: 1.2vw;
     margin-bottom: 0.5vw;
   }
 
@@ -185,17 +321,17 @@ const Details = styled.div`
   }
   @media (max-width: 600px) {
     > h1 {
-    font-size: 5vw;
-    margin-bottom: 3vw;
-    margin-top: 2vw;
-  }
-  > h2 {
-    //margin-top: 2vw;
-    line-height: 5vw;
-    text-align: justify;
-    > strong {
-      font-weight: 800;
+      font-size: 5vw;
+      margin-bottom: 3vw;
+      margin-top: 2vw;
     }
-  }
+    > h2 {
+      //margin-top: 2vw;
+      line-height: 5vw;
+      text-align: justify;
+      > strong {
+        font-weight: 800;
+      }
+    }
   }
 `;
