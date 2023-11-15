@@ -63,12 +63,68 @@ export const responsive = {
       },
       tablet: {
         breakpoint: { max: 1024, min: 464 },
-        items: 2,
+        items: 4,
         partialVisibilityGutter: 30 // this is needed to tell the amount of px that should be visible.
       },
       mobile: {
         breakpoint: { max: 464, min: 0 },
-        items: 1,
-        partialVisibilityGutter: 30 // this is needed to tell the amount of px that should be visible.
+        items: 3,
+        partialVisibilityGutter: 170 // this is needed to tell the amount of px that should be visible.
       }
     }
+
+export const ColumnsToName = {
+  verbeteIngles: "Inglês",
+  num: "Num",
+  cabeca_simb: "Cabeça/Símbolo",
+  rubrica: "Rubrica",
+  grupo: "Grupo",
+  classeGram: "Classe Gramatical",
+  genero_num: "Gênero/Número",
+  volp: "Volp",
+  fontes: "Fontes",
+  remissivaComplementar: "Rem. Complementar",
+  remissivaImperativa: "Rem. Imperativa",
+  f_rmula: "Fórmula",
+  locucao_expressoes: "Locução/Expressões",
+  etimologiaBruto: "Etimologia",
+  plural: "Plural",
+  sinonimosVariantes: "Sinônimos/Variantes",
+  antonimos: "Antônimos",
+  achega: "Achega",
+  exemplo: "Exemplo",
+  abonacao_citacoes_adagios: "Abonação/Citações/Adágios",
+  fig: "Fig",
+  comentariosExtraBrutos: "Comentários Extras",
+  comentariosExtraEditados: "Comentários Extras",
+  voceSabia: "Você sabia?",
+  ortoepia: "Ortoépia",
+}
+
+export const NameToColumns = {
+  Inglês: "verbeteIngles",
+  Num: "num",
+  "Cabeça/Símbolo": "cabeca_simb",
+  Rubrica: "rubrica",
+  Grupo: "grupo",
+  "Classe Gramatical": "classeGram",
+  "Gênero/Número": "genero_num",
+  Volp: "volp",
+  Fontes: "fontes",
+  "Rem. Complementar": "remissivaComplementar",
+  "Rem. Imperativa": "remissivaImperativa",
+  Fórmula: "f_rmula",
+  "Locução/Expressões": "locucao_expressoes",
+  Etimologia: "etimologiaBruto",
+  Plural: "plural",
+  "Sinônimos/Variantes": "sinonimosVariantes",
+  Antônimos: "antonimos",
+  Achega: "achega",
+  Exemplo: "exemplo",
+  "Abonação/Citações/Adágios": "abonacao_citacoes_adagios",
+  Fig: "fig",
+  "Comentários Extras": ["comentariosExtraBrutos", "comentariosExtraEditados"],
+  "Você sabia?": "voceSabia",
+  Ortoépia: "ortoepia",
+  Descrição: "descricao"
+};

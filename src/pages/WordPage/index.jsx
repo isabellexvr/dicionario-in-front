@@ -2,13 +2,13 @@ import { useNavigate, useParams } from "react-router-dom";
 import styled from "styled-components";
 import colors from "../../constants/colors";
 import useGetWordByName from "../../services/hooks/api/words/useGetWordByName";
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useState } from "react";
 import Background from "../../constants/Background";
-import { AiOutlineStar, AiFillStar } from "react-icons/ai";
+import { AiOutlineStar } from "react-icons/ai";
 import { BiCommentDetail } from "react-icons/bi";
 import CommentsBar from "../../components/CommentsBar";
 import useUserInfo from "../../contexts/hooks/useUserInfo";
-import { mapTabs, responsive } from "./helpers";
+import { NameToColumns, mapTabs, responsive } from "./helpers";
 import Carousel from "react-multi-carousel";
 import "react-multi-carousel/lib/styles.css";
 import { FaArrowAltCircleRight, FaArrowAltCircleLeft } from "react-icons/fa";
@@ -38,6 +38,7 @@ export default function WordPage({ showSidebar, setShowSidebar }) {
   const [showComments, setShowComments] = useState(false);
   const [tabs, setTabs] = useState([]);
   const [selectedTab, setSelectedTab] = useState(0);
+  const [selectedTabName, setSelectedTabName] = useState("Definições");
 
   const regex = /\(\d\) /g;
   const navigate = useNavigate();
@@ -47,7 +48,7 @@ export default function WordPage({ showSidebar, setShowSidebar }) {
       try {
         const data = await getWordByName(palavra);
         setWordInfo(data);
-        console.log(data);
+        //console.log(data);
 
         const tabsArr = Object.keys(data).filter((e) => {
           if (data[e] == null) {
@@ -94,14 +95,17 @@ export default function WordPage({ showSidebar, setShowSidebar }) {
             <CarouselContainer>
               <Carousel
                 customRightArrow={<CustomRightArrow />}
-                customLeftArrow={<CustomLeftArrow/>}
+                customLeftArrow={<CustomLeftArrow />}
                 partialVisible
                 removeArrowOnDeviceType={["tablet", "mobile"]}
                 responsive={responsive}
               >
                 {tabs.map((t, i) => (
                   <Tab
-                    onClick={() => setSelectedTab(i)}
+                    onClick={() => {
+                      setSelectedTab(i);
+                      setSelectedTabName(NameToColumns[tabs[i]]);
+                    }}
                     isSelected={selectedTab == i}
                     key={i}
                   >
@@ -119,28 +123,34 @@ export default function WordPage({ showSidebar, setShowSidebar }) {
                 />
               </div>
             </Word>
-            <Details>
-              <h1>DEFINIÇÕES</h1>
-              {definicoes.length == 1 && definicoes[0] == "v." ? (
-                <h3
-                  onClick={() =>
-                    navigate(`/palavra/${wordInfo.remissivaImperativa}`)
-                  }
-                >
-                  {wordInfo.remissivaImperativa}
-                </h3>
-              ) : (
-                <>
-                  {" "}
-                  {definicoes.map((d, i) => (
-                    <h2>
-                      <strong>{i + 1}</strong>. {d}
-                      {"\n"}
-                    </h2>
-                  ))}
-                </>
-              )}
-            </Details>
+            {selectedTab == 0 ? (
+              <Details>
+                <h1>{tabs[selectedTab]}</h1>
+                {definicoes.length == 1 && definicoes[0] == "v." ? (
+                  <h3
+                    onClick={() =>
+                      navigate(`/palavra/${wordInfo.remissivaImperativa}`)
+                    }
+                  >
+                    {wordInfo.remissivaImperativa}
+                  </h3>
+                ) : (
+                  <>
+                    {definicoes.map((d, i) => (
+                      <h2>
+                        <strong>{i + 1}</strong>. {d}
+                        {"\n"}
+                      </h2>
+                    ))}
+                  </>
+                )}
+              </Details>
+            ) : (
+              <Details>
+                <h1>{tabs[selectedTab]}</h1>
+                <h2>{wordInfo[selectedTabName]}</h2>
+              </Details>
+            )}
           </WordDetailsContainer>
           {showComments && (
             <>
@@ -173,7 +183,7 @@ const RightArrow = styled.div`
 `;
 
 const LeftArrow = styled.div`
-    font-size: 1.5em; // Set your desired size
+  font-size: 1.5em; // Set your desired size
   color: black; // Set your desired color
   cursor: pointer;
   display: flex;
@@ -189,13 +199,18 @@ const LeftArrow = styled.div`
   :hover {
     opacity: 0.7;
   }
-`
+`;
 
 const CarouselContainer = styled.div`
   width: 100%; /* Adjust this width based on your layout */
-  margin: 0 auto;
+  //margin: 0 auto;
   position: absolute;
   top: -2.9vw;
+  left: 0;
+  @media (max-width: 600px) {
+    top: -5.7vw;
+    z-index: 0;
+  }
 `;
 
 const Tab = styled.div`
@@ -215,8 +230,10 @@ const Tab = styled.div`
   font-size: 1.1vw;
   @media (max-width: 600px) {
     font-size: 3vw;
-    width: 17vw;
-    height: 5vw;
+    width: 25vw;
+    height: 8vw;
+    margin-right: 4vw;
+    z-index: 0;
   }
 `;
 const WordDetailsContainer = styled.div`
@@ -243,8 +260,10 @@ const WordDetailsContainer = styled.div`
   @media (max-width: 600px) {
     width: 80%;
     height: fit-content;
+  z-index: 0;
     margin-left: 10%;
   }
+
 `;
 
 const Word = styled.h1`
