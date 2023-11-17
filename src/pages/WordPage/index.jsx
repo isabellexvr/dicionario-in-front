@@ -25,7 +25,7 @@ const CustomLeftArrow = ({ onClick, ...rest }) => (
   </LeftArrow>
 );
 
-export default function WordPage({ showSidebar, setShowSidebar }) {
+export default function WordPage({ showSidebar, setShowSidebar, selectedTab, setSelectedTab }) {
   const { palavra } = useParams();
 
   const { getWordByName, getWordByNameLoading, getWordByNameError } =
@@ -37,7 +37,7 @@ export default function WordPage({ showSidebar, setShowSidebar }) {
   const [definicaoIN, setDefinicaoIN] = useState("");
   const [showComments, setShowComments] = useState(false);
   const [tabs, setTabs] = useState([]);
-  const [selectedTab, setSelectedTab] = useState(0);
+
   const [selectedTabName, setSelectedTabName] = useState("Definições");
 
   const regex = /\(\d\) /g;

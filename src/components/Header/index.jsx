@@ -32,7 +32,7 @@ export default function Header() {
       ) : (
         <>
           <CommonButton onClick={() => navigate("/")}>Início</CommonButton>
-          <CommonButton>Sobre</CommonButton>
+          <CommonButton onClick={() => navigate("/sobre")}>Sobre</CommonButton>
           <CommonButton onClick={() => navigate("/login")}>Login</CommonButton>
           <HighlightButton onClick={() => navigate("/cadastro")}>
             Cadastro

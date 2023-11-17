@@ -12,7 +12,7 @@ import { FiSun, FiMoon } from "react-icons/fi";
 import useUserInfo from "../../contexts/hooks/useUserInfo";
 import useSearch from "../../services/hooks/api/words/useSearch";
 
-export default function SideBar({ showSidebar, setShowSidebar }) {
+export default function SideBar({ showSidebar, setShowSidebar, selectedTab, setSelectedTab }) {
 
   const { getWords, getWordsLoading, getWordsError } = useGetWords();
   const { search, searchLoading, searchError } = useSearch();
@@ -97,6 +97,7 @@ export default function SideBar({ showSidebar, setShowSidebar }) {
                         if (screen.width <= 600) {
                           setShowSidebar(!showSidebar);
                         }
+                        setSelectedTab(0);
                         navigate(`/palavra/${w}`);
                       }}
                       key={i}

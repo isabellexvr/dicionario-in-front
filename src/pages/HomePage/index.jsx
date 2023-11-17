@@ -2,40 +2,15 @@ import React from "react";
 import styled from "styled-components";
 import colors from "../../constants/colors";
 import Background from "../../constants/Background";
-import Carousel from "react-multi-carousel";
-import "react-multi-carousel/lib/styles.css";
 
 export default function HomePage({ showSidebar, setShowSidebar }) {
-  const responsive = {
-    superLargeDesktop: {
-      breakpoint: { max: 4000, min: 3000 },
-      items: 5,
-    },
-    desktop: {
-      breakpoint: { max: 3000, min: 1024 },
-      items: 3,
-    },
-    tablet: {
-      breakpoint: { max: 1024, min: 464 },
-      items: 2,
-    },
-    mobile: {
-      breakpoint: { max: 464, min: 0 },
-      items: 1,
-    },
-  };
 
   return (
     <Background showSidebar={showSidebar}>
-      <Word>Dicionário Lumeeiro de Iluminação Natural</Word>
+      <Word>Dicionário Lumeeiro de luz, iluminação e termos afins</Word>
     </Background>
   );
 }
-
-const CarouselContainer = styled.div`
-  width: 80%; /* Adjust this width based on your layout */
-  margin: 0 auto;
-`;
 
 const Word = styled.h1`
   font-size: 3vw;
