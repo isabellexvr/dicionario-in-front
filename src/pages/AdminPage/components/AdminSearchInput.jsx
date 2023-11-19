@@ -116,4 +116,5 @@ const Input = styled.input`
   padding: 1.2vw;
   box-sizing: border-box;
   font-size: 1.5vw;
+  color: black;
 `;

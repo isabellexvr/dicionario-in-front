@@ -162,7 +162,7 @@ const CompressedSideBar = styled.div`
   height: 100%;
   svg {
     color: ${colors.lightGrey};
-    font-size: 2vw;
+    font-size: 1.5vw;
     cursor: pointer;
 
     border-radius: 0.5vw;
@@ -203,7 +203,7 @@ const CompressedSideBar = styled.div`
 
 const SideBarContainer = styled.div`
   background-color: #48556a;
-  width: ${(p) => (p.opened ? "30vw" : "5vw")};
+  width: ${(p) => (p.opened ? "30vw" : "4vw")};
   position: fixed;
   left: 0;
   top: 0;
@@ -216,7 +216,7 @@ const SideBarContainer = styled.div`
   > .menu-icon {
     > svg {
       color: ${colors.lightGrey};
-      font-size: 2vw;
+      font-size: 1.5vw;
       cursor: pointer;
     }
 

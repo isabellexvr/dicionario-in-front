@@ -95,10 +95,18 @@ export const ColumnsToName = {
   exemplo: "Exemplo",
   abonacao_citacoes_adagios: "Abonação/Citações/Adágios",
   fig: "Fig",
-  comentariosExtraBrutos: "Comentários Extras",
-  comentariosExtraEditados: "Comentários Extras",
+  comentariosExtraBrutos: "Comentários Extras Brutos",
+  comentariosExtraEditados: "Comentários Extras Editados",
   voceSabia: "Você sabia?",
   ortoepia: "Ortoépia",
+  Verbete: "Verbete",
+  C_digo: "Código",
+  indice: "Índice",
+  definicao: "Definição",
+  topicoIluminacaoNatural: "Tópico de Iluminação Natural",
+  etimologiaBruto: "Etimologia (Bruto)",
+  outrasLinguas: "Outras Línguas",
+  obsrcc: "OBSRCC",
 }
 
 export const NameToColumns = {
