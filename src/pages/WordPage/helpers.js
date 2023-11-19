@@ -68,8 +68,8 @@ export const responsive = {
       },
       mobile: {
         breakpoint: { max: 464, min: 0 },
-        items: 3,
-        partialVisibilityGutter: 170 // this is needed to tell the amount of px that should be visible.
+        items: 1,
+        partialVisibilityGutter: -400 // optional, default to 1.
       }
     }
 

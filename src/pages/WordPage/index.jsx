@@ -96,7 +96,6 @@ export default function WordPage({ showSidebar, setShowSidebar, selectedTab, set
                 customRightArrow={<CustomRightArrow />}
                 customLeftArrow={<CustomLeftArrow />}
                 partialVisible
-                removeArrowOnDeviceType={["tablet", "mobile"]}
                 responsive={responsive}
               >
                 {tabs.map((t, i) => (
@@ -114,13 +113,23 @@ export default function WordPage({ showSidebar, setShowSidebar, selectedTab, set
               </Carousel>
             </CarouselContainer>
             <Word showSidebar={showSidebar}>
-              {wordInfo.Verbete}
-              <div className="icons">
+              {screen.width <= 600 && (<>
+                <div className="icons">
                 <AiOutlineStar />
                 <BiCommentDetail
                   onClick={() => setShowComments(!showComments)}
                 />
               </div>
+              </>)}
+              {wordInfo.Verbete}
+              {screen.width > 600 && (<>
+                <div className="icons">
+                <AiOutlineStar />
+                <BiCommentDetail
+                  onClick={() => setShowComments(!showComments)}
+                />
+              </div>
+              </>)}
             </Word>
             {selectedTab == 0 ? (
               <Details>
@@ -205,8 +214,12 @@ const CarouselContainer = styled.div`
   position: absolute;
   top: -2.9vw;
   left: 0;
+  //background-color: red;
+  >ul{
+    background-color: green;
+  }
   @media (max-width: 600px) {
-    top: -5.7vw;
+    top: -8.35vw;
     z-index: 0;
   }
 `;
@@ -227,10 +240,11 @@ const Tab = styled.div`
   border-radius: 0.7vw 0.7vw 0 0;
   font-size: 1.1vw;
   @media (max-width: 600px) {
-    font-size: 3vw;
-    width: 25vw;
-    height: 8vw;
-    margin-right: 4vw;
+    font-size: 4.5vw;
+    width: 79vw;
+    height: 11vw;
+    //margin-right: 100vw;
+    border-radius: 2vw 2vw 0 0;
     z-index: 0;
   }
 `;
@@ -248,7 +262,6 @@ const WordDetailsContainer = styled.div`
   border: 2px solid ${colors.mediumGrey};
   width: 50%;
   height: fit-content;
-
   border-radius: 0 0 1vw 1vw;
   display: flex;
   flex-direction: column;
@@ -258,10 +271,11 @@ const WordDetailsContainer = styled.div`
   padding-bottom: 2vw;
   box-sizing: border-box;
   @media (max-width: 600px) {
-    width: 80%;
-    height: fit-content;
+    width: 80vw;
+    height: 50vh;
     z-index: 0;
-    margin-left: 10%;
+    margin-left: 0%;
+
   }
 `;
 
@@ -295,12 +309,14 @@ const Word = styled.h1`
     height: 13%;
     width: 90%;
     margin-bottom: 2vw;
-    margin-top: 6vw;
+    margin-top: 4vw;
     flex-direction: column;
     align-items: flex-start;
-    //background-color: red;
+    text-align: center;
     display: ${(p) => (p.showSidebar ? "none" : "initial")};
+
     > .icons {
+      margin-bottom: 1vw;
       font-size: 8vw;
       width: 100%;
       position: inherit;
@@ -339,13 +355,13 @@ const Details = styled.div`
     line-height: 1.6vw;
   }
   @media (max-width: 600px) {
+    margin-top: 5vw;
     > h1 {
       font-size: 5vw;
       margin-bottom: 3vw;
-      margin-top: 2vw;
+      margin-top: 5vw;
     }
     > h2 {
-      //margin-top: 2vw;
       line-height: 5vw;
       text-align: justify;
       > strong {

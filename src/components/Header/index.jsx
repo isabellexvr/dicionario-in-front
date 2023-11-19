@@ -4,8 +4,9 @@ import { useNavigate } from "react-router-dom";
 import useUserInfo from "../../contexts/hooks/useUserInfo";
 import { jwtDecode } from "jwt-decode";
 import { useEffect, useState } from "react";
+import { RiMenu4Line } from "react-icons/ri";
 
-export default function Header() {
+export default function Header({setShowSidebar}) {
   const navigate = useNavigate();
   const { userInfo } = useUserInfo();
   const [userInfos, setUserInfos] = useState({});
@@ -19,7 +20,7 @@ export default function Header() {
 
   return (
     <HeaderContainer>
-      {(typeof userInfo == "string") ? (
+      {typeof userInfo == "string" ? (
         <>
           <h1>
             Olá, <strong>{userInfos.nome}</strong>
@@ -31,9 +32,31 @@ export default function Header() {
         </>
       ) : (
         <>
-          <CommonButton onClick={() => navigate("/")}>Início</CommonButton>
-          <CommonButton onClick={() => navigate("/sobre")}>Sobre</CommonButton>
-          <CommonButton onClick={() => navigate("/login")}>Login</CommonButton>
+          {screen.width <= 600 ? (
+            <>
+            <RiMenu4Line onClick={() => {setShowSidebar(true)}} />
+              <HighlightButton onClick={() => navigate("/")}>
+                Início
+              </HighlightButton>
+              <HighlightButton onClick={() => navigate("/sobre")}>
+                Sobre
+              </HighlightButton>
+              <HighlightButton onClick={() => navigate("/login")}>
+                Login
+              </HighlightButton>
+            </>
+          ) : (
+            <>
+              <CommonButton onClick={() => navigate("/")}>Início</CommonButton>
+              <CommonButton onClick={() => navigate("/sobre")}>
+                Sobre
+              </CommonButton>
+              <CommonButton onClick={() => navigate("/login")}>
+                Login
+              </CommonButton>
+            </>
+          )}
+
           <HighlightButton onClick={() => navigate("/cadastro")}>
             Cadastro
           </HighlightButton>
@@ -66,11 +89,19 @@ const HeaderContainer = styled.div`
     > strong {
       font-weight: 700;
     }
+
   }
+    >svg{
+      font-size: 8vw;
+      color: ${colors.lightGrey};
+      position: absolute;
+      left: 5vw;
+    }
   @media (max-width: 600px) {
     height: 15vw;
-    width: 90vw;
-    >h1{
+    width: 100vw;
+    background-color: ${colors.darkGrey};
+    > h1 {
       font-size: 5.5vw;
       margin-right: 5vw;
     }

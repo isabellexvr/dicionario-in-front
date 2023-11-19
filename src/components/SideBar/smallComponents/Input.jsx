@@ -14,7 +14,7 @@ export default function Input({
     try {
       const res = await search(searchInput);
       const arr = res.map((e) => e.Verbete);
-      console.log(arr);
+     // console.log(arr);
       setShownWords(arr);
     } catch (err) {
       console.log(err);
@@ -81,6 +81,9 @@ const InputContainer = styled.div`
         font-size: 7vw;
         top: 55%;
       }
+    }
+    ::placeholder{
+      font-size: 3.7vw;
     }
   }
 `;

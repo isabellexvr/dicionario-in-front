@@ -1,83 +1,91 @@
 import styled from "styled-components";
-import { CompactTable } from '@table-library/react-table-library/compact';
+import { useEffect, useState } from "react";
+import Background from "../../constants/Background";
+import useGetWordById from "../../services/hooks/api/words/useGetWordById";
+import useSearch from "../../services/hooks/api/words/useSearch";
+import AdminSearchInput from "./components/AdminSearchInput";
+import useGetWords from "../../services/hooks/api/words/useGetWords.js";
+import colors from "../../constants/colors";
 
-/* {
-    "C_digo": null,
-    "Verbete": "aba",
-    "verbeteIngles": null,
-    "num": null,
-    "indice": null,
-    "cabeca_simb": null,
-    "rubrica": null,
-    "grupo": null,
-    "classeGram": "s",
-    "genero_num": "f",
-    "volp": null,
-    "fontes": null,
-    "remissivaComplementar": null,
-    "remissivaImperativa": null,
-    "definicao": "(1) Qualquer prolongamento de telhado além da prumada externa; beiral. \n(2) peça de madeira usada no arremate da junção entre a parede e o teto de madeira\n(3) peça saliente em obras de alvenaria, carpintaria, serralheria, cantaria etc.",
-    "f_rmula": null,
-    "topicoIluminacaoNatural": null,
-    "locucao_expressoes": "v. aba corrida\n",
-    "etimologiaBruto": null,
-    "ortoepia": null,
-    "plural": null,
-    "sinonimosVariantes": "beiral",
-    "antonimos": null,
-    "achega": null,
-    "exemplo": null,
-    "abonacao_citacoes_adagios": null,
-    "outrasLinguas": null,
-    "fig": null,
-    "comentariosExtraBrutos": null,
-    "comentariosExtraEditados": null,
-    "obsrcc": null,
-    "voceSabia": null,
-    "id": 1
-} */
+// input pra pesquisar palavra
+// começar pela primeira palavra?
+// filtrar por palavras
+// criar nova palavra => modal
 
-const COLUMNS = [
-    { label: 'Código', renderCell: (item) => item.name },
-    { label: 'Verbete', renderCell: (item) => item.name },
-    { label: 'Verbete em Inglês', renderCell: (item) => item.name },
-    { label: 'Num', renderCell: (item) => item.name },
-    { label: 'Índice', renderCell: (item) => item.name },
-    { label: 'Cabeça/Símbolo', renderCell: (item) => item.name },
-    { label: 'Rubrica', renderCell: (item) => item.name },
-    { label: 'Grupo', renderCell: (item) => item.name },
-    { label: 'Classe Gramatical', renderCell: (item) => item.name },
-    { label: 'Gênero/Número', renderCell: (item) => item.name },
-    { label: 'Volp', renderCell: (item) => item.name },
-    { label: 'Fontes', renderCell: (item) => item.name },
-    { label: 'Remissiva Complementar', renderCell: (item) => item.name },
-    { label: 'Remissiva Imperativa', renderCell: (item) => item.name },
-    { label: 'Definição', renderCell: (item) => item.name },
-    { label: 'Fórmula', renderCell: (item) => item.name },
-    { label: 'Tópico de Iluminação Natural', renderCell: (item) => item.name },
-    { label: 'Locução/Expressões', renderCell: (item) => item.name },
-    { label: 'Etimologia Bruto', renderCell: (item) => item.name },
-    { label: 'Ortoepia', renderCell: (item) => item.name },
-    { label: 'Plural', renderCell: (item) => item.name },
-    { label: 'Sinônimos Variantes', renderCell: (item) => item.name },
-    { label: 'Antônimos', renderCell: (item) => item.name },
-    { label: 'Achega', renderCell: (item) => item.name },
-    { label: 'Exemplo', renderCell: (item) => item.name },
-    { label: 'Abonação/Citações/Adágios', renderCell: (item) => item.name },
-    { label: 'Outras Línguas', renderCell: (item) => item.name },
-    { label: 'Fig', renderCell: (item) => item.name },
-    { label: 'Comentários Extra Brutos', renderCell: (item) => item.name },
-    { label: 'Comentários Extra Editados', renderCell: (item) => item.name },
-    { label: 'OBSRCC', renderCell: (item) => item.name },
-    { label: 'Você Sabia', renderCell: (item) => item.name },
+export default function AdminPage({ showSidebar, setShowSidebar }) {
+  const { getWords, getWordsLoading, getWordsError } = useGetWords();
 
-]
+  const [wordInfo, setWordInfo] = useState({});
+  const [words, setWords] = useState([]);
+  const [showSearchBar, setShowSearchBar] = useState(false);
 
-export default function AdminPage({ showSidebar, setShowSidebar }){
-    return(
+  const { getWordById, getWordByIdLoading, getWordByIdError } =
+    useGetWordById();
+  const { search, searchLoading, searchError } = useSearch();
+
+  useEffect(() => {
+    async function getApiWordInfo() {
+      try {
+        const data = await getWordById(1);
+        setWordInfo(data);
+      } catch (err) {
+        console.log(err);
+      }
+    }
+
+    async function getApiWords() {
+      try {
+        const data = await getWords();
+        console.log(data);
+        setWords(data);
+      } catch (err) {
+        console.log(err);
+      }
+    }
+
+    if (wordInfo.Verbete == undefined) {
+      getApiWordInfo();
+    }
+
+    if (words.length <= 0) {
+      getApiWords();
+    }
+  }, []);
+
+  return (
+    <Background>
+      {getWordByIdLoading ? (
+        <>CARREGANDO...</>
+      ) : (
         <>
-        <CompactTable columns={COLUMNS}/>
+          <PageHeader showSidebar={showSidebar}>
+            <AdminSearchInput
+              search={search}
+              setWordInfo={setWordInfo}
+              words={words}
+              showSearchBar={showSearchBar}
+              setShowSearchBar={setShowSearchBar}
+            ></AdminSearchInput>
+          </PageHeader>
+          <></>
         </>
-    )
+      )}
+    </Background>
+  );
 }
 
+const PageHeader = styled.div`
+position: absolute;
+top: 6vw;
+  background-color: ${colors.darkGrey};
+padding-top: 2vw;
+padding-bottom: 2vw;
+
+  width: 100%;
+  left: 50%;
+  transform: translateX(-50%);
+  //padding-left: ${(p) => (p.showSidebar ? "22vw" : "7vw")};
+  display: flex;
+  justify-content: center;
+  //align-items: center;
+`;

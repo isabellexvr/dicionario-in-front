@@ -8,7 +8,7 @@ import { FaMagnifyingGlass } from "react-icons/fa6";
 import { FallingLines } from "react-loader-spinner";
 import colors from "../../constants/colors";
 import { RiMenu4Line, RiLogoutCircleLine } from "react-icons/ri";
-import { FiSun, FiMoon } from "react-icons/fi";
+import { FiMoon } from "react-icons/fi";
 import useUserInfo from "../../contexts/hooks/useUserInfo";
 import useSearch from "../../services/hooks/api/words/useSearch";
 
@@ -182,6 +182,7 @@ const CompressedSideBar = styled.div`
     }
   }
   @media (max-width: 600px) {
+    display: none;
     > .top {
       display: flex;
       align-items: center;
@@ -210,6 +211,7 @@ const SideBarContainer = styled.div`
   display: flex;
   flex-direction: column;
   align-items: center;
+  z-index: 5;
 
   > .menu-icon {
     > svg {
@@ -217,10 +219,12 @@ const SideBarContainer = styled.div`
       font-size: 2vw;
       cursor: pointer;
     }
+
     width: 90%;
     display: flex;
     justify-content: flex-end;
     padding-top: 1vw;
+
   }
 
   font-family: "Roboto", sans-serif;
@@ -234,7 +238,7 @@ const SideBarContainer = styled.div`
     background: #6a6a6a79;
   }
   @media (max-width: 600px) {
-    width: ${(p) => (p.opened ? "100vw" : "15vw")};
+    width: ${(p) => (p.opened ? "100vw" : "0")};
     > .menu-icon {
       > svg {
         font-size: 7vw;

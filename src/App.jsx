@@ -1,5 +1,5 @@
 import SideBar from "./components/SideBar";
-import { BrowserRouter, Routes, Route, Outlet } from "react-router-dom";
+import { BrowserRouter, Routes, Route, Outlet, Navigate } from "react-router-dom";
 import HomePage from "./pages/HomePage";
 import WordPage from "./pages/WordPage";
 import Header from "./components/Header";
@@ -12,12 +12,16 @@ import useToken from "./services/hooks/useToken";
 import AboutPage from "./pages/AboutPage";
 
 function App() {
+
+
   const [showSidebar, setShowSidebar] = useState(false);
+  
   const [selectedTab, setSelectedTab] = useState(0);
+
   return (
     <UserInfoProvider>
       <BrowserRouter>
-        <Header />
+        <Header setShowSidebar={setShowSidebar} />
         <SideBar showSidebar={showSidebar} setShowSidebar={setShowSidebar} selectedTab={selectedTab} setSelectedTab={setSelectedTab} />
         <Routes>
           <Route
@@ -54,7 +58,8 @@ function App() {
                 <AdminPage
                   showSidebar={showSidebar}
                   setShowSidebar={setShowSidebar}
-                />
+                >
+                </AdminPage>
               }
               path="admin"
             />
