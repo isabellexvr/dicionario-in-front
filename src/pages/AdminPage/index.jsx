@@ -21,6 +21,9 @@ export default function AdminPage({ showSidebar, setShowSidebar }) {
   const [wordInfo, setWordInfo] = useState({});
   const [words, setWords] = useState([]);
   const [showSearchBar, setShowSearchBar] = useState(false);
+  const [info, setInfo] = useState([]);
+  const [columns, setColumns] = useState([]);
+  const [columnToEdit, setColumnToEdit] = useState(null);
 
   const { getWordById, getWordByIdLoading, getWordByIdError } =
     useGetWordById();
@@ -33,6 +36,8 @@ export default function AdminPage({ showSidebar, setShowSidebar }) {
       try {
         const data = await getWordById(1);
         setWordInfo(data);
+        setColumns(Object.keys(data).map((i) => ColumnsToName[i]));
+        setInfo(Object.values(data));
       } catch (err) {
         console.log(err);
       }
@@ -113,21 +118,40 @@ export default function AdminPage({ showSidebar, setShowSidebar }) {
           </PageHeader>
           <Columns>
             <h1>{wordInfo.Verbete}</h1>
-            {Object.keys(wordInfo).map((c) => (
-              <Column>
-                <h1>{ColumnsToName[c]}</h1>
+            {columns.map((c, i) => (
+              <Column key={i}>
+                <h1>{c}</h1>
 
-                <h2>{wordInfo[c]}</h2>
-                <div className="icons">
-                  <RiEditFill />
-                  <FaTrash onClick={() => {
-                    if(confirm("Você tem certeza que quer deletar esse campo?")){
-                      
-                    }else{
+                {columnToEdit == i ? (
+                  <EditContainer>
+                    <textarea
+                      onChange={(e) => {
+                        const newInfo = [...info];
+                        newInfo[i] = e.target.value;
+                        setInfo(newInfo);
+                      }}
+                      type="text"
+                      value={info[i]}
+                    />
+                    <div className="buttons">
+                      <button>Confirmar</button>
+                      <button onClick={() => setColumnToEdit(null)} >Cancelar</button>
+                    </div>
+                  </EditContainer>
+                ) : (
+                  <>
+                    <h2>{info[i]}</h2>
+                    <div className="icon">
+                      <RiEditFill
+                        onClick={() => {
+                          setColumnToEdit(i);
+                        }}
+                      />
+                    </div>
+                  </>
+                )}
 
-                    }
-                  }} />
-                </div>
+                {/*  */}
               </Column>
             ))}
           </Columns>
@@ -137,6 +161,58 @@ export default function AdminPage({ showSidebar, setShowSidebar }) {
     </Background>
   );
 }
+
+const EditContainer = styled.div`
+  width: 86%;
+  display: flex;
+  justify-content: space-between;
+  height: 100%;
+  
+>.buttons{
+  display: flex;
+  flex-direction: column;
+  justify-content: space-around;
+  align-items: center;
+  border-left: 1px solid ${colors.darkGrey};
+  box-sizing: border-box;
+ >button:first-child{
+  border: 1px solid ${colors.darkGrey};
+  background-color: none;
+  box-sizing: border-box;
+ }
+ >button:last-child{
+  background-color: red;
+  color: ${colors.lightGrey};
+ }
+ >button{
+   all: unset;
+   font-size: 1vw;
+   font-weight: 600;
+   border-radius: 0.2vw;
+   display: flex;
+   width: 90%;
+   justify-content: center;
+   align-items: center;
+   cursor: pointer;
+   height: 40%;
+   align-items: center;
+
+ }
+
+ width: 14%;
+
+}
+> textarea {
+    all: unset;
+    background-color: white;
+    width: 82%;
+    height: 5vw;
+    font-size: 1vw;
+    padding: 0.5vw;
+    box-sizing: border-box;
+    border-radius: 0.5vw;
+  }
+`
 
 const PageHeader = styled.div`
   position: absolute;
@@ -186,12 +262,14 @@ const Column = styled.div`
   height: fit-content;
   padding-top: 0.7vw;
   padding-bottom: 0.7vw;
-  > .icons {
+  > .icon {
     display: flex;
-    justify-content: space-around;
+    justify-content: center;
+    align-items: center;
     width: 10%;
     > svg {
       cursor: pointer;
+      font-size: 2vw;
     }
   }
   > h1 {
@@ -211,5 +289,7 @@ const Column = styled.div`
     width: 70%;
     border-right: 1px solid ${colors.darkGrey};
     margin-right: 1vw;
+    padding: 1vw;
   }
+
 `;
