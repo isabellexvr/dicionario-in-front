@@ -14,6 +14,7 @@ export default function Header({setShowSidebar}) {
   useEffect(() => {
     if (typeof userInfo == "string") {
       const decoded = jwtDecode(userInfo);
+      console.log(decoded)
       setUserInfos(decoded);
     }
   }, [userInfo]);
@@ -23,12 +24,18 @@ export default function Header({setShowSidebar}) {
       {typeof userInfo == "string" ? (
         <>
           <h1>
-            Olá, <strong>{userInfos.nome}</strong>
+            Olá,&ensp;<strong>{userInfos.nome}</strong>
           </h1>
           <CommonButton>Perfil</CommonButton>
+          {userInfos.isAdmin && (
+
+            <CommonButton onClick={() => navigate("/user/admin")} >Admin</CommonButton>
+          )}
+          
           <HighlightButton onClick={() => navigate("/")}>
             Início
           </HighlightButton>
+          
         </>
       ) : (
         <>
@@ -69,7 +76,7 @@ export default function Header({setShowSidebar}) {
 const HeaderContainer = styled.div`
   width: 70vw;
   height: 6vw;
-  position: fixed;
+  position: absolute;
   right: 0;
   top: 0;
   padding-right: 4vw;
