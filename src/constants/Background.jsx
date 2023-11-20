@@ -7,7 +7,7 @@ export default function Background({ children, showSidebar }) {
 
 const PageContainer = styled.section`
   background-color: ${colors.lightGrey};
-  height: fit-content;
+  height: 100vh;
   box-sizing: border-box;
   font-family: "Roboto", sans-serif;
   display: flex;

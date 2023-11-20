@@ -11,6 +11,7 @@ export default function AdminSearchInput({
   words,
   showSearchBar,
   setShowSearchBar,
+  setSelectedWord
 }) {
   const searchBar = document.getElementById("search-bar");
 
@@ -80,6 +81,7 @@ export default function AdminSearchInput({
               searchBarInfo={searchBarInfo}
               setWordInfo={setWordInfo}
               setShowSearchBar={setShowSearchBar}
+              setSelectedWord={setSelectedWord}
             ></SearchBar>,
             searchBar
           )}

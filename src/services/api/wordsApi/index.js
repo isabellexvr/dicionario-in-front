@@ -2,19 +2,23 @@ import api from "../api.js";
 
 const wordsApi = {
   allWords: async () => {
-    const res = await api.get("/words");
+    const res = await api.get("/words/all");
     return res.data;
   },
   wordById: async (id) => {
-    const res = await api.get(`/words/${id}`);
+    const res = await api.get(`/words/id/${id}`);
     return res.data;
   },
   wordByName: async (name) => {
-    const res = await api.get(`/words/${name}`);
+    const res = await api.get(`/words/name/${name}`);
     return res.data;
   },
-  editWord: async (params, token) => {
-    const res = await api.put(`words/edit-word/${params}`, {
+  wordsByFirstChar: async(char) => {
+    const res = await api.get(`/words/char/${char}`);
+    return res.data
+  },
+  editWord: async (params, body, token) => {
+    const res = await api.put(`words/edit-word/${params}`, body, {
       headers: { Authorization: "Bearer " + token },
     });
     return res.data;

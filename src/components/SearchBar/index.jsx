@@ -7,7 +7,7 @@ export default function SearchBar({
   searchInput,
   searchBarInfo,
   setWordInfo,
-  setShowSearchBar,
+  setShowSearchBar,setSelectedWord
 }) {
   function getSubstring(string, substring) {
     if (string == undefined) return "";
@@ -39,9 +39,11 @@ export default function SearchBar({
         <Word>{searchBarInfo.empty}</Word>
       ) : (
         <>
-          {searchBarInfo.map((w) => (
+          {searchBarInfo.map((w,i) => (
             <Word>
-              <Verbete>
+              <Verbete onClick={() => {
+                setSelectedWord(w.id)
+              }} >
                 <FaArrowRight />
                 {w.Verbete}
               </Verbete>
@@ -91,7 +93,7 @@ const SearchBarContainer = styled.div`
   height: fit-content;
   position: absolute;
   top: 12.5vw;
-  left: 50%;
+  left: 36.5%;
   transform: translateX(-50%);
   padding: 2vw;
   box-sizing: border-box;
@@ -111,6 +113,7 @@ const Definicao = styled.div`
 `;
 
 const Verbete = styled.div`
+cursor: pointer;
   display: flex;
   align-items: center;
   font-size: 1.5vw;

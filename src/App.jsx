@@ -79,7 +79,7 @@ function AuthorizedRoute({ children }) {
   const token = useToken();
 
   if (!token) {
-    return <Navigate to="/sign-in" />;
+    return <Navigate to="/login" />;
   }
 
   return <>{children}</>;

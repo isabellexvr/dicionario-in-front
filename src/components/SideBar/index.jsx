@@ -1,6 +1,7 @@
 import styled from "styled-components";
 import Input from "./smallComponents/Input";
 import useGetWords from "../../services/hooks/api/words/useGetWords.js";
+import useGetWordsByFirstChar from "../../services/hooks/api/words/useGetWordsByFirstChar";
 import { useEffect, useState } from "react";
 import PORTUGUESEALPHABET from "../../constants/portugueseAlphabet.js";
 import { useNavigate } from "react-router-dom";
@@ -12,9 +13,20 @@ import { FiMoon } from "react-icons/fi";
 import useUserInfo from "../../contexts/hooks/useUserInfo";
 import useSearch from "../../services/hooks/api/words/useSearch";
 
-export default function SideBar({ showSidebar, setShowSidebar, selectedTab, setSelectedTab }) {
+export default function SideBar({
+  showSidebar,
+  setShowSidebar,
+  selectedTab,
+  setSelectedTab,
+}) {
+  //const { getWords, getWordsLoading, getWordsError } = useGetWords();
+  const {
+    getWordByFirstCharData,
+    getWordByFirstCharLoading,
+    getWordByFirstCharError,
+    getWordByFirstChar,
+  } = useGetWordsByFirstChar();
 
-  const { getWords, getWordsLoading, getWordsError } = useGetWords();
   const { search, searchLoading, searchError } = useSearch();
 
   const [words, setWords] = useState([]);
@@ -26,7 +38,8 @@ export default function SideBar({ showSidebar, setShowSidebar, selectedTab, setS
   useEffect(() => {
     async function getApiWords() {
       try {
-        const data = await getWords();
+        const data = await getWordByFirstChar(selectedLetter);
+        console.log(data);
         const onlyWords = data.map((d) => d.Verbete);
         setWords(onlyWords);
         setShownWords(onlyWords);
@@ -64,7 +77,7 @@ export default function SideBar({ showSidebar, setShowSidebar, selectedTab, setS
             {<FaMagnifyingGlass />}
           </Input>
           <DictionaryContainer>
-            {getWordsLoading || searchLoading ? (
+            {getWordByFirstCharLoading || searchLoading ? (
               <LoadingContainer>
                 <h1>Carregando...</h1>
                 <FallingLines
@@ -224,7 +237,6 @@ const SideBarContainer = styled.div`
     display: flex;
     justify-content: flex-end;
     padding-top: 1vw;
-
   }
 
   font-family: "Roboto", sans-serif;

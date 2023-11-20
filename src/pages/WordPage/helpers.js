@@ -134,5 +134,7 @@ export const NameToColumns = {
   "Comentários Extras": ["comentariosExtraBrutos", "comentariosExtraEditados"],
   "Você sabia?": "voceSabia",
   Ortoépia: "ortoepia",
-  Descrição: "descricao"
+  Descrição: "descricao",
+  Verbete: "Verbete",
+  OBSRCC: "obsrcc"
 };

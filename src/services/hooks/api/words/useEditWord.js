@@ -9,7 +9,7 @@ export default function useEditWord() {
       loading: editWordLoading,
       error: editWordError,
       connect: editWord,
-    } = useAsync((params) => wordsApi.editWord(params, token), false);
+    } = useAsync((params, body) => wordsApi.editWord(params,body, token), false);
   
     return {
       editWordLoading,
