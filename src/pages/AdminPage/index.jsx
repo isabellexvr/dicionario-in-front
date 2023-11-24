@@ -1,6 +1,5 @@
 import styled from "styled-components";
 import { useEffect, useState } from "react";
-import Background from "../../constants/Background";
 import useGetWordById from "../../services/hooks/api/words/useGetWordById";
 import useSearch from "../../services/hooks/api/words/useSearch";
 import AdminSearchInput from "./components/AdminSearchInput";
@@ -61,6 +60,7 @@ export default function AdminPage({ showSidebar, setShowSidebar }) {
           setWordInfo(data);
           setColumns(Object.keys(data).map((i) => ColumnsToName[i]));
           setInfo(Object.values(data));
+          setShowSearchBar(false);
         } catch (err) {
           console.log(err);
         }

@@ -42,7 +42,8 @@ export default function SearchBar({
           {searchBarInfo.map((w,i) => (
             <Word>
               <Verbete onClick={() => {
-                setSelectedWord(w.id)
+                setSelectedWord(w.id);
+                setShowSearchBar(false);
               }} >
                 <FaArrowRight />
                 {w.Verbete}

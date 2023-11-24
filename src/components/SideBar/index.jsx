@@ -47,10 +47,10 @@ export default function SideBar({
         console.log(err);
       }
     }
-    if (words.length <= 0) {
+
       getApiWords();
-    }
-  }, []);
+
+  }, [selectedLetter]);
 
   function attWords(letter) {
     const toShow = words.filter(

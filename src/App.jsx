@@ -10,6 +10,7 @@ import { useState } from "react";
 import AdminPage from "./pages/AdminPage";
 import useToken from "./services/hooks/useToken";
 import AboutPage from "./pages/AboutPage";
+import ProfilePage from "./pages/ProfilePage";
 
 function App() {
 
@@ -63,6 +64,7 @@ function App() {
               }
               path="admin"
             />
+            <Route element={<ProfilePage/>} path="" />
           </Route>
           <Route path="cadastro" element={<SignUp />} />
           <Route path="login" element={<SignInPage />} />
