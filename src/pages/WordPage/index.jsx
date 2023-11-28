@@ -9,8 +9,6 @@ import { BiCommentDetail } from "react-icons/bi";
 import CommentsBar from "../../components/CommentsBar";
 import useUserInfo from "../../contexts/hooks/useUserInfo";
 import { NameToColumns, mapTabs, responsive } from "./helpers";
-import Carousel from "react-multi-carousel";
-import "react-multi-carousel/lib/styles.css";
 import { FaArrowAltCircleRight, FaArrowAltCircleLeft } from "react-icons/fa";
 
 const CustomRightArrow = ({ onClick, ...rest }) => (
@@ -25,7 +23,12 @@ const CustomLeftArrow = ({ onClick, ...rest }) => (
   </LeftArrow>
 );
 
-export default function WordPage({ showSidebar, setShowSidebar, selectedTab, setSelectedTab }) {
+export default function WordPage({
+  showSidebar,
+  setShowSidebar,
+  selectedTab,
+  setSelectedTab,
+}) {
   const { palavra } = useParams();
 
   const { getWordByName, getWordByNameLoading, getWordByNameError } =
@@ -68,6 +71,7 @@ export default function WordPage({ showSidebar, setShowSidebar, selectedTab, set
 
         const defArr = ["Definições"];
         const mappedTabsArr = mapTabs(tabsArr);
+        console.log("tabs ai porra: ", mappedTabsArr);
 
         setTabs(defArr.concat(mappedTabsArr));
 
@@ -91,45 +95,43 @@ export default function WordPage({ showSidebar, setShowSidebar, selectedTab, set
       {wordInfo.Verbete && (
         <>
           <WordDetailsContainer>
-            <CarouselContainer>
-              <Carousel
-                customRightArrow={<CustomRightArrow />}
-                customLeftArrow={<CustomLeftArrow />}
-                partialVisible
-                responsive={responsive}
-              >
-                {tabs.map((t, i) => (
-                  <Tab
-                    onClick={() => {
-                      setSelectedTab(i);
-                      setSelectedTabName(NameToColumns[tabs[i]]);
-                    }}
-                    isSelected={selectedTab == i}
-                    key={i}
-                  >
-                    {t}
-                  </Tab>
-                ))}
-              </Carousel>
-            </CarouselContainer>
+            <TabsContainer>
+              {tabs.map((t, i) => (
+                <Tab
+                  onClick={() => {
+                    setSelectedTab(i);
+                    setSelectedTabName(NameToColumns[tabs[i]]);
+                  }}
+                  isSelected={selectedTab == i}
+                  key={i}
+                >
+                  {t}
+                </Tab>
+              ))}
+            </TabsContainer>
+
             <Word showSidebar={showSidebar}>
-              {screen.width <= 600 && (<>
-                <div className="icons">
-                <AiOutlineStar />
-                <BiCommentDetail
-                  onClick={() => setShowComments(!showComments)}
-                />
-              </div>
-              </>)}
+              {screen.width <= 600 && (
+                <>
+                  <div className="icons">
+                    <AiOutlineStar />
+                    <BiCommentDetail
+                      onClick={() => setShowComments(!showComments)}
+                    />
+                  </div>
+                </>
+              )}
               {wordInfo.Verbete}
-              {screen.width > 600 && (<>
-                <div className="icons">
-                <AiOutlineStar />
-                <BiCommentDetail
-                  onClick={() => setShowComments(!showComments)}
-                />
-              </div>
-              </>)}
+              {screen.width > 600 && (
+                <>
+                  <div className="icons">
+                    <AiOutlineStar />
+                    <BiCommentDetail
+                      onClick={() => setShowComments(!showComments)}
+                    />
+                  </div>
+                </>
+              )}
             </Word>
             {selectedTab == 0 ? (
               <Details>
@@ -171,6 +173,14 @@ export default function WordPage({ showSidebar, setShowSidebar, selectedTab, set
   );
 }
 
+const TabsContainer = styled.div`
+  display: flex;
+  position: absolute; 
+  top: -1.5vw;
+ // background-color: red;
+  width: 100%;
+`;
+
 const RightArrow = styled.div`
   font-size: 1.5em; // Set your desired size
   color: black; // Set your desired color
@@ -209,21 +219,6 @@ const LeftArrow = styled.div`
   }
 `;
 
-const CarouselContainer = styled.div`
-  width: 100%; 
-  position: absolute;
-  top: -2.9vw;
-  left: 0;
-  //background-color: red;
-  >ul{
-    background-color: green;
-  }
-  @media (max-width: 600px) {
-    top: -8.35vw;
-    z-index: 0;
-  }
-`;
-
 const Tab = styled.div`
   background-color: ${colors.darkGrey};
   display: flex;
@@ -233,12 +228,14 @@ const Tab = styled.div`
   cursor: pointer;
   color: white;
   font-weight: 600;
-  margin-right: 1vw;
-  height: 2.8vw;
-  padding: 0vw 1vw 0vw 1vw;
+  margin-right: 0.25vw;
+  height: fit-content;
+  padding: 0.35vw 0.7vw 0.35vw 0.7vw;
   box-sizing: border-box;
-  border-radius: 0.7vw 0.7vw 0 0;
-  font-size: 1.1vw;
+  border-radius: 0.3vw 0.3vw 0 0;
+  font-size: min(15px, 0.8vw);
+  width: fit-content;
+  white-space: nowrap;
   @media (max-width: 600px) {
     font-size: 4.5vw;
     width: 79vw;
@@ -261,7 +258,7 @@ const WordDetailsContainer = styled.div`
   }
   border: 2px solid ${colors.mediumGrey};
   width: 50%;
-  height: fit-content;
+  height: 70%;
   border-radius: 0 0 1vw 1vw;
   display: flex;
   flex-direction: column;
@@ -275,7 +272,6 @@ const WordDetailsContainer = styled.div`
     height: 50vh;
     z-index: 0;
     margin-left: 0%;
-
   }
 `;
 
