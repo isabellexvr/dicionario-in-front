@@ -20,7 +20,7 @@ import { Navigate } from "react-router-dom";
 // filtrar por palavras
 // criar nova palavra => modal
 
-export default function AdminPage({ showSidebar, setShowSidebar }) {
+export default function AdminPage() {
   const { getWords, getWordsLoading, getWordsError } = useGetWords();
   const { userInfo } = useUserInfo();
 
@@ -90,12 +90,12 @@ export default function AdminPage({ showSidebar, setShowSidebar }) {
   }
 
   return (
-    <PageBackground showSidebar={showSidebar} >
+    <PageBackground >
       {getWordByIdLoading ? (
-        <PageHeader showSidebar={showSidebar}>Carregando...</PageHeader>
+        <PageHeader>Carregando...</PageHeader>
       ) : (
         <>
-          <PageHeader showSidebar={showSidebar}>
+          <PageHeader>
             <AdminSearchInput
               search={search}
               setWordInfo={setWordInfo}

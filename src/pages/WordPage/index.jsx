@@ -24,8 +24,6 @@ const CustomLeftArrow = ({ onClick, ...rest }) => (
 );
 
 export default function WordPage({
-  showSidebar,
-  setShowSidebar,
   selectedTab,
   setSelectedTab,
 }) {
@@ -91,7 +89,7 @@ export default function WordPage({
   }, [palavra]);
 
   return (
-    <Background showSidebar={showSidebar}>
+    <Background>
       {wordInfo.Verbete && (
         <>
           <WordDetailsContainer>
@@ -110,7 +108,7 @@ export default function WordPage({
               ))}
             </TabsContainer>
 
-            <Word showSidebar={showSidebar}>
+            <Word>
               {screen.width <= 600 && (
                 <>
                   <div className="icons">
@@ -309,7 +307,6 @@ const Word = styled.h1`
     flex-direction: column;
     align-items: flex-start;
     text-align: center;
-    display: ${(p) => (p.showSidebar ? "none" : "initial")};
 
     > .icons {
       margin-bottom: 1vw;

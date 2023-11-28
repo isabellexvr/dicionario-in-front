@@ -57,7 +57,7 @@ export default function Input({
 }
 
 const InputContainer = styled.div`
-  width: 85%;
+  width: 92%;
   margin-top: 1.3vw;
   > .input {
     position: relative;
@@ -73,7 +73,7 @@ const InputContainer = styled.div`
     }
   }
   ::placeholder {
-    font-size: 1.1vw;
+    font-size: 1vw;
   }
   @media (max-width: 600px) {
     > .input {
@@ -90,7 +90,9 @@ const InputContainer = styled.div`
 
 const SearchInput = styled.input`
   all: unset;
-  background-color: ${colors.lightGrey};
+  background-color: white;
+  border: 2px solid ${colors.mediumGrey};
+  box-sizing: border-box;
   color: ${colors.darkGrey};
   padding: 1.5vw;
   box-sizing: border-box;
@@ -98,9 +100,9 @@ const SearchInput = styled.input`
   justify-content: center;
   align-items: center;
   width: 100%;
-  height: 3vw;
+  height: 2vw;
   border-radius: 0.6vw;
-  font-size: 1.2vw;
+  font-size: 1vw;
 
   @media (max-width: 600px) {
     height: 15vw;

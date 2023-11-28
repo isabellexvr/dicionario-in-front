@@ -3,10 +3,10 @@ import styled from "styled-components";
 import colors from "../../constants/colors";
 import Background from "../../constants/Background";
 
-export default function HomePage({ showSidebar, setShowSidebar }) {
+export default function HomePage() {
 
   return (
-    <Background showSidebar={showSidebar}>
+    <Background>
       <Word>Dicionário Lumeeiro de luz, iluminação e termos afins</Word>
     </Background>
   );

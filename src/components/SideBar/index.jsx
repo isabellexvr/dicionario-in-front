@@ -13,12 +13,7 @@ import { FiMoon } from "react-icons/fi";
 import useUserInfo from "../../contexts/hooks/useUserInfo";
 import useSearch from "../../services/hooks/api/words/useSearch";
 
-export default function SideBar({
-  showSidebar,
-  setShowSidebar,
-  selectedTab,
-  setSelectedTab,
-}) {
+export default function SideBar({ selectedTab, setSelectedTab }) {
   //const { getWords, getWordsLoading, getWordsError } = useGetWords();
   const {
     getWordByFirstCharData,
@@ -39,7 +34,7 @@ export default function SideBar({
     async function getApiWords() {
       try {
         const data = await getWordByFirstChar(selectedLetter);
-        console.log(data);
+        //console.log(data);
         const onlyWords = data.map((d) => d.Verbete);
         setWords(onlyWords);
         setShownWords(onlyWords);
@@ -48,8 +43,7 @@ export default function SideBar({
       }
     }
 
-      getApiWords();
-
+    getApiWords();
   }, [selectedLetter]);
 
   function attWords(letter) {
@@ -60,90 +54,73 @@ export default function SideBar({
   }
 
   return (
-    <SideBarContainer opened={showSidebar}>
-      {showSidebar ? (
-        <>
-          <div className="menu-icon">
-            <RiMenu4Line onClick={() => setShowSidebar(!showSidebar)} />
-          </div>
+    <SideBarContainer>
+      <>
+        <Input
+          setShownWords={setShownWords}
+          allWords={words}
+          placeholder="Pesquisa simples..."
+          search={search}
+          searchLoading={searchLoading}
+        >
+          {<FaMagnifyingGlass />}
+        </Input>
+        <DictionaryContainer>
+          {getWordByFirstCharLoading || searchLoading ? (
+            <LoadingContainer>
+              <h1>Carregando...</h1>
+              <FallingLines
+                color={colors.darkGrey}
+                width="100"
+                visible={true}
+                ariaLabel="falling-lines-loading"
+              />
+            </LoadingContainer>
+          ) : (
+            <>
+              <AlphabetContainer>
+                {PORTUGUESEALPHABET.map((l, i) => (
+                  <Letter
+                    onClick={() => {
+                      setSelectedLetter(l);
+                      attWords(l);
+                    }}
+                    selectedLetter={selectedLetter == l}
+                    key={i}
+                  >
+                    {l}
+                  </Letter>
+                ))}
+              </AlphabetContainer>
+              <WordsContainer>
+                {shownWords.map((w, i) => (
+                  <Word
+                    onClick={() => {
+                      if (screen.width <= 600) {
+                      }
+                      setSelectedTab(0);
+                      navigate(`/palavra/${w}`);
+                    }}
+                    key={i}
+                  >
+                    {w}
+                  </Word>
+                ))}
+              </WordsContainer>
+            </>
+          )}
+        </DictionaryContainer>
+        <OpenedSidebarBottom>
 
-          <Input
-            setShownWords={setShownWords}
-            allWords={words}
-            placeholder="Pesquise palavras ou palavras-chave..."
-            search={search}
-            searchLoading={searchLoading}
-          >
-            {<FaMagnifyingGlass />}
-          </Input>
-          <DictionaryContainer>
-            {getWordByFirstCharLoading || searchLoading ? (
-              <LoadingContainer>
-                <h1>Carregando...</h1>
-                <FallingLines
-                  color={colors.lightGrey}
-                  width="100"
-                  visible={true}
-                  ariaLabel="falling-lines-loading"
-                />
-              </LoadingContainer>
-            ) : (
-              <>
-                <AlphabetContainer>
-                  {PORTUGUESEALPHABET.map((l, i) => (
-                    <Letter
-                      onClick={() => {
-                        setSelectedLetter(l);
-                        attWords(l);
-                      }}
-                      selectedLetter={selectedLetter == l}
-                      key={i}
-                    >
-                      {l}
-                    </Letter>
-                  ))}
-                </AlphabetContainer>
-                <WordsContainer>
-                  {shownWords.map((w, i) => (
-                    <Word
-                      onClick={() => {
-                        if (screen.width <= 600) {
-                          setShowSidebar(!showSidebar);
-                        }
-                        setSelectedTab(0);
-                        navigate(`/palavra/${w}`);
-                      }}
-                      key={i}
-                    >
-                      {w}
-                    </Word>
-                  ))}
-                </WordsContainer>
-              </>
-            )}
-          </DictionaryContainer>
-          <OpenedSidebarBottom>
-            <FiMoon />
-            <RiLogoutCircleLine
-              onClick={() => {
-                localStorage.removeItem("userInfo");
-                setUserInfo({});
-                navigate("/");
-              }}
-            />
-          </OpenedSidebarBottom>
-        </>
-      ) : (
-        <CompressedSideBar>
-          <div className="top">
-            <RiMenu4Line onClick={() => setShowSidebar(!showSidebar)} />
-            {<FaMagnifyingGlass />}
-          </div>
-          <div className="bottom">
-            <FiMoon />
-          </div>
-        </CompressedSideBar>
-      )}
+          <RiLogoutCircleLine
+            onClick={() => {
+              localStorage.removeItem("userInfo");
+              setUserInfo({});
+              navigate("/");
+            }}
+          />
+        </OpenedSidebarBottom>
+      </>
     </SideBarContainer>
   );
 }
@@ -157,7 +134,7 @@ const OpenedSidebarBottom = styled.div`
   z-index: 1;
 
   > svg {
-    color: ${colors.lightGrey};
+    color: ${colors.darkGrey};
     font-size: 2vw;
     cursor: pointer;
 
@@ -171,52 +148,10 @@ const OpenedSidebarBottom = styled.div`
   }
 `;
 
-const CompressedSideBar = styled.div`
-  height: 100%;
-  svg {
-    color: ${colors.lightGrey};
-    font-size: 1.5vw;
-    cursor: pointer;
-
-    border-radius: 0.5vw;
-    padding: 0.5vw;
-    :hover {
-      background-color: ${colors.lightYellow};
-    }
-  }
-  > .top {
-    display: flex;
-    align-items: center;
-    justify-content: flex-start;
-    flex-direction: column;
-    height: 90%;
-    > svg {
-      margin-top: 3vw;
-    }
-  }
-  @media (max-width: 600px) {
-    display: none;
-    > .top {
-      display: flex;
-      align-items: center;
-      justify-content: flex-start;
-      flex-direction: column;
-      > svg {
-        font-size: 7vw;
-        margin-top: 6vw;
-      }
-    }
-    > .bottom {
-      > svg {
-        font-size: 7vw;
-      }
-    }
-  }
-`;
-
 const SideBarContainer = styled.div`
-  background-color: #48556a;
-  width: ${(p) => (p.opened ? "30vw" : "4vw")};
+  background-color: ${colors.lightGrey};
+  border-right: 2px solid ${colors.mediumGrey};
+  width: 20vw;
   position: fixed;
   left: 0;
   top: 0;
@@ -225,10 +160,11 @@ const SideBarContainer = styled.div`
   flex-direction: column;
   align-items: center;
   z-index: 5;
+  box-sizing: border-box;
 
   > .menu-icon {
     > svg {
-      color: ${colors.lightGrey};
+      color: ${colors.darkGrey};
       font-size: 1.5vw;
       cursor: pointer;
     }
@@ -241,16 +177,17 @@ const SideBarContainer = styled.div`
 
   font-family: "Roboto", sans-serif;
   ::-webkit-scrollbar-track {
-    background-color: ${colors.darkGrey};
+    //background-color: ${colors.darkGrey};
   }
   ::-webkit-scrollbar {
     width: 1px;
   }
   ::-webkit-scrollbar-thumb {
-    background: #6a6a6a79;
+    background: ${colors.lightYellow};
+    opacity: 0.5;
   }
   @media (max-width: 600px) {
-    width: ${(p) => (p.opened ? "100vw" : "0")};
+    //width: ${(p) => (p.opened ? "100vw" : "0")};
     > .menu-icon {
       > svg {
         font-size: 7vw;
@@ -262,12 +199,12 @@ const SideBarContainer = styled.div`
 
 const DictionaryContainer = styled.div`
   display: flex;
-  width: 85%;
+  width: 92%;
   position: relative;
-  height: 65%;
-  border: 4px solid ${colors.mediumGrey};
+  height: 80%;
+  border: 2px solid ${colors.mediumGrey};
   box-sizing: border-box;
-  border-radius: 1vw;
+  border-radius: 0.8vw;
   align-items: center;
   justify-content: space-between;
   margin-top: 1.2vw;
@@ -283,14 +220,14 @@ const DictionaryContainer = styled.div`
 `;
 
 const AlphabetContainer = styled.div`
-  width: 3.8vw;
+  width: 25%;
   color: #d8dfea;
   display: flex;
   flex-direction: column;
   justify-content: space-between;
-  font-weight: 600;
-  font-size: 1vw;
-  height: 90%;
+  font-weight: 800;
+  font-size: 0.75vw;
+  height: 97%;
   overflow-y: scroll;
   :hover {
     background-color: #fcf05d;
@@ -307,14 +244,15 @@ const AlphabetContainer = styled.div`
 const Letter = styled.button`
   all: unset;
   background-color: ${(p) => (p.selectedLetter ? "#fcf05d" : "")};
-  color: ${(p) => (p.selectedLetter ? "#48556a" : "")};
-  width: 100%;
+  color: ${colors.darkGrey};
+  width: 90%;
   display: flex;
   justify-content: center;
-  border-radius: 0px 1vw 1vw 0px;
-  height: 1.65vw;
+  border-radius: 0px 0.3vw 0.3vw 0px;
+  padding-top: 0.23vw;
+  padding-bottom: 0.23vw;
   cursor: pointer;
-  margin-bottom: 1vw;
+  margin-bottom: 0.75vw;
   align-items: center;
   :hover {
     background-color: #fcf05d;
@@ -334,11 +272,14 @@ const WordsContainer = styled.div`
   align-items: flex-start;
   width: 80%;
   right: 0;
-  font-size: 1.1vw;
-  height: 90%;
+  font-size: 0.8vw;
+  height: 96%;
   z-index: 2;
-
+  color: ${colors.darkGrey};
   overflow-y: scroll;
+  padding-left: 0.5vw;
+  box-sizing: border-box;
+
 
   @media (max-width: 600px) {
     font-size: 4vw;
@@ -352,13 +293,10 @@ const WordsContainer = styled.div`
 
 const Word = styled.h1`
   width: 100%;
-  margin-bottom: 1.7vw;
-  color: #d8dfea;
+  margin-bottom: 0.8vw;
+  color: ${colors.darkGrey};
   font-weight: 600;
   cursor: pointer;
-  :hover {
-    color: ${colors.darkGrey};
-  }
   z-index: 2;
 
   @media (max-width: 600px) {
@@ -375,7 +313,7 @@ const LoadingContainer = styled.div`
   align-items: center;
   flex-direction: column;
   > h1 {
-    color: ${colors.lightGrey};
+    color: ${colors.darkGrey};
     margin-bottom: 1vw;
   }
 `;
