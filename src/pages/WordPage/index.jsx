@@ -174,7 +174,8 @@ export default function WordPage({
 const TabsContainer = styled.div`
   display: flex;
   position: absolute; 
-  top: -1.5vw;
+  top: -1.65vw;
+
  // background-color: red;
   width: 100%;
 `;
@@ -255,8 +256,9 @@ const WordDetailsContainer = styled.div`
     background: ${colors.yellow};
   }
   border: 2px solid ${colors.mediumGrey};
-  width: 50%;
-  height: 70%;
+  background-color: white;
+  width: 80%;
+  height: 80%;
   border-radius: 0 0 1vw 1vw;
   display: flex;
   flex-direction: column;

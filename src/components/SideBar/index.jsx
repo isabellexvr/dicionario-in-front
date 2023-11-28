@@ -14,7 +14,9 @@ import useUserInfo from "../../contexts/hooks/useUserInfo";
 import useSearch from "../../services/hooks/api/words/useSearch";
 
 export default function SideBar({ selectedTab, setSelectedTab }) {
-  //const { getWords, getWordsLoading, getWordsError } = useGetWords();
+  const { getWords, getWordsLoading, getWordsError } = useGetWords();
+
+
   const {
     getWordByFirstCharData,
     getWordByFirstCharLoading,
@@ -33,7 +35,8 @@ export default function SideBar({ selectedTab, setSelectedTab }) {
   useEffect(() => {
     async function getApiWords() {
       try {
-        const data = await getWordByFirstChar(selectedLetter);
+        //const data = await getWordByFirstChar(selectedLetter);
+        const data = await getWords();
         //console.log(data);
         const onlyWords = data.map((d) => d.Verbete);
         setWords(onlyWords);
@@ -44,7 +47,7 @@ export default function SideBar({ selectedTab, setSelectedTab }) {
     }
 
     getApiWords();
-  }, [selectedLetter]);
+  }, []);
 
   function attWords(letter) {
     const toShow = words.filter(
@@ -66,7 +69,7 @@ export default function SideBar({ selectedTab, setSelectedTab }) {
           {<FaMagnifyingGlass />}
         </Input>
         <DictionaryContainer>
-          {getWordByFirstCharLoading || searchLoading ? (
+          {getWordsLoading || searchLoading ? (
             <LoadingContainer>
               <h1>Carregando...</h1>
               <FallingLines
@@ -183,7 +186,7 @@ const SideBarContainer = styled.div`
     width: 1px;
   }
   ::-webkit-scrollbar-thumb {
-    background: ${colors.lightYellow};
+    background: ${colors.lightGrey};
     opacity: 0.5;
   }
   @media (max-width: 600px) {
@@ -202,6 +205,7 @@ const DictionaryContainer = styled.div`
   width: 92%;
   position: relative;
   height: 80%;
+  background-color: white;
   border: 2px solid ${colors.mediumGrey};
   box-sizing: border-box;
   border-radius: 0.8vw;
@@ -244,15 +248,18 @@ const AlphabetContainer = styled.div`
 const Letter = styled.button`
   all: unset;
   background-color: ${(p) => (p.selectedLetter ? "#fcf05d" : "")};
+  border: 1px solid ${colors.mediumGrey};
+  border-left: none;
+  box-sizing: border-box;
   color: ${colors.darkGrey};
   width: 90%;
   display: flex;
   justify-content: center;
   border-radius: 0px 0.3vw 0.3vw 0px;
-  padding-top: 0.23vw;
+  padding-top: 0.25vw;
   padding-bottom: 0.23vw;
   cursor: pointer;
-  margin-bottom: 0.75vw;
+  margin-bottom: 0.35vw;
   align-items: center;
   :hover {
     background-color: #fcf05d;
