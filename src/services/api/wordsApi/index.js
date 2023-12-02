@@ -38,6 +38,11 @@ const wordsApi = {
   search: async (query) => {
     const res = await api.get(`words/search?input=${query}`);
     return res.data;
+  },
+  tabs: async (word) => {
+    const res = await api.get(`words/tabs/${word}`);
+    console.log(word)
+    return res.data;
   }
 };
 

@@ -248,7 +248,7 @@ const AlphabetContainer = styled.div`
 const Letter = styled.button`
   all: unset;
   background-color: ${(p) => (p.selectedLetter ? "#fcf05d" : "")};
-  border: 1px solid ${colors.mediumGrey};
+  //border: 1px solid ${colors.mediumGrey};
   border-left: none;
   box-sizing: border-box;
   color: ${colors.darkGrey};

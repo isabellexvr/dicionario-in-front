@@ -2,6 +2,7 @@ import { useNavigate, useParams } from "react-router-dom";
 import styled from "styled-components";
 import colors from "../../constants/colors";
 import useGetWordByName from "../../services/hooks/api/words/useGetWordByName";
+import useGetWordTabs from "../../services/hooks/api/words/useGetWordTabs";
 import { useEffect, useState } from "react";
 import Background from "../../constants/Background";
 import { AiOutlineStar } from "react-icons/ai";
@@ -9,37 +10,31 @@ import { BiCommentDetail } from "react-icons/bi";
 import CommentsBar from "../../components/CommentsBar";
 import useUserInfo from "../../contexts/hooks/useUserInfo";
 import { NameToColumns, mapTabs, responsive } from "./helpers";
-import { FaArrowAltCircleRight, FaArrowAltCircleLeft } from "react-icons/fa";
+import DetailsFooter from "./components/DetailsFooter";
+import { IoSunny } from "react-icons/io5";
+import { IoMdArrowDropright } from "react-icons/io";
 
-const CustomRightArrow = ({ onClick, ...rest }) => (
-  <RightArrow onClick={() => onClick()}>
-    <FaArrowAltCircleRight />
-  </RightArrow>
-);
+const HeaderTabs = ["Acepções", "Acepções em Iluminação Natural"];
 
-const CustomLeftArrow = ({ onClick, ...rest }) => (
-  <LeftArrow onClick={() => onClick()}>
-    <FaArrowAltCircleLeft />
-  </LeftArrow>
-);
-
-export default function WordPage({
-  selectedTab,
-  setSelectedTab,
-}) {
+export default function WordPage({ selectedTab, setSelectedTab }) {
   const { palavra } = useParams();
 
   const { getWordByName, getWordByNameLoading, getWordByNameError } =
     useGetWordByName();
+
+  const { getWordTabsData, getWordTabsLoading, getWordTabsError, getWordTabs } =
+    useGetWordTabs();
+
   const { userInfo } = useUserInfo();
 
   const [wordInfo, setWordInfo] = useState({});
   const [definicoes, setDefinicoes] = useState([]);
   const [definicaoIN, setDefinicaoIN] = useState("");
   const [showComments, setShowComments] = useState(false);
-  const [tabs, setTabs] = useState([]);
+  const [tabs, setTabs] = useState([0, 1]);
+  const [genClass, setGenClass] = useState([]);
 
-  const [selectedTabName, setSelectedTabName] = useState("Definições");
+  const [selectedHeaderTab, setSelectedHeaderTab] = useState(0);
 
   const regex = /\(\d\) /g;
   const navigate = useNavigate();
@@ -48,30 +43,17 @@ export default function WordPage({
     async function getApiWordByName() {
       try {
         const data = await getWordByName(palavra);
+        const tabsData = await getWordTabs(palavra);
+
         setWordInfo(data);
+        setDefinicaoIN(data["topicoIluminacaoNatural"]);
+        setTabs(tabsData.filter((e) => e !== null));
+        console.log(data);
+        const arr = [];
+        if (data.classeGram !== null) arr.push(data.classeGram);
+        if (data.genero_num !== null) arr.push(data.genero_num);
 
-        const tabsArr = Object.keys(data).filter((e) => {
-          if (data[e] == null) {
-            return false;
-          } else if (
-            e == "Verbete" ||
-            e == "definicao" ||
-            e == "id" ||
-            e == "topicoIluminacaoNatural" ||
-            e == "obsrcc" ||
-            e == "comentariosExtraBrutos"
-          ) {
-            return false;
-          } else {
-            return true;
-          }
-        });
-
-        const defArr = ["Definições"];
-        const mappedTabsArr = mapTabs(tabsArr);
-        console.log("tabs ai porra: ", mappedTabsArr);
-
-        setTabs(defArr.concat(mappedTabsArr));
+        setGenClass(arr);
 
         const thereAreMany = data.definicao.search("(1)");
         if (thereAreMany == 1) {
@@ -94,71 +76,85 @@ export default function WordPage({
         <>
           <WordDetailsContainer>
             <TabsContainer>
-              {tabs.map((t, i) => (
+              {HeaderTabs.map((t, i) => (
                 <Tab
                   onClick={() => {
                     setSelectedTab(i);
-                    setSelectedTabName(NameToColumns[tabs[i]]);
+                    setSelectedHeaderTab(i);
                   }}
-                  isSelected={selectedTab == i}
+                  isSelected={selectedHeaderTab == i}
                   key={i}
                 >
                   {t}
                 </Tab>
               ))}
             </TabsContainer>
-
-            <Word>
-              {screen.width <= 600 && (
-                <>
-                  <div className="icons">
-                    <AiOutlineStar />
-                    <BiCommentDetail
-                      onClick={() => setShowComments(!showComments)}
-                    />
-                  </div>
-                </>
-              )}
-              {wordInfo.Verbete}
-              {screen.width > 600 && (
-                <>
-                  <div className="icons">
-                    <AiOutlineStar />
-                    <BiCommentDetail
-                      onClick={() => setShowComments(!showComments)}
-                    />
-                  </div>
-                </>
-              )}
-            </Word>
-            {selectedTab == 0 ? (
-              <Details>
-                <h1>{tabs[selectedTab]}</h1>
-                {definicoes.length == 1 && definicoes[0] == "v." ? (
-                  <h3
-                    onClick={() =>
-                      navigate(`/palavra/${wordInfo.remissivaImperativa}`)
-                    }
-                  >
-                    {wordInfo.remissivaImperativa}
-                  </h3>
-                ) : (
+            <DetailsHeader>
+              <Word>
+                {screen.width <= 600 && (
                   <>
-                    {definicoes.map((d, i) => (
-                      <h2>
-                        <strong>{i + 1}</strong>. {d}
-                        {"\n"}
-                      </h2>
-                    ))}
+                    <div className="icons">
+                      <AiOutlineStar />
+                      <BiCommentDetail
+                        onClick={() => setShowComments(!showComments)}
+                      />
+                    </div>
                   </>
                 )}
-              </Details>
-            ) : (
-              <Details>
-                <h1>{tabs[selectedTab]}</h1>
-                <h2>{wordInfo[selectedTabName]}</h2>
-              </Details>
-            )}
+                <h1>{wordInfo.Verbete}</h1>
+
+                {screen.width > 600 && (
+                  <>
+                    <div className="icons">
+                      <AiOutlineStar />
+                      <BiCommentDetail
+                        onClick={() => setShowComments(!showComments)}
+                      />
+                    </div>
+                  </>
+                )}
+              </Word>
+              {genClass.map((e, i) => (
+                <AboutWord key={i}>
+                  <IoMdArrowDropright />
+                  <strong>
+                    {i == 0 ? "Classe Gramatical: " : "Gênero/Número: "}
+                  </strong>
+                  &ensp;
+                  <span>{e}</span>
+                </AboutWord>
+              ))}
+              {selectedTab == 0 ? (
+                <Details>
+                  <h1>{HeaderTabs[selectedHeaderTab]}</h1>
+                  {definicoes.length == 1 && definicoes[0] == "v." ? (
+                    <h3
+                      onClick={() =>
+                        navigate(`/palavra/${wordInfo.remissivaImperativa}`)
+                      }
+                    >
+                      {wordInfo.remissivaImperativa}
+                    </h3>
+                  ) : (
+                    <>
+                      {definicoes.map((d, i) => (
+                        <h2>
+                          <strong>{i + 1}</strong>. {d}
+                          {"\n"}
+                        </h2>
+                      ))}
+                    </>
+                  )}
+                </Details>
+              ) : (
+                <Details>
+                  <h1>{HeaderTabs[selectedHeaderTab]}</h1>
+                  <h2>{wordInfo[selectedHeaderTab]}</h2>
+                </Details>
+              )}
+            </DetailsHeader>
+
+            <DetailsFooter tabs={tabs} wordInfo={wordInfo} default={tabs[0]} />
           </WordDetailsContainer>
           {showComments && (
             <>
@@ -171,67 +167,38 @@ export default function WordPage({
   );
 }
 
+const DetailsHeader = styled.div`
+  width: 100%;
+  height: 65%;
+  padding: 2vw;
+  padding-top: 2.7vw;
+  box-sizing: border-box;
+`;
+
 const TabsContainer = styled.div`
   display: flex;
-  position: absolute; 
-  top: -1.65vw;
+  position: absolute;
+  top: 0;
+  z-index: 2;
 
- // background-color: red;
+  // background-color: red;
   width: 100%;
 `;
 
-const RightArrow = styled.div`
-  font-size: 1.5em; // Set your desired size
-  color: black; // Set your desired color
-  cursor: pointer;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  position: absolute;
-
-  font-size: 2.2vw;
-  right: 1%;
-  > svg {
-    opacity: 0.4;
-  }
-  :hover {
-    opacity: 0.7;
-  }
-`;
-
-const LeftArrow = styled.div`
-  font-size: 1.5em; // Set your desired size
-  color: black; // Set your desired color
-  cursor: pointer;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  position: absolute;
-
-  font-size: 2.2vw;
-  left: 1%;
-  > svg {
-    opacity: 0.4;
-  }
-  :hover {
-    opacity: 0.7;
-  }
-`;
-
-const Tab = styled.div`
-  background-color: ${colors.darkGrey};
+export const Tab = styled.div`
+  background-color: ${(p) => (p.isFooter ? "white" : colors.darkGrey)};
   display: flex;
   opacity: ${(p) => (p.isSelected ? "1" : "0.5")};
   align-items: center;
   justify-content: center;
   cursor: pointer;
-  color: white;
+  color: ${(p) => (p.isFooter ? colors.darkGrey : "white")};
   font-weight: 600;
   margin-right: 0.25vw;
   height: fit-content;
   padding: 0.35vw 0.7vw 0.35vw 0.7vw;
   box-sizing: border-box;
-  border-radius: 0.3vw 0.3vw 0 0;
+  //border-radius: 0.3vw 0.3vw 0 0;
   font-size: min(15px, 0.8vw);
   width: fit-content;
   white-space: nowrap;
@@ -259,13 +226,14 @@ const WordDetailsContainer = styled.div`
   background-color: white;
   width: 80%;
   height: 80%;
+
   border-radius: 0 0 1vw 1vw;
   display: flex;
   flex-direction: column;
   align-items: center;
   position: relative;
-  padding-top: 2vw;
-  padding-bottom: 2vw;
+  // padding-top: 2vw;
+  //padding-bottom: 2vw;
   box-sizing: border-box;
   @media (max-width: 600px) {
     width: 80vw;
@@ -283,6 +251,7 @@ const Word = styled.h1`
   align-items: flex-end;
   color: ${colors.darkGrey};
   font-size: 3.2vw;
+  margin-bottom: 0.8vw;
   position: relative;
   font-weight: 800;
   z-index: 0;
@@ -323,9 +292,9 @@ const Word = styled.h1`
   }
 `;
 
-const Details = styled.div`
+export const Details = styled.div`
   width: 85%;
-  margin-top: 2vw;
+  margin-top: 1vw;
   display: flex;
   flex-direction: column;
   color: ${colors.darkThemeGrey};
@@ -363,5 +332,23 @@ const Details = styled.div`
         font-weight: 800;
       }
     }
+  }
+`;
+
+const AboutWord = styled.div`
+  width: 85%;
+  font-weight: 600;
+  display: flex;
+  align-items: center;
+  font-size: 0.8vw;
+  color: ${colors.darkGrey};
+  margin-bottom: 0.2vw;
+  > svg {
+    font-size: 1vw;
+  }
+  > strong {
+    color: orangered;
+  }
+  > span {
   }
 `;
