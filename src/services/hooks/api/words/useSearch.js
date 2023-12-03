@@ -7,7 +7,7 @@ export default function useSearch() {
       loading: searchLoading,
       error: searchError,
       connect: search,
-    } = useAsync((query) => wordsApi.search(query), false);
+    } = useAsync((body, query) => wordsApi.search(body, query), false);
   
     return {
       searchData,

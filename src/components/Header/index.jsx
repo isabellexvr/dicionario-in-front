@@ -74,8 +74,9 @@ export default function Header({setShowSidebar}) {
 }
 
 const HeaderContainer = styled.div`
-  width: 70vw;
-  height: 6vw;
+background-color: ${colors.mediumGrey};
+  width: 80vw;
+  height: 5vw;
   position: absolute;
   right: 0;
   top: 0;
