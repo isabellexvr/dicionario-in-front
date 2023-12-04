@@ -86,56 +86,60 @@ export default function SearchModal({ setShowSearchModal }) {
           ))}
         </TabsContainer>
         <ModalBody>
-          <SearchForm
-            onSubmit={(e) =>
-              forms.sendFormWithQuery(e, search, setSearchResults, form, "")
-            }
-          >
-            <div className="input">
-              <label htmlFor="startsWith">Iniciado por:</label>
-              <label htmlFor="startsWith" className="icon-label">
-                <TbBracketsContainStart />
-              </label>
-              <input
-                onChange={(e) => forms.handleForm(e, form, setForm)}
-                id="startsWith"
-                name="startsWith"
-              ></input>
-            </div>
+          {selectedTab === 0 ? (
+            <SearchForm
+              onSubmit={(e) =>
+                forms.sendFormWithQuery(e, search, setSearchResults, form, "")
+              }
+            >
+              <div className="input">
+                <label htmlFor="startsWith">Iniciado por:</label>
+                <label htmlFor="startsWith" className="icon-label">
+                  <TbBracketsContainStart />
+                </label>
+                <input
+                  onChange={(e) => forms.handleForm(e, form, setForm)}
+                  id="startsWith"
+                  name="startsWith"
+                ></input>
+              </div>
 
-            <p>e/ou</p>
+              <p>e/ou</p>
 
-            <div className="input">
-              <label htmlFor="endsWith">Terminado por:</label>
-              <label htmlFor="endsWith" className="icon-label">
-                <TbBracketsContainEnd />
-              </label>
-              <input
-                onChange={(e) => forms.handleForm(e, form, setForm)}
-                id="endsWith"
-                name="endsWith"
-              ></input>
-            </div>
-            <div className="buttons">
-              <button
-                onClick={() => {
-                  console.log(searchResults);
-                  setShowResults(true);
-                }}
-                type="submit"
-              >
-                Pesquisar
-              </button>
-              <button
-                onClick={() => {
-                  setForm({});
-                  setShowSearchModal(false);
-                }}
-              >
-                Cancelar
-              </button>
-            </div>
-          </SearchForm>
+              <div className="input">
+                <label htmlFor="endsWith">Terminado por:</label>
+                <label htmlFor="endsWith" className="icon-label">
+                  <TbBracketsContainEnd />
+                </label>
+                <input
+                  onChange={(e) => forms.handleForm(e, form, setForm)}
+                  id="endsWith"
+                  name="endsWith"
+                ></input>
+              </div>
+              <div className="buttons">
+                <button
+                  onClick={() => {
+                    console.log(searchResults);
+                    setShowResults(true);
+                  }}
+                  type="submit"
+                >
+                  Pesquisar
+                </button>
+                <button
+                  onClick={() => {
+                    setForm({});
+                    setShowSearchModal(false);
+                  }}
+                >
+                  Cancelar
+                </button>
+              </div>
+            </SearchForm>
+          ) : (
+            <></>
+          )}
         </ModalBody>
       </SearchModalWindow>
     </SearchModalContainer>
