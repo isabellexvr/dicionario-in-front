@@ -7,7 +7,7 @@ const forms = {
         try {
           const res = await api(body);
           setState(res);
-          navigate(whereTo);
+          if(navigate) navigate(whereTo);
         } catch (err) {
           console.log(err);
         }
@@ -21,6 +21,16 @@ const forms = {
         console.log(err);
       }
   },
+  sendFormWithQuery: async (e, api, setState, body, query, navigate, whereTo) => {
+    e.preventDefault();
+    try {
+      const res = await api(body, query);
+      setState(res);
+      if(navigate) navigate(whereTo);
+    } catch (err) {
+      console.log(err);
+    }
+  }
 }
 
 export default forms;

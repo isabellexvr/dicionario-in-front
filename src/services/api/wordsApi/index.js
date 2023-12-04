@@ -36,8 +36,9 @@ const wordsApi = {
     return res.data;
   },
   search: async (body, query) => {
-    console.log("body e query: ", body,query)
+    //console.log("query: ",body)
     const res = await api.post(`words/search?input=${query}`, body);
+    //console.log("resultado: ", res.data)
     return res.data;
   },
   tabs: async (word) => {

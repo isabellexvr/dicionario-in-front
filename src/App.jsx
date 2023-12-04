@@ -5,6 +5,7 @@ import {
   Route,
   Outlet,
   Navigate,
+  useNavigate,
 } from "react-router-dom";
 import HomePage from "./pages/HomePage";
 import WordPage from "./pages/WordPage";
@@ -17,14 +18,20 @@ import AdminPage from "./pages/AdminPage";
 import useToken from "./services/hooks/useToken";
 import AboutPage from "./pages/AboutPage";
 import ProfilePage from "./pages/ProfilePage";
+import { createPortal } from "react-dom";
+import SearchModal from "./components/SearchModal";
 
 function App() {
+  const searchModal = document.getElementById("search-modal");
+
   const [selectedTab, setSelectedTab] = useState(0);
+  const [showSearchModal, setShowSearchModal] = useState(false);
+
 
   return (
     <UserInfoProvider>
       <BrowserRouter>
-        <Header />
+        <Header setShowSearchModal={setShowSearchModal} />
         <SideBar selectedTab={selectedTab} setSelectedTab={setSelectedTab} />
         <Routes>
           <Route path="/" element={<HomePage />} />
@@ -54,7 +61,10 @@ function App() {
           <Route path="login" element={<SignInPage />} />
           <Route path="sobre" element={<AboutPage />} />
         </Routes>
+        {showSearchModal &&
+        createPortal(<SearchModal setShowSearchModal={setShowSearchModal}  />, searchModal)}
       </BrowserRouter>
+      
     </UserInfoProvider>
   );
 }

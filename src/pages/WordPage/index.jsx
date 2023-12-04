@@ -48,7 +48,7 @@ export default function WordPage({ selectedTab, setSelectedTab }) {
         setWordInfo(data);
         setDefinicaoIN(data["topicoIluminacaoNatural"]);
         setTabs(tabsData.filter((e) => e !== null));
-        console.log(data);
+        //console.log(data);
         const arr = [];
         if (data.classeGram !== null) arr.push(data.classeGram);
         if (data.genero_num !== null) arr.push(data.genero_num);
@@ -114,16 +114,12 @@ export default function WordPage({ selectedTab, setSelectedTab }) {
                   </>
                 )}
               </Word>
-              {genClass.map((e, i) => (
-                <AboutWord key={i}>
-                  <IoMdArrowDropright />
-                  <strong>
-                    {i == 0 ? "Classe Gramatical: " : "Gênero/Número: "}
-                  </strong>
-                  &ensp;
-                  <span>{e}</span>
-                </AboutWord>
-              ))}
+              <AboutWord>
+                {genClass.map((e, i) => (
+                  <span key={i}>{e}{i === genClass.length-1 ? "" : ","}&ensp;</span>
+                  
+                ))}
+              </AboutWord>
               {selectedTab == 0 ? (
                 <Details>
                   <h1>{HeaderTabs[selectedHeaderTab]}</h1>
@@ -350,5 +346,9 @@ const AboutWord = styled.div`
     color: orangered;
   }
   > span {
+    display: flex;
+    font-size: 1.2vw;
+    font-style: italic;
+    color: orangered;
   }
 `;

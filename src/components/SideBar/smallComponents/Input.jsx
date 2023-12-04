@@ -13,7 +13,7 @@ export default function Input({
   async function handleInput() {
     try {
       const res = await search({},searchInput);
-      console.log(res);
+
       setShownWords(res);
     } catch (err) {
       console.log(err);

@@ -9,13 +9,11 @@ import { FaMagnifyingGlass } from "react-icons/fa6";
 import { FallingLines } from "react-loader-spinner";
 import colors from "../../constants/colors";
 import { RiMenu4Line, RiLogoutCircleLine } from "react-icons/ri";
-import { FiMoon } from "react-icons/fi";
 import useUserInfo from "../../contexts/hooks/useUserInfo";
 import useSearch from "../../services/hooks/api/words/useSearch";
 
 export default function SideBar({ selectedTab, setSelectedTab }) {
   const { getWords, getWordsLoading, getWordsError } = useGetWords();
-
 
   const {
     getWordByFirstCharData,
@@ -37,7 +35,6 @@ export default function SideBar({ selectedTab, setSelectedTab }) {
       try {
         //const data = await getWordByFirstChar(selectedLetter);
         const data = await getWords();
-        //console.log(data);
         const onlyWords = data.map((d) => d.Verbete);
         setWords(onlyWords);
         setShownWords(onlyWords);

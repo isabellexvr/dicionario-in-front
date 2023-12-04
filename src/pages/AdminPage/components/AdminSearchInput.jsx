@@ -75,7 +75,7 @@ export default function AdminSearchInput({
           id="admin-search-input"
         />
         {showSearchBar &&
-          createPortal(
+          createPortal( 
             <SearchBar
               searchInput={searchInput}
               searchBarInfo={searchBarInfo}

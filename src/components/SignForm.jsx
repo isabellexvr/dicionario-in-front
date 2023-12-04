@@ -11,7 +11,8 @@ export default function SignForm({ verb, title, inputs, api, setState, navigateT
   const navigate = useNavigate();
 
   return (
-    <SignFormContainer>
+    <>
+        <SignFormContainer>
       <Title>{title}</Title>
       <FormContainer>
         <Form onSubmit={(e) => forms.sendForm(e, api, setState, form, navigate, navigateTo)}>
@@ -27,9 +28,12 @@ export default function SignForm({ verb, title, inputs, api, setState, navigateT
           <HighlightButton type="submit">{verb}</HighlightButton>
         </Form>
       </FormContainer>
-    </SignFormContainer>
+    </SignFormContainer>    </>
+
   );
 }
+
+
 
 const SignFormContainer = styled.div`
   width: 90%;

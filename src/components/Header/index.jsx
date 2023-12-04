@@ -5,8 +5,9 @@ import useUserInfo from "../../contexts/hooks/useUserInfo";
 import { jwtDecode } from "jwt-decode";
 import { useEffect, useState } from "react";
 import { RiMenu4Line } from "react-icons/ri";
+import { FiSearch } from "react-icons/fi";
 
-export default function Header({setShowSidebar}) {
+export default function Header({ setShowSearchModal }) {
   const navigate = useNavigate();
   const { userInfo } = useUserInfo();
   const [userInfos, setUserInfos] = useState({});
@@ -14,7 +15,7 @@ export default function Header({setShowSidebar}) {
   useEffect(() => {
     if (typeof userInfo == "string") {
       const decoded = jwtDecode(userInfo);
-      console.log(decoded)
+      //console.log(decoded)
       setUserInfos(decoded);
     }
   }, [userInfo]);
@@ -28,28 +29,27 @@ export default function Header({setShowSidebar}) {
           </h1>
           <CommonButton>Perfil</CommonButton>
           {userInfos.isAdmin && (
-
-            <CommonButton onClick={() => navigate("/user/admin")} >Admin</CommonButton>
+            <CommonButton onClick={() => navigate("/user/admin")}>
+              Admin
+            </CommonButton>
           )}
-          
+
           <HighlightButton onClick={() => navigate("/")}>
             Início
           </HighlightButton>
-          
         </>
       ) : (
         <>
           {screen.width <= 600 ? (
             <>
-            <RiMenu4Line onClick={() => {setShowSidebar(true)}} />
+              <RiMenu4Line
+                
+              />
               <HighlightButton onClick={() => navigate("/")}>
                 Início
               </HighlightButton>
               <HighlightButton onClick={() => navigate("/sobre")}>
                 Sobre
-              </HighlightButton>
-              <HighlightButton onClick={() => navigate("/login")}>
-                Login
               </HighlightButton>
             </>
           ) : (
@@ -58,14 +58,16 @@ export default function Header({setShowSidebar}) {
               <CommonButton onClick={() => navigate("/sobre")}>
                 Sobre
               </CommonButton>
-              <CommonButton onClick={() => navigate("/login")}>
-                Login
-              </CommonButton>
             </>
           )}
-
+          <CommonButton onClick={() => {
+                  setShowSearchModal(true);
+                }}>
+            <FiSearch />
+            Pesquisar
+          </CommonButton>
           <HighlightButton onClick={() => navigate("/cadastro")}>
-            Cadastro
+            Faça Parte
           </HighlightButton>
         </>
       )}
@@ -74,7 +76,10 @@ export default function Header({setShowSidebar}) {
 }
 
 const HeaderContainer = styled.div`
-background-color: ${colors.mediumGrey};
+  background-color: ${colors.mediumGrey};
+  :hover {
+    background-color: ${colors.lightGrey};
+  }
   width: 80vw;
   height: 5vw;
   position: absolute;
@@ -97,14 +102,13 @@ background-color: ${colors.mediumGrey};
     > strong {
       font-weight: 700;
     }
-
   }
-    >svg{
-      font-size: 8vw;
-      color: ${colors.lightGrey};
-      position: absolute;
-      left: 5vw;
-    }
+  > svg {
+    font-size: 8vw;
+    color: ${colors.lightGrey};
+    position: absolute;
+    left: 5vw;
+  }
   @media (max-width: 600px) {
     height: 15vw;
     width: 100vw;
@@ -140,13 +144,26 @@ export const HighlightButton = styled.button`
 
 const CommonButton = styled.button`
   all: unset;
-  width: 5vw;
+  width: fit-content;
+  padding: 0.1vw 0.5vw 0.1vw 0.5vw;
+
   height: 2.8vw;
   color: ${colors.darkGrey};
   font-weight: 600;
+  border: 2px solid ${colors.lightGrey};
+  box-sizing: border-box;
+  display: flex;
+  justify-content: space-around;
+  align-items: center;
+  border-radius: 0.5vw;
   cursor: pointer;
   margin-right: 1.5vw;
-  font-size: 1.25vw;
+  font-size: 1.1vw;
+  >svg{
+    font-size: 1.25vw;
+    margin-right: 0.45vw;
+  }
+
   @media (max-width: 600px) {
     font-size: 4vw;
     padding: 1.5vw;
