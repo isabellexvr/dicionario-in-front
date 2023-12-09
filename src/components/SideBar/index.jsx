@@ -11,6 +11,7 @@ import colors from "../../constants/colors";
 import { RiMenu4Line, RiLogoutCircleLine } from "react-icons/ri";
 import useUserInfo from "../../contexts/hooks/useUserInfo";
 import useSearch from "../../services/hooks/api/words/useSearch";
+import useWords from "../../contexts/hooks/useWords";
 
 export default function SideBar({ selectedTab, setSelectedTab }) {
   const { getWords, getWordsLoading, getWordsError } = useGetWords();
@@ -22,9 +23,11 @@ export default function SideBar({ selectedTab, setSelectedTab }) {
     getWordByFirstChar,
   } = useGetWordsByFirstChar();
 
+  const { words, setWords } = useWords();
+
   const { search, searchLoading, searchError } = useSearch();
 
-  const [words, setWords] = useState([]);
+  const [apiWords, setApiWords] = useState([]);
   const [shownWords, setShownWords] = useState([]);
   const [selectedLetter, setSelectedLetter] = useState("A");
   const { setUserInfo } = useUserInfo();
@@ -35,9 +38,16 @@ export default function SideBar({ selectedTab, setSelectedTab }) {
       try {
         //const data = await getWordByFirstChar(selectedLetter);
         const data = await getWords();
+        const hashtable = {};
+
         const onlyWords = data.map((d) => d.Verbete);
-        setWords(onlyWords);
+        setApiWords(onlyWords);
         setShownWords(onlyWords);
+        onlyWords.forEach((w) => {
+          hashtable[w] = true;
+        });
+        console.log(hashtable)
+        setWords(hashtable);
       } catch (err) {
         console.log(err);
       }
@@ -47,7 +57,7 @@ export default function SideBar({ selectedTab, setSelectedTab }) {
   }, []);
 
   function attWords(letter) {
-    const toShow = words.filter(
+    const toShow = apiWords.filter(
       (w) => w[0] == letter.toLowerCase() || w[0] == letter
     );
     setShownWords(toShow);
@@ -58,7 +68,7 @@ export default function SideBar({ selectedTab, setSelectedTab }) {
       <>
         <Input
           setShownWords={setShownWords}
-          allWords={words}
+          allWords={apiWords}
           placeholder="Pesquisa simples..."
           search={search}
           searchLoading={searchLoading}
@@ -111,7 +121,6 @@ export default function SideBar({ selectedTab, setSelectedTab }) {
           )}
         </DictionaryContainer>
         <OpenedSidebarBottom>
-
           <RiLogoutCircleLine
             onClick={() => {
               localStorage.removeItem("userInfo");
@@ -283,7 +292,6 @@ const WordsContainer = styled.div`
   overflow-y: scroll;
   padding-left: 0.5vw;
   box-sizing: border-box;
-
 
   @media (max-width: 600px) {
     font-size: 4vw;

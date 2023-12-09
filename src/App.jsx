@@ -20,6 +20,7 @@ import AboutPage from "./pages/AboutPage";
 import ProfilePage from "./pages/ProfilePage";
 import { createPortal } from "react-dom";
 import SearchModal from "./components/SearchModal";
+import WordsProvider from "./contexts/WordsContext";
 
 function App() {
   const searchModal = document.getElementById("search-modal");
@@ -27,44 +28,47 @@ function App() {
   const [selectedTab, setSelectedTab] = useState(0);
   const [showSearchModal, setShowSearchModal] = useState(false);
 
-
   return (
     <UserInfoProvider>
-      <BrowserRouter>
-        <Header setShowSearchModal={setShowSearchModal} />
-        <SideBar selectedTab={selectedTab} setSelectedTab={setSelectedTab} />
-        <Routes>
-          <Route path="/" element={<HomePage />} />
-          <Route path="palavra">
+      <WordsProvider>
+        <BrowserRouter>
+          <Header setShowSearchModal={setShowSearchModal} />
+          <SideBar selectedTab={selectedTab} setSelectedTab={setSelectedTab} />
+          <Routes>
+            <Route path="/" element={<HomePage />} />
+            <Route path="palavra">
+              <Route
+                path=":palavra"
+                element={
+                  <WordPage
+                    selectedTab={selectedTab}
+                    setSelectedTab={setSelectedTab}
+                  />
+                }
+              />
+            </Route>
             <Route
-              path=":palavra"
+              path="/user"
               element={
-                <WordPage
-                  selectedTab={selectedTab}
-                  setSelectedTab={setSelectedTab}
-                />
+                <AuthorizedRoute>
+                  <Outlet />
+                </AuthorizedRoute>
               }
-            />
-          </Route>
-          <Route
-            path="/user"
-            element={
-              <AuthorizedRoute>
-                <Outlet />
-              </AuthorizedRoute>
-            }
-          >
-            <Route element={<AdminPage></AdminPage>} path="admin" />
-            <Route element={<ProfilePage />} path="" />
-          </Route>
-          <Route path="cadastro" element={<SignUp />} />
-          <Route path="login" element={<SignInPage />} />
-          <Route path="sobre" element={<AboutPage />} />
-        </Routes>
-        {showSearchModal &&
-        createPortal(<SearchModal setShowSearchModal={setShowSearchModal}  />, searchModal)}
-      </BrowserRouter>
-      
+            >
+              <Route element={<AdminPage></AdminPage>} path="admin" />
+              <Route element={<ProfilePage />} path="" />
+            </Route>
+            <Route path="cadastro" element={<SignUp />} />
+            <Route path="login" element={<SignInPage />} />
+            <Route path="sobre" element={<AboutPage />} />
+          </Routes>
+          {showSearchModal &&
+            createPortal(
+              <SearchModal setShowSearchModal={setShowSearchModal} />,
+              searchModal
+            )}
+        </BrowserRouter>
+      </WordsProvider>
     </UserInfoProvider>
   );
 }

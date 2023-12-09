@@ -33,6 +33,12 @@ export default function Header({ setShowSearchModal }) {
               Admin
             </CommonButton>
           )}
+                    <CommonButton onClick={() => {
+                  setShowSearchModal(true);
+                }}>
+            <FiSearch />
+            Pesquisar
+          </CommonButton>
 
           <HighlightButton onClick={() => navigate("/")}>
             Início
@@ -82,9 +88,10 @@ const HeaderContainer = styled.div`
   }
   width: 80vw;
   height: 5vw;
-  position: absolute;
+  position: fixed;
   right: 0;
   top: 0;
+  z-index: 100;
   padding-right: 4vw;
   box-sizing: border-box;
   display: flex;

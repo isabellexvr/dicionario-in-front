@@ -14,6 +14,7 @@ const PageContainer = styled.section`
   align-items: center;
   justify-content: center;
   padding-left:  20vw;
+  //position: relative;
  padding-top: 7vw;
  @media (max-width: 600px) {
   padding-left: 0;

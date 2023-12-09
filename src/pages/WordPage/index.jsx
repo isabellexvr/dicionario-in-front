@@ -4,17 +4,13 @@ import colors from "../../constants/colors";
 import useGetWordByName from "../../services/hooks/api/words/useGetWordByName";
 import useGetWordTabs from "../../services/hooks/api/words/useGetWordTabs";
 import { useEffect, useState } from "react";
-import Background from "../../constants/Background";
-import { AiOutlineStar } from "react-icons/ai";
-import { BiCommentDetail } from "react-icons/bi";
 import CommentsBar from "../../components/CommentsBar";
 import useUserInfo from "../../contexts/hooks/useUserInfo";
-import { NameToColumns, mapTabs, responsive } from "./helpers";
 import DetailsFooter from "./components/DetailsFooter";
-import { IoSunny } from "react-icons/io5";
-import { IoMdArrowDropright } from "react-icons/io";
+import useWords from "../../contexts/hooks/useWords";
+import HighlightWords from "./components/LikableWords";
 
-const HeaderTabs = ["Acepções", "Acepções em Iluminação Natural"];
+const HeaderTabs = ["Definições/Acepções", "Tópicos em Iluminação Natural"];
 
 export default function WordPage({ selectedTab, setSelectedTab }) {
   const { palavra } = useParams();
@@ -26,6 +22,7 @@ export default function WordPage({ selectedTab, setSelectedTab }) {
     useGetWordTabs();
 
   const { userInfo } = useUserInfo();
+  const { words, setWords } = useWords();
 
   const [wordInfo, setWordInfo] = useState({});
   const [definicoes, setDefinicoes] = useState([]);
@@ -35,6 +32,7 @@ export default function WordPage({ selectedTab, setSelectedTab }) {
   const [genClass, setGenClass] = useState([]);
 
   const [selectedHeaderTab, setSelectedHeaderTab] = useState(0);
+  const [selectedFooterTab, setSelectedFooterTab] = useState(0);
 
   const regex = /\(\d\) /g;
   const navigate = useNavigate();
@@ -44,18 +42,18 @@ export default function WordPage({ selectedTab, setSelectedTab }) {
       try {
         const data = await getWordByName(palavra);
         const tabsData = await getWordTabs(palavra);
+        setSelectedFooterTab(0)
 
         setWordInfo(data);
         setDefinicaoIN(data["topicoIluminacaoNatural"]);
         setTabs(tabsData.filter((e) => e !== null));
-        //console.log(data);
         const arr = [];
         if (data.classeGram !== null) arr.push(data.classeGram);
         if (data.genero_num !== null) arr.push(data.genero_num);
 
         setGenClass(arr);
 
-        const thereAreMany = data.definicao.search("(1)");
+        const thereAreMany = data?.definicao?.search("(1)");
         if (thereAreMany == 1) {
           const arr = data.definicao.split(regex);
           setDefinicoes(arr.slice(1));
@@ -71,10 +69,13 @@ export default function WordPage({ selectedTab, setSelectedTab }) {
   }, [palavra]);
 
   return (
-    <Background>
+    <PageContainer>
       {wordInfo.Verbete && (
         <>
           <WordDetailsContainer>
+            <Verbete>
+              <h1>{wordInfo.Verbete}</h1>
+            </Verbete>
             <TabsContainer>
               {HeaderTabs.map((t, i) => (
                 <Tab
@@ -90,58 +91,37 @@ export default function WordPage({ selectedTab, setSelectedTab }) {
               ))}
             </TabsContainer>
             <DetailsHeader>
-              <Word>
-                {screen.width <= 600 && (
-                  <>
-                    <div className="icons">
-                      <AiOutlineStar />
-                      <BiCommentDetail
-                        onClick={() => setShowComments(!showComments)}
-                      />
-                    </div>
-                  </>
-                )}
-                <h1>{wordInfo.Verbete}</h1>
-
-                {screen.width > 600 && (
-                  <>
-                    <div className="icons">
-                      <AiOutlineStar />
-                      <BiCommentDetail
-                        onClick={() => setShowComments(!showComments)}
-                      />
-                    </div>
-                  </>
-                )}
-              </Word>
-              <AboutWord>
-                {genClass.map((e, i) => (
-                  <span key={i}>{e}{i === genClass.length-1 ? "" : ","}&ensp;</span>
-                  
-                ))}
-              </AboutWord>
               {selectedTab == 0 ? (
-                <Details>
-                  <h1>{HeaderTabs[selectedHeaderTab]}</h1>
-                  {definicoes.length == 1 && definicoes[0] == "v." ? (
-                    <h3
-                      onClick={() =>
-                        navigate(`/palavra/${wordInfo.remissivaImperativa}`)
-                      }
-                    >
-                      {wordInfo.remissivaImperativa}
-                    </h3>
-                  ) : (
-                    <>
-                      {definicoes.map((d, i) => (
-                        <h2>
-                          <strong>{i + 1}</strong>. {d}
-                          {"\n"}
-                        </h2>
-                      ))}
-                    </>
-                  )}
-                </Details>
+                <>
+                  <AboutWord>
+                    {genClass.map((e, i) => (
+                      <span key={i}>
+                        {e}
+                        {i === genClass.length - 1 ? "" : " "}&ensp;
+                      </span>
+                    ))}
+                  </AboutWord>
+                  <Details>
+                    {definicoes.length == 1 && definicoes[0] == "v." ? (
+                      <h3
+                        onClick={() =>
+                          navigate(`/palavra/${wordInfo.remissivaImperativa}`)
+                        }
+                      >
+                        v. {wordInfo.remissivaImperativa}
+                      </h3>
+                    ) : (
+                      <>
+                        {definicoes.map((d, i) => (
+                          <h2>
+                            <strong>{i + 1}</strong>. <HighlightWords text={d} hashtable={words} navigate={navigate} />
+                            {"\n"}
+                          </h2>
+                        ))}
+                      </>
+                    )}
+                  </Details>
+                </>
               ) : (
                 <Details>
                   <h1>{HeaderTabs[selectedHeaderTab]}</h1>
@@ -150,7 +130,7 @@ export default function WordPage({ selectedTab, setSelectedTab }) {
               )}
             </DetailsHeader>
 
-            <DetailsFooter tabs={tabs} wordInfo={wordInfo} default={tabs[0]} />
+            <DetailsFooter tabs={tabs} wordInfo={wordInfo} default={tabs[0]} navigate={navigate} selectedFooterTab={selectedFooterTab} setSelectedFooterTab={setSelectedFooterTab} />
           </WordDetailsContainer>
           {showComments && (
             <>
@@ -159,13 +139,39 @@ export default function WordPage({ selectedTab, setSelectedTab }) {
           )}
         </>
       )}
-    </Background>
+    </PageContainer>
   );
 }
 
+const Verbete = styled.div`
+  position: absolute;
+  top: -7vw;
+  left: 0vw;
+  color: ${colors.darkGrey};
+  font-size: 6vw;
+  font-weight: 800;
+`;
+
+const PageContainer = styled.section`
+  background-color: ${colors.lightGrey};
+  height: 100vh;
+  box-sizing: border-box;
+  font-family: "Roboto", sans-serif;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding-left: 20vw;
+  position: relative;
+  padding-top: 7vw;
+  @media (max-width: 600px) {
+    padding-left: 0;
+    flex-direction: column;
+  }
+`;
+
 const DetailsHeader = styled.div`
   width: 100%;
-  height: 65%;
+  height: 55%;
   padding: 2vw;
   padding-top: 2.7vw;
   box-sizing: border-box;
@@ -176,8 +182,6 @@ const TabsContainer = styled.div`
   position: absolute;
   top: 0;
   z-index: 2;
-
-  // background-color: red;
   width: 100%;
 `;
 
@@ -194,7 +198,6 @@ export const Tab = styled.div`
   height: fit-content;
   padding: 0.35vw 0.7vw 0.35vw 0.7vw;
   box-sizing: border-box;
-  //border-radius: 0.3vw 0.3vw 0 0;
   font-size: min(15px, 0.8vw);
   width: fit-content;
   white-space: nowrap;
@@ -202,7 +205,6 @@ export const Tab = styled.div`
     font-size: 4.5vw;
     width: 79vw;
     height: 11vw;
-    //margin-right: 100vw;
     border-radius: 2vw 2vw 0 0;
     z-index: 0;
   }
@@ -221,70 +223,19 @@ const WordDetailsContainer = styled.div`
   border: 2px solid ${colors.mediumGrey};
   background-color: white;
   width: 80%;
-  height: 80%;
+  height: 65%;
 
   border-radius: 0 0 1vw 1vw;
   display: flex;
   flex-direction: column;
   align-items: center;
   position: relative;
-  // padding-top: 2vw;
-  //padding-bottom: 2vw;
   box-sizing: border-box;
   @media (max-width: 600px) {
     width: 80vw;
     height: 50vh;
     z-index: 0;
     margin-left: 0%;
-  }
-`;
-
-const Word = styled.h1`
-  font-family: "Roboto", sans-serif;
-  width: 85%;
-  height: 20%;
-  display: flex;
-  align-items: flex-end;
-  color: ${colors.darkGrey};
-  font-size: 3.2vw;
-  margin-bottom: 0.8vw;
-  position: relative;
-  font-weight: 800;
-  z-index: 0;
-  > .icons {
-    position: absolute;
-    right: 0;
-    cursor: pointer;
-    font-size: 2.5vw;
-    display: flex;
-    justify-content: space-between;
-    width: 18%;
-    > svg:first-child {
-      :hover {
-        color: red;
-      }
-    }
-  }
-  @media (max-width: 600px) {
-    font-size: 10vw;
-    height: 13%;
-    width: 90%;
-    margin-bottom: 2vw;
-    margin-top: 4vw;
-    flex-direction: column;
-    align-items: flex-start;
-    text-align: center;
-
-    > .icons {
-      margin-bottom: 1vw;
-      font-size: 8vw;
-      width: 100%;
-      position: inherit;
-      justify-content: flex-end;
-      > svg:first-child {
-        margin-right: 1vw;
-      }
-    }
   }
 `;
 
@@ -303,15 +254,20 @@ export const Details = styled.div`
   > h2 {
     margin-top: 0.5vw;
     line-height: 1.6vw;
+    display: flex;
     text-align: justify;
     > strong {
       font-weight: 800;
+    }
+    >a{
+      color: red;
     }
   }
   > h3 {
     text-decoration: underline;
     cursor: pointer;
     margin-top: 0.5vw;
+    font-size: 0.9vw;
     line-height: 1.6vw;
   }
   @media (max-width: 600px) {
@@ -339,6 +295,7 @@ const AboutWord = styled.div`
   font-size: 0.8vw;
   color: ${colors.darkGrey};
   margin-bottom: 0.2vw;
+  margin-top: 0.2vw;
   > svg {
     font-size: 1vw;
   }
