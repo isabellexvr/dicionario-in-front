@@ -6,7 +6,7 @@ import { createPortal } from "react-dom";
 import SearchBar from "../../../components/SearchBar";
 
 export default function AdminSearchInput({
-  search,
+  simpleSearch,
   setWordInfo,
   words,
   showSearchBar,

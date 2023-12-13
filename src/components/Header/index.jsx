@@ -91,7 +91,7 @@ const HeaderContainer = styled.div`
   position: fixed;
   right: 0;
   top: 0;
-  z-index: 100;
+  z-index: 5;
   padding-right: 4vw;
   box-sizing: border-box;
   display: flex;

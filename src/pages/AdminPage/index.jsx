@@ -1,7 +1,7 @@
 import styled from "styled-components";
 import { useEffect, useState } from "react";
 import useGetWordById from "../../services/hooks/api/words/useGetWordById";
-import useSearch from "../../services/hooks/api/words/useSearch";
+import useSimpleSearch from "../../services/hooks/api/words/useSimpleSearch";
 import AdminSearchInput from "./components/AdminSearchInput";
 import useGetWords from "../../services/hooks/api/words/useGetWords.js";
 import colors from "../../constants/colors";
@@ -37,7 +37,7 @@ export default function AdminPage() {
 
   const { deleteWordLoading, deleteWordError, deleteWord } = useDeleteWord();
   const { editWordLoading, editWordError, editWord } = useEditWord();
-  const { search, searchLoading, searchError } = useSearch();
+  const { simpleSearch, simpleSearchLoading, simpleSearchError } = useSimpleSearch();
 
   async function handleEditWord(column, index) {
     const newWordInfo = { ...wordInfo, [NameToColumns[column]]: info[index] };
@@ -97,7 +97,7 @@ export default function AdminPage() {
         <>
           <PageHeader>
             <AdminSearchInput
-              search={search}
+              search={simpleSearch}
               setWordInfo={setWordInfo}
               words={words}
               showSearchBar={showSearchBar}

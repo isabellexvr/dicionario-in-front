@@ -13,9 +13,9 @@ const wordsApi = {
     const res = await api.get(`/words/name/${name}`);
     return res.data;
   },
-  wordsByFirstChar: async(char) => {
+  wordsByFirstChar: async (char) => {
     const res = await api.get(`/words/char/${char}`);
-    return res.data
+    return res.data;
   },
   editWord: async (params, body, token) => {
     const res = await api.put(`words/edit-word/${params}`, body, {
@@ -35,17 +35,19 @@ const wordsApi = {
     });
     return res.data;
   },
-  search: async (body, query) => {
-    //console.log("query: ",body)
-    const res = await api.post(`words/search?input=${query}`, body);
-    //console.log("resultado: ", res.data)
+  simpleSearch: async (body, query) => {
+    const res = await api.post(`words/simple-search?input=${query}`, body);
+    return res.data;
+  },
+  reverseSearch: async (body) => {
+    const res = await api.post("words/reverse-search", body);
     return res.data;
   },
   tabs: async (word) => {
     const res = await api.get(`words/tabs/${word}`);
-    console.log(word)
+    console.log(word);
     return res.data;
-  }
+  },
 };
 
 export default wordsApi;

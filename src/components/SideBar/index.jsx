@@ -10,7 +10,7 @@ import { FallingLines } from "react-loader-spinner";
 import colors from "../../constants/colors";
 import { RiMenu4Line, RiLogoutCircleLine } from "react-icons/ri";
 import useUserInfo from "../../contexts/hooks/useUserInfo";
-import useSearch from "../../services/hooks/api/words/useSearch";
+import useSimpleSearch from "../../services/hooks/api/words/useSimpleSearch";
 import useWords from "../../contexts/hooks/useWords";
 
 export default function SideBar({ selectedTab, setSelectedTab }) {
@@ -25,7 +25,7 @@ export default function SideBar({ selectedTab, setSelectedTab }) {
 
   const { words, setWords } = useWords();
 
-  const { search, searchLoading, searchError } = useSearch();
+  const { simpleSearch, simpleSearchLoading, simpleSearchError } = useSimpleSearch();
 
   const [apiWords, setApiWords] = useState([]);
   const [shownWords, setShownWords] = useState([]);
@@ -70,13 +70,13 @@ export default function SideBar({ selectedTab, setSelectedTab }) {
           setShownWords={setShownWords}
           allWords={apiWords}
           placeholder="Pesquisa simples..."
-          search={search}
-          searchLoading={searchLoading}
+          search={simpleSearch}
+          simpleSearchLoading={simpleSearchLoading}
         >
           {<FaMagnifyingGlass />}
         </Input>
         <DictionaryContainer>
-          {getWordsLoading || searchLoading ? (
+          {getWordsLoading || simpleSearchLoading ? (
             <LoadingContainer>
               <h1>Carregando...</h1>
               <FallingLines
