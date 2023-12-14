@@ -5,7 +5,7 @@ import {
   import { Tooltip } from "react-tooltip";
 
 export default function ResultsBoxComponent({
-    showResults, searchResults, setShowSearchModal, setShowResults
+    showResults, searchResults, setShowSearchModal, setShowResults, navigate
 }){
     return(
         <ResultsBox areResultsHidden={showResults}>

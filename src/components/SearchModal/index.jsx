@@ -50,18 +50,13 @@ export default function SearchModal({ setShowSearchModal }) {
     reverseSearch,
   } = useReverseSearch();
 
-  // const navigate = useNavigate();
+  const navigate = useNavigate();
 
   function addWords(input, words, setter) {
     const inputHash = {};
     input.split(" ").forEach((e) => (inputHash[e] = true));
     setter({ ...words, ...inputHash });
   }
-
-  /*   export type ReverseSearchType = {
-    contains: string[],
-    doesNotContain: string[]
-} */
 
   return (
     <>
@@ -73,6 +68,7 @@ export default function SearchModal({ setShowSearchModal }) {
           searchResults={searchResults}
           setShowSearchModal={setShowSearchModal}
           setShowResults={setShowResults}
+          navigate={navigate}
         />
 
         <ShowResultsIcon
@@ -215,19 +211,31 @@ export default function SearchModal({ setShowSearchModal }) {
                 <input
                   id="add"
                   name="name"
-                  onChange={(e) => setIncludedRSWordInput(e.target.value)}
-                  onKeyDown={(e) => {if(e.key == "Enter"){
-                    addWords(includedRSWordInput, includedRSWords, setIncludedRSWords)
-                  }}}
+                  value={includedRSWordInput}
+                  onChange={(e) => {
+                    setIncludedRSWordInput(e.target.value);
+                  }}
+                  onKeyDown={(e) => {
+                    if (e.key == "Enter") {
+                      addWords(
+                        includedRSWordInput,
+                        includedRSWords,
+                        setIncludedRSWords
+                      );
+                      setIncludedRSWordInput("");
+                    }
+                  }}
                 />
 
                 <button
                   onClick={() => {
-                    const inputHash = {};
-                    includedRSWordInput
-                      .split(" ")
-                      .forEach((e) => (inputHash[e] = true));
-                    setIncludedRSWords({ ...includedRSWords, ...inputHash });
+                    addWords(
+                      includedRSWordInput,
+                      includedRSWords,
+                      setIncludedRSWords
+                    )
+
+                    setIncludedRSWordInput("");
                   }}
                 >
                   <IoMdAdd />
@@ -240,14 +248,29 @@ export default function SearchModal({ setShowSearchModal }) {
                 <input
                   id="delete"
                   name="name"
+                  value={excludedRSWordInput}
                   onChange={(e) => setExcludedRSWordInput(e.target.value)}
-                  onKeyDown={(e) => {if(e.key == "Enter"){
-                    addWords(excludedRSWordInput, excludedRSWords, setExcludedRSWords)
-                  }}}
+                  onKeyDown={(e) => {
+                    if (e.key == "Enter") {
+                      addWords(
+                        excludedRSWordInput,
+                        excludedRSWords,
+                        setExcludedRSWords
+                      );
+                      setExcludedRSWordInput("");
+                    }
+                  }}
                 />
 
                 <button
-                  onClick={ () => addWords(excludedRSWordInput, excludedRSWords, setExcludedRSWords)}
+                  onClick={() => {
+                    addWords(
+                      excludedRSWordInput,
+                      excludedRSWords,
+                      setExcludedRSWords
+                    );
+                    setExcludedRSWordInput("");
+                  }}
                 >
                   <RiSubtractFill />
                 </button>
@@ -256,10 +279,14 @@ export default function SearchModal({ setShowSearchModal }) {
                 <button
                   onClick={async () => {
                     setShowResults(true);
-                    const form = {contains: Object.keys(includedRSWords), doesNotContain: Object.keys(excludedRSWords)}
-                    console.log(form)
+                    const form = {
+                      contains: Object.keys(includedRSWords),
+                      doesNotContain: Object.keys(excludedRSWords),
+                    };
+                    console.log(form);
                     const res = await reverseSearch(form);
-                    console.log(res)
+                    setSearchResults(res.map((e) => e.Verbete));
+                    console.log(res);
                   }}
                   type="submit"
                 >
