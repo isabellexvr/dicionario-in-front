@@ -13,10 +13,10 @@ export default function DetailsFooter({
   selectedFooterTab,
   setSelectedFooterTab
 }) {
-
-  console.log(wordInfo[NameToColumns[tabs[selectedFooterTab]]])
-
+console.log(wordInfo[NameToColumns[tabs[selectedFooterTab]]])
   return (
+<>
+ {tabs.length > 0 && (
     <DetailsFooterContainer>
       <TabsContainer>
         {tabs.map((t, i) => (
@@ -40,22 +40,29 @@ export default function DetailsFooter({
             (<Highlight
               onClick={() =>
                 navigate(
-                  `/palavra/${wordInfo[NameToColumns[tabs[selectedFooterTab]]].slice(3)}`
+                  `/palavra/${wordInfo[NameToColumns[tabs[selectedFooterTab]]]?.slice(3)}`
                 )
               }
             >
 
-            {wordInfo[NameToColumns[tabs[selectedFooterTab]]]?.slice(2)}
+           { (wordInfo[NameToColumns[tabs[selectedFooterTab]]]?.slice(3).split(/\((\d+)\)|,|;/g)
+              .map((w, i) => (
+
+                <Highlight key={i} onClick={() => navigate(`/palavra/${w}`)}>
+                {w}{"\n"}
+                </Highlight>
+
+              )))}
 
             </Highlight>) 
             : 
 
             (wordInfo[NameToColumns[tabs[selectedFooterTab]]]?
-              .split(/, |;/)
+              .split(/\((\d+)\)|,|;/g)
               .map((w, i) => (
 
                 <Highlight key={i} onClick={() => navigate(`/palavra/${w}`)}>
-                {w}
+                {w}{"\n"}
                 </Highlight>
 
               )))}
@@ -63,6 +70,11 @@ export default function DetailsFooter({
         </FooterDetails>
       </div>
     </DetailsFooterContainer>
+
+    )}
+
+</>
+   
   );
 }
 
@@ -75,7 +87,7 @@ const DetailsFooterContainer = styled.div`
     height: 100%;
   }
   width: 100%;
-  height: max(50%);
+  height: fit-content;
   position: relative;
 
 `;

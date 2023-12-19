@@ -37,7 +37,7 @@ export default function WordPage({ selectedTab, setSelectedTab, globalSelectedWo
   const regex = /\(\d\) /g;
   const navigate = useNavigate();
 
-
+console.log(definicoes)
 
   useEffect(() => {
     async function getApiWordByName() {
@@ -105,7 +105,7 @@ export default function WordPage({ selectedTab, setSelectedTab, globalSelectedWo
                     ))}
                   </AboutWord>
                   <Details>
-                    {definicoes.length == 1 && definicoes[0] == "v." ? (
+                    {definicoes.length == 1 && definicoes[0].includes("v.") ? (
                       <h3
                         onClick={() =>
                           navigate(`/palavra/${wordInfo.remissivaImperativa}`)
@@ -115,7 +115,7 @@ export default function WordPage({ selectedTab, setSelectedTab, globalSelectedWo
                       </h3>
                     ) : (
                       <>
-                        {definicoes.map((d, i) => (
+                        {definicoes?.map((d, i) => (
                           <h2>
                             <strong>{i + 1}</strong>. <HighlightWords text={d} hashtable={words} navigate={navigate} />
                             {"\n"}
@@ -135,11 +135,11 @@ export default function WordPage({ selectedTab, setSelectedTab, globalSelectedWo
 
             <DetailsFooter tabs={tabs} wordInfo={wordInfo} default={tabs[0]} navigate={navigate} selectedFooterTab={selectedFooterTab} setSelectedFooterTab={setSelectedFooterTab} />
           </WordDetailsContainer>
-          {showComments && (
+{/*           {showComments && (
             <>
               <CommentsBar wordId={wordInfo.id} logged={userInfo} />
             </>
-          )}
+          )} */}
         </>
       )}
     </PageContainer>
@@ -174,10 +174,11 @@ const PageContainer = styled.section`
 
 const DetailsHeader = styled.div`
   width: 100%;
-  height: 55%;
+  height: fit-content;
   padding: 2vw;
   padding-top: 2.7vw;
   box-sizing: border-box;
+  
 `;
 
 const TabsContainer = styled.div`
@@ -232,6 +233,7 @@ const WordDetailsContainer = styled.div`
   display: flex;
   flex-direction: column;
   align-items: center;
+  justify-content: space-between;
   position: relative;
   box-sizing: border-box;
   @media (max-width: 600px) {
@@ -246,6 +248,7 @@ export const Details = styled.div`
   width: 85%;
   margin-top: 1vw;
   display: flex;
+  height: fit-content;
   flex-direction: column;
   color: ${colors.darkThemeGrey};
   > h1 {
@@ -256,6 +259,7 @@ export const Details = styled.div`
 
   > h2 {
     margin-top: 0.5vw;
+    margin-bottom: 2%;
     line-height: 1.6vw;
     display: flex;
     text-align: justify;
