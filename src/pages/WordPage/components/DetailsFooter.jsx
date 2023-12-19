@@ -13,7 +13,6 @@ export default function DetailsFooter({
   selectedFooterTab,
   setSelectedFooterTab
 }) {
-console.log(wordInfo[NameToColumns[tabs[selectedFooterTab]]])
   return (
 <>
  {tabs.length > 0 && (
@@ -57,8 +56,7 @@ console.log(wordInfo[NameToColumns[tabs[selectedFooterTab]]])
             </Highlight>) 
             : 
 
-            (wordInfo[NameToColumns[tabs[selectedFooterTab]]]?
-              .split(/\((\d+)\)|,|;/g)
+            (wordInfo[NameToColumns[tabs[selectedFooterTab]]]?.split(/\((\d+)\)|,|;/g)
               .map((w, i) => (
 
                 <Highlight key={i} onClick={() => navigate(`/palavra/${w}`)}>
