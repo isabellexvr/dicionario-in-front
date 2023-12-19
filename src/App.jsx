@@ -5,7 +5,6 @@ import {
   Route,
   Outlet,
   Navigate,
-  useNavigate,
 } from "react-router-dom";
 import HomePage from "./pages/HomePage";
 import WordPage from "./pages/WordPage";
@@ -27,13 +26,19 @@ function App() {
 
   const [selectedTab, setSelectedTab] = useState(0);
   const [showSearchModal, setShowSearchModal] = useState(false);
+  const [globalSelectedWord, setGlobalSelectedWord] = useState();
 
   return (
     <UserInfoProvider>
       <WordsProvider>
         <BrowserRouter>
           <Header setShowSearchModal={setShowSearchModal} />
-          <SideBar selectedTab={selectedTab} setSelectedTab={setSelectedTab} />
+          <SideBar
+            selectedTab={selectedTab}
+            setSelectedTab={setSelectedTab}
+            globalSelectedWord={globalSelectedWord}
+            setGlobalSelectedWord={setGlobalSelectedWord}
+          />
           <Routes>
             <Route path="/" element={<HomePage />} />
             <Route path="palavra">
@@ -43,6 +48,8 @@ function App() {
                   <WordPage
                     selectedTab={selectedTab}
                     setSelectedTab={setSelectedTab}
+                    globalSelectedWord={globalSelectedWord}
+                    setGlobalSelectedWord={setGlobalSelectedWord}
                   />
                 }
               />

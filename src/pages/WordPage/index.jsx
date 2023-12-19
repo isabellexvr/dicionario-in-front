@@ -12,7 +12,7 @@ import HighlightWords from "./components/LikableWords";
 
 const HeaderTabs = ["Definições/Acepções", "Tópicos em Iluminação Natural"];
 
-export default function WordPage({ selectedTab, setSelectedTab }) {
+export default function WordPage({ selectedTab, setSelectedTab, globalSelectedWord, setGlobalSelectedWord }) {
   const { palavra } = useParams();
 
   const { getWordByName, getWordByNameLoading, getWordByNameError } =
@@ -37,8 +37,11 @@ export default function WordPage({ selectedTab, setSelectedTab }) {
   const regex = /\(\d\) /g;
   const navigate = useNavigate();
 
+
+
   useEffect(() => {
     async function getApiWordByName() {
+      setGlobalSelectedWord(palavra);
       try {
         const data = await getWordByName(palavra);
         const tabsData = await getWordTabs(palavra);
@@ -145,10 +148,10 @@ export default function WordPage({ selectedTab, setSelectedTab }) {
 
 const Verbete = styled.div`
   position: absolute;
-  top: -7vw;
+  top: -4vw;
   left: 0vw;
   color: ${colors.darkGrey};
-  font-size: 6vw;
+  font-size: 3.2vw;
   font-weight: 800;
 `;
 

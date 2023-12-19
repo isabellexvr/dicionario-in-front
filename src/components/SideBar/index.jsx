@@ -4,24 +4,16 @@ import useGetWords from "../../services/hooks/api/words/useGetWords.js";
 import useGetWordsByFirstChar from "../../services/hooks/api/words/useGetWordsByFirstChar";
 import { useEffect, useState } from "react";
 import PORTUGUESEALPHABET from "../../constants/portugueseAlphabet.js";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 import { FaMagnifyingGlass } from "react-icons/fa6";
 import { FallingLines } from "react-loader-spinner";
 import colors from "../../constants/colors";
-import { RiMenu4Line, RiLogoutCircleLine } from "react-icons/ri";
 import useUserInfo from "../../contexts/hooks/useUserInfo";
 import useSimpleSearch from "../../services/hooks/api/words/useSimpleSearch";
 import useWords from "../../contexts/hooks/useWords";
 
-export default function SideBar({ selectedTab, setSelectedTab }) {
+export default function SideBar({ selectedTab, setSelectedTab,globalSelectedWord, setGlobalSelectedWord }) {
   const { getWords, getWordsLoading, getWordsError } = useGetWords();
-
-  const {
-    getWordByFirstCharData,
-    getWordByFirstCharLoading,
-    getWordByFirstCharError,
-    getWordByFirstChar,
-  } = useGetWordsByFirstChar();
 
   const { words, setWords } = useWords();
 
@@ -74,7 +66,7 @@ export default function SideBar({ selectedTab, setSelectedTab }) {
           simpleSearchLoading={simpleSearchLoading}
         >
           {<FaMagnifyingGlass />}
-        </Input>
+        </Input>  
         <DictionaryContainer>
           {getWordsLoading || simpleSearchLoading ? (
             <LoadingContainer>
@@ -91,20 +83,24 @@ export default function SideBar({ selectedTab, setSelectedTab }) {
               <AlphabetContainer>
                 {PORTUGUESEALPHABET.map((l, i) => (
                   <Letter
+                  
                     onClick={() => {
                       setSelectedLetter(l);
+                      setGlobalSelectedWord(l);
                       attWords(l);
                     }}
                     selectedLetter={selectedLetter == l}
                     key={i}
                   >
-                    {l}
+                    <h1>{l}</h1>
+                    
                   </Letter>
                 ))}
               </AlphabetContainer>
               <WordsContainer>
                 {shownWords.map((w, i) => (
                   <Word
+                  isSelected={w == globalSelectedWord}
                     onClick={() => {
                       if (screen.width <= 600) {
                       }
@@ -120,42 +116,11 @@ export default function SideBar({ selectedTab, setSelectedTab }) {
             </>
           )}
         </DictionaryContainer>
-        <OpenedSidebarBottom>
-          <RiLogoutCircleLine
-            onClick={() => {
-              localStorage.removeItem("userInfo");
-              setUserInfo({});
-              navigate("/");
-            }}
-          />
-        </OpenedSidebarBottom>
       </>
     </SideBarContainer>
   );
 }
 
-const OpenedSidebarBottom = styled.div`
-  height: 15%;
-  width: 75%;
-  display: flex;
-  align-items: center;
-  justify-content: space-around;
-  z-index: 1;
-
-  > svg {
-    color: ${colors.darkGrey};
-    font-size: 2vw;
-    cursor: pointer;
-
-    border-radius: 0.5vw;
-    padding: 0.5vw;
-  }
-  @media (max-width: 600px) {
-    > svg {
-      font-size: 7vw;
-    }
-  }
-`;
 
 const SideBarContainer = styled.div`
   background-color: ${colors.lightGrey};
@@ -189,10 +154,13 @@ const SideBarContainer = styled.div`
     //background-color: ${colors.darkGrey};
   }
   ::-webkit-scrollbar {
-    width: 1px;
+    width: 3px;
+    
   }
   ::-webkit-scrollbar-thumb {
-    background: ${colors.lightGrey};
+    background: ${colors.mediumGrey};
+    height: 10%;
+
     opacity: 0.5;
   }
   @media (max-width: 600px) {
@@ -220,6 +188,7 @@ const DictionaryContainer = styled.div`
   margin-top: 1.2vw;
   z-index: 2;
 
+
   @media (max-width: 600px) {
     height: 75%;
     margin-top: 3vw;
@@ -240,7 +209,7 @@ const AlphabetContainer = styled.div`
   height: 97%;
   overflow-y: scroll;
   :hover {
-    background-color: #fcf05d;
+    background-color: ${colors.lightYellow};
     color: #48556a;
   }
   @media (max-width: 600px) {
@@ -254,18 +223,18 @@ const AlphabetContainer = styled.div`
 const Letter = styled.button`
   all: unset;
   background-color: ${(p) => (p.selectedLetter ? "#fcf05d" : "")};
-  //border: 1px solid ${colors.mediumGrey};
   border-left: none;
   box-sizing: border-box;
   color: ${colors.darkGrey};
-  width: 90%;
+  width: 80%;
+
   display: flex;
   justify-content: center;
-  border-radius: 0px 0.3vw 0.3vw 0px;
-  padding-top: 0.25vw;
-  padding-bottom: 0.23vw;
+  border-radius: 0 0.3vw 0.3vw 0;
+  padding: 5%;
+  padding-bottom: 5%;
   cursor: pointer;
-  margin-bottom: 0.35vw;
+  margin-bottom: 2%;
   align-items: center;
   :hover {
     background-color: #fcf05d;
@@ -286,12 +255,16 @@ const WordsContainer = styled.div`
   width: 80%;
   right: 0;
   font-size: 0.8vw;
-  height: 96%;
+  height: 97%;
   z-index: 2;
   color: ${colors.darkGrey};
   overflow-y: scroll;
   padding-left: 0.5vw;
   box-sizing: border-box;
+    :hover{
+    background-color: ${colors.lightYellow};
+  }
+
 
   @media (max-width: 600px) {
     font-size: 4vw;
@@ -304,12 +277,15 @@ const WordsContainer = styled.div`
 `;
 
 const Word = styled.h1`
-  width: 100%;
-  margin-bottom: 0.8vw;
+  width: 90%;
+  padding: 0.3vw;
   color: ${colors.darkGrey};
   font-weight: 600;
+  margin-bottom: 2%;
   cursor: pointer;
   z-index: 2;
+  border-radius: 0.3vw;
+  background-color: ${p => p.isSelected ? colors.yellow : "white"};
 
   @media (max-width: 600px) {
     margin-top: 2vw;

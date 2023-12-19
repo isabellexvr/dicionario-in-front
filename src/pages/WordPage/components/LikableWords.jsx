@@ -31,5 +31,7 @@ export const Highlight = styled.a`
   text-decoration: underline;
   cursor: pointer;
   white-space: nowrap;
- // background-color: red;
+  margin-bottom: 2%;
+  //background-color: red;
+  width: fit-content;
 `;

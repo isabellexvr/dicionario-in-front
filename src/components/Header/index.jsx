@@ -6,6 +6,7 @@ import { jwtDecode } from "jwt-decode";
 import { useEffect, useState } from "react";
 import { RiMenu4Line } from "react-icons/ri";
 import { FiSearch } from "react-icons/fi";
+import logo from "../../assets/logo.png"
 
 export default function Header({ setShowSearchModal }) {
   const navigate = useNavigate();
@@ -22,6 +23,7 @@ export default function Header({ setShowSearchModal }) {
 
   return (
     <HeaderContainer>
+      <Logo onClick={() => navigate("/")} alt="logo" src={logo}/>
       {typeof userInfo == "string" ? (
         <>
           <h1>
@@ -81,8 +83,17 @@ export default function Header({ setShowSearchModal }) {
   );
 }
 
+const Logo = styled.img`
+  
+  pointer-events: none;
+  width: 15%;
+  position: absolute;
+  left: 3%;
+  cursor: pointer;
+`
+
 const HeaderContainer = styled.div`
-  background-color: ${colors.mediumGrey};
+  background-color: white;
   :hover {
     background-color: ${colors.lightGrey};
   }

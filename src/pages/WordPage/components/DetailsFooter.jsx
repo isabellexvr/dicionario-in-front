@@ -14,6 +14,7 @@ export default function DetailsFooter({
   setSelectedFooterTab
 }) {
 
+  console.log(wordInfo[NameToColumns[tabs[selectedFooterTab]]])
 
   return (
     <DetailsFooterContainer>
@@ -32,29 +33,34 @@ export default function DetailsFooter({
         ))}
       </TabsContainer>
       <div className="content">
-        <Details>
-          {tabs[selectedFooterTab] == "Sinônimos/Variantes" ? (
-            wordInfo[NameToColumns[tabs[selectedFooterTab]]]
-              .split("; ")
-              .map((w, i) => (
-                <Highlight key={i} onClick={() => navigate(`/palavra/${w}`)}>
-                  {w}
-                </Highlight>
-              ))
-          ) : wordInfo[NameToColumns[tabs[selectedFooterTab]]]?.search("v.") !== -1 ? (
-            <Highlight
+        <FooterDetails>
+
+            {wordInfo[NameToColumns[tabs[selectedFooterTab]]]?.includes("v.") || wordInfo[NameToColumns[tabs[selectedFooterTab]]]?.includes("(") ? 
+            
+            (<Highlight
               onClick={() =>
                 navigate(
                   `/palavra/${wordInfo[NameToColumns[tabs[selectedFooterTab]]].slice(3)}`
                 )
               }
             >
-              {wordInfo[NameToColumns[tabs[selectedFooterTab]]]?.slice(2)}
-            </Highlight>
-          ) : (
-            <h1>{wordInfo[NameToColumns[tabs[selectedFooterTab]]]}</h1>
-          )}
-        </Details>
+
+            {wordInfo[NameToColumns[tabs[selectedFooterTab]]]?.slice(2)}
+
+            </Highlight>) 
+            : 
+
+            (wordInfo[NameToColumns[tabs[selectedFooterTab]]]?
+              .split(/, |;/)
+              .map((w, i) => (
+
+                <Highlight key={i} onClick={() => navigate(`/palavra/${w}`)}>
+                {w}
+                </Highlight>
+
+              )))}
+
+        </FooterDetails>
       </div>
     </DetailsFooterContainer>
   );
@@ -66,10 +72,12 @@ const DetailsFooterContainer = styled.div`
   > .content {
     padding: 2vw;
     box-sizing: border-box;
+    height: 100%;
   }
   width: 100%;
-  height: 45%;
+  height: max(50%);
   position: relative;
+
 `;
 
 const TabsContainer = styled.div`
@@ -80,3 +88,14 @@ const TabsContainer = styled.div`
   // background-color: red;
   width: 100%;
 `;
+
+const FooterDetails = styled.div`
+margin-top: 2%;
+display: flex;
+flex-direction: column;
+flex-wrap: wrap;
+height: 90%;
+//background-color: yellow;
+
+width: 50%;
+`
