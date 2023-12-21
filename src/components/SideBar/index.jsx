@@ -12,16 +12,22 @@ import useUserInfo from "../../contexts/hooks/useUserInfo";
 import useSimpleSearch from "../../services/hooks/api/words/useSimpleSearch";
 import useWords from "../../contexts/hooks/useWords";
 
-export default function SideBar({ selectedTab, setSelectedTab,globalSelectedWord, setGlobalSelectedWord }) {
+export default function SideBar({
+  selectedTab,
+  setSelectedTab,
+  globalSelectedWord,
+  setGlobalSelectedWord,
+}) {
   const { getWords, getWordsLoading, getWordsError } = useGetWords();
 
   const { words, setWords } = useWords();
 
-  const { simpleSearch, simpleSearchLoading, simpleSearchError } = useSimpleSearch();
+  const { simpleSearch, simpleSearchLoading, simpleSearchError } =
+    useSimpleSearch();
 
   const [apiWords, setApiWords] = useState([]);
   const [shownWords, setShownWords] = useState([]);
-  const [selectedLetter, setSelectedLetter] = useState("A");
+  const [selectedLetter, setSelectedLetter] = useState(0);
   const { setUserInfo } = useUserInfo();
 
   const navigate = useNavigate();
@@ -38,7 +44,7 @@ export default function SideBar({ selectedTab, setSelectedTab,globalSelectedWord
         onlyWords.forEach((w) => {
           hashtable[w] = true;
         });
-        console.log(hashtable)
+        console.log(hashtable);
         setWords(hashtable);
       } catch (err) {
         console.log(err);
@@ -66,7 +72,7 @@ export default function SideBar({ selectedTab, setSelectedTab,globalSelectedWord
           simpleSearchLoading={simpleSearchLoading}
         >
           {<FaMagnifyingGlass />}
-        </Input>  
+        </Input>
         <DictionaryContainer>
           {getWordsLoading || simpleSearchLoading ? (
             <LoadingContainer>
@@ -83,24 +89,31 @@ export default function SideBar({ selectedTab, setSelectedTab,globalSelectedWord
               <AlphabetContainer>
                 {PORTUGUESEALPHABET.map((l, i) => (
                   <Letter
-                  
                     onClick={() => {
-                      setSelectedLetter(l);
-                      setGlobalSelectedWord(l);
-                      attWords(l);
+                      setSelectedLetter(i);
+                      //setGlobalSelectedWord(l);
+                      attWords(PORTUGUESEALPHABET[i]);
                     }}
-                    selectedLetter={selectedLetter == l}
+                    onKeyDown={(e) => {
+                      if (e.key === "ArrowDown") {
+                        setSelectedLetter(selectedLetter + 1);
+                        attWords(PORTUGUESEALPHABET[selectedLetter + 1]);
+                      } else if (e.key === "ArrowUp") {
+                        setSelectedLetter(selectedLetter - 1);
+                        attWords(PORTUGUESEALPHABET[selectedLetter - 1]);
+                      }
+                    }}
+                    selectedLetter={selectedLetter == i}
                     key={i}
                   >
                     <h1>{l}</h1>
-                    
                   </Letter>
                 ))}
               </AlphabetContainer>
               <WordsContainer>
                 {shownWords.map((w, i) => (
                   <Word
-                  isSelected={w == globalSelectedWord}
+                    isSelected={w == globalSelectedWord}
                     onClick={() => {
                       if (screen.width <= 600) {
                       }
@@ -120,7 +133,6 @@ export default function SideBar({ selectedTab, setSelectedTab,globalSelectedWord
     </SideBarContainer>
   );
 }
-
 
 const SideBarContainer = styled.div`
   background-color: ${colors.lightGrey};
@@ -155,7 +167,6 @@ const SideBarContainer = styled.div`
   }
   ::-webkit-scrollbar {
     width: 3px;
-    
   }
   ::-webkit-scrollbar-thumb {
     background: ${colors.mediumGrey};
@@ -187,7 +198,6 @@ const DictionaryContainer = styled.div`
   justify-content: space-between;
   margin-top: 1.2vw;
   z-index: 2;
-
 
   @media (max-width: 600px) {
     height: 75%;
@@ -261,10 +271,9 @@ const WordsContainer = styled.div`
   overflow-y: scroll;
   padding-left: 0.5vw;
   box-sizing: border-box;
-    :hover{
+  :hover {
     background-color: ${colors.lightYellow};
   }
-
 
   @media (max-width: 600px) {
     font-size: 4vw;
@@ -285,7 +294,7 @@ const Word = styled.h1`
   cursor: pointer;
   z-index: 2;
   border-radius: 0.3vw;
-  background-color: ${p => p.isSelected ? colors.yellow : "white"};
+  background-color: ${(p) => (p.isSelected ? colors.yellow : "white")};
 
   @media (max-width: 600px) {
     margin-top: 2vw;

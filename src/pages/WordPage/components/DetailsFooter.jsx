@@ -1,6 +1,5 @@
 import styled from "styled-components";
-import { Tab, Details } from "..";
-import { useEffect, useState } from "react";
+import { Tab } from "..";
 import { NameToColumns } from "../helpers";
 import colors from "../../../constants/colors";
 import { Highlight } from "./LikableWords";
@@ -13,6 +12,7 @@ export default function DetailsFooter({
   selectedFooterTab,
   setSelectedFooterTab
 }) {
+  //palavra pano ta com problema
   return (
 <>
  {tabs.length > 0 && (
