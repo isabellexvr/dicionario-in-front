@@ -29,6 +29,8 @@ export default function SideBar({
   const [shownWords, setShownWords] = useState([]);
   const [selectedLetter, setSelectedLetter] = useState(0);
   const { setUserInfo } = useUserInfo();
+  console.log(selectedLetter);
+  //console.log(PORTUGUESEALPHABET.length)
 
   const navigate = useNavigate();
   useEffect(() => {
@@ -91,16 +93,19 @@ export default function SideBar({
                   <Letter
                     onClick={() => {
                       setSelectedLetter(i);
-                      //setGlobalSelectedWord(l);
                       attWords(PORTUGUESEALPHABET[i]);
                     }}
                     onKeyDown={(e) => {
                       if (e.key === "ArrowDown") {
-                        setSelectedLetter(selectedLetter + 1);
-                        attWords(PORTUGUESEALPHABET[selectedLetter + 1]);
+                        if (selectedLetter < PORTUGUESEALPHABET.length -1) {
+                          setSelectedLetter(selectedLetter + 1);
+                          attWords(PORTUGUESEALPHABET[selectedLetter + 1]);
+                        }
                       } else if (e.key === "ArrowUp") {
-                        setSelectedLetter(selectedLetter - 1);
-                        attWords(PORTUGUESEALPHABET[selectedLetter - 1]);
+                        if (selectedLetter > 0) {
+                          setSelectedLetter(selectedLetter - 1);
+                          attWords(PORTUGUESEALPHABET[selectedLetter - 1]);
+                        }
                       }
                     }}
                     selectedLetter={selectedLetter == i}
