@@ -46,7 +46,7 @@ function App() {
     };
   }, []);
 
-  console.log(letterOrWordSelection)
+  console.log(globalSelectedWord)
 
   return (
     <AppContainer>

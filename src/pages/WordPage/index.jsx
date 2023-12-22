@@ -36,7 +36,7 @@ export default function WordPage({ selectedTab, setSelectedTab, globalSelectedWo
 
   const regex = /\(\d\) /g;
   const navigate = useNavigate();
-
+console.log(globalSelectedWord)
   useEffect(() => {
 
     async function getApiWordByName() {

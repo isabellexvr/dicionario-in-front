@@ -43,6 +43,7 @@ export default function SideBar({
   //console.log(letterOrWordSelection)
   useEffect(() => {
     const handleKeyDown = (e) => {
+      // console.log(globalSelectedWord)
       if (letterOrWordSelection === 0) {
         if (e.key === "ArrowDown") {
           if (selectedLetter < PORTUGUESEALPHABET.length - 1) {
@@ -50,6 +51,7 @@ export default function SideBar({
               const nextLetter = prevLetter + 1;
               return nextLetter;
             });
+            setGlobalSelectedWord(0)
           }
         } else if (e.key === "ArrowUp") {
           if (selectedLetter > 0) {
@@ -57,22 +59,33 @@ export default function SideBar({
               const prev = prevLetter - 1;
               return prev;
             });
+            setGlobalSelectedWord(0)
+
           }
         }
       } else if (letterOrWordSelection === 1) {
         if (e.key === "ArrowDown") {
           if (globalSelectedWord < shownWords.length - 1) {
-            setGlobalSelectedWord((prevWord) => prevWord + 1);
+            setGlobalSelectedWord((prevWord) => {
+              const prev = prevWord + 1;
+              return prev;
+            });
+
           }
         } else if (e.key === "ArrowUp") {
+          // console.log(globalSelectedWord);
           if (globalSelectedWord > 0) {
-            setGlobalSelectedWord((prevWord) => prevWord - 1);
+            setGlobalSelectedWord((prevWord) => {
+              const prev = prevWord - 1;
+              return prev;
+            });
           }
         }
       }
     };
 
     attWords(PORTUGUESEALPHABET[selectedLetter]);
+    if (globalSelectedWord) navigate(`palavra/${words[globalSelectedWord]}`);
 
     document.addEventListener("keydown", handleKeyDown);
 
@@ -98,7 +111,7 @@ export default function SideBar({
     return () => {
       document.removeEventListener("keydown", handleKeyDown);
     };
-  }, [selectedLetter]);
+  }, [selectedLetter, globalSelectedWord, letterOrWordSelection]);
 
   return (
     <SideBarContainer>
@@ -141,7 +154,14 @@ export default function SideBar({
               </AlphabetContainer>
               <WordsContainer>
                 {shownWords.map((w, i) => (
-                  <Word isSelected={i == globalSelectedWord} key={i}>
+                  <Word
+                    onClick={() => {
+                      navigate(`/palavra/${w}`);
+                      setGlobalSelectedWord(i);
+                    }}
+                    isSelected={i == globalSelectedWord}
+                    key={i}
+                  >
                     {w}
                   </Word>
                 ))}
