@@ -40,10 +40,8 @@ export default function SideBar({
     );
     setShownWords(toShow);
   }
-  //console.log(letterOrWordSelection)
   useEffect(() => {
     const handleKeyDown = (e) => {
-      // console.log(globalSelectedWord)
       if (letterOrWordSelection === 0) {
         if (e.key === "ArrowDown") {
           if (selectedLetter < PORTUGUESEALPHABET.length - 1) {
@@ -51,7 +49,7 @@ export default function SideBar({
               const nextLetter = prevLetter + 1;
               return nextLetter;
             });
-            setGlobalSelectedWord(0)
+            setGlobalSelectedWord(0);
           }
         } else if (e.key === "ArrowUp") {
           if (selectedLetter > 0) {
@@ -59,8 +57,7 @@ export default function SideBar({
               const prev = prevLetter - 1;
               return prev;
             });
-            setGlobalSelectedWord(0)
-
+            setGlobalSelectedWord(0);
           }
         }
       } else if (letterOrWordSelection === 1) {
@@ -70,10 +67,8 @@ export default function SideBar({
               const prev = prevWord + 1;
               return prev;
             });
-
           }
         } else if (e.key === "ArrowUp") {
-          // console.log(globalSelectedWord);
           if (globalSelectedWord > 0) {
             setGlobalSelectedWord((prevWord) => {
               const prev = prevWord - 1;
@@ -85,7 +80,7 @@ export default function SideBar({
     };
 
     attWords(PORTUGUESEALPHABET[selectedLetter]);
-    if (globalSelectedWord) navigate(`palavra/${words[globalSelectedWord]}`);
+ navigate(`palavra/${words[globalSelectedWord]}`)
 
     document.addEventListener("keydown", handleKeyDown);
 
@@ -100,7 +95,6 @@ export default function SideBar({
         onlyWords.forEach((w) => {
           hashtable[w] = true;
         });
-        // console.log(hashtable);
         setWords(onlyWords);
       } catch (err) {
         console.log(err);

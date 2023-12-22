@@ -32,21 +32,17 @@ function App() {
 
   useEffect(() => {
     const handleKeyDown = (e) => {
-      //console.log(letterOrWordSelection)
       if(e.key === "ArrowRight"){
         setLetterOrWordSelection(1);
       }else if( e.key === "ArrowLeft"){
         setLetterOrWordSelection(0);
       }
-      // Perform actions based on the pressed key
     };
     document.addEventListener("keydown", handleKeyDown);
     return () => {
       document.removeEventListener("keydown", handleKeyDown);
     };
   }, []);
-
-  console.log(globalSelectedWord)
 
   return (
     <AppContainer>
