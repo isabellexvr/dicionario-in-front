@@ -45,7 +45,6 @@ const wordsApi = {
   },
   tabs: async (word) => {
     const res = await api.get(`words/tabs/${word}`);
-    console.log(word);
     return res.data;
   },
 };

@@ -37,11 +37,13 @@ export default function WordPage({ selectedTab, setSelectedTab, globalSelectedWo
   const regex = /\(\d\) /g;
   const navigate = useNavigate();
 
-console.log(definicoes)
-
   useEffect(() => {
+
     async function getApiWordByName() {
-      setGlobalSelectedWord(palavra);
+      //console.log(words)
+
+      //setGlobalSelectedWord(palavra);
+
       try {
         const data = await getWordByName(palavra);
         const tabsData = await getWordTabs(palavra);
@@ -68,7 +70,9 @@ console.log(definicoes)
         console.log(err);
       }
     }
+
     getApiWordByName();
+
   }, [palavra]);
 
   return (

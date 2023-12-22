@@ -17,6 +17,7 @@ export default function SideBar({
   setSelectedTab,
   globalSelectedWord,
   setGlobalSelectedWord,
+  letterOrWordSelection,
 }) {
   const { getWords, getWordsLoading, getWordsError } = useGetWords();
 
@@ -29,14 +30,54 @@ export default function SideBar({
   const [shownWords, setShownWords] = useState([]);
   const [selectedLetter, setSelectedLetter] = useState(0);
   const { setUserInfo } = useUserInfo();
-  console.log(selectedLetter);
-  //console.log(PORTUGUESEALPHABET.length)
+  const [attWordsLoading, setAttWordsLoading] = useState(false);
 
   const navigate = useNavigate();
+
+  function attWords(letter) {
+    const toShow = apiWords.filter(
+      (w) => w[0] == letter.toLowerCase() || w[0] == letter
+    );
+    setShownWords(toShow);
+  }
+  //console.log(letterOrWordSelection)
   useEffect(() => {
+    const handleKeyDown = (e) => {
+      if (letterOrWordSelection === 0) {
+        if (e.key === "ArrowDown") {
+          if (selectedLetter < PORTUGUESEALPHABET.length - 1) {
+            setSelectedLetter((prevLetter) => {
+              const nextLetter = prevLetter + 1;
+              return nextLetter;
+            });
+          }
+        } else if (e.key === "ArrowUp") {
+          if (selectedLetter > 0) {
+            setSelectedLetter((prevLetter) => {
+              const prev = prevLetter - 1;
+              return prev;
+            });
+          }
+        }
+      } else if (letterOrWordSelection === 1) {
+        if (e.key === "ArrowDown") {
+          if (globalSelectedWord < shownWords.length - 1) {
+            setGlobalSelectedWord((prevWord) => prevWord + 1);
+          }
+        } else if (e.key === "ArrowUp") {
+          if (globalSelectedWord > 0) {
+            setGlobalSelectedWord((prevWord) => prevWord - 1);
+          }
+        }
+      }
+    };
+
+    attWords(PORTUGUESEALPHABET[selectedLetter]);
+
+    document.addEventListener("keydown", handleKeyDown);
+
     async function getApiWords() {
       try {
-        //const data = await getWordByFirstChar(selectedLetter);
         const data = await getWords();
         const hashtable = {};
 
@@ -46,22 +87,18 @@ export default function SideBar({
         onlyWords.forEach((w) => {
           hashtable[w] = true;
         });
-        console.log(hashtable);
-        setWords(hashtable);
+        // console.log(hashtable);
+        setWords(onlyWords);
       } catch (err) {
         console.log(err);
       }
     }
+    if (apiWords.length < 1) getApiWords();
 
-    getApiWords();
-  }, []);
-
-  function attWords(letter) {
-    const toShow = apiWords.filter(
-      (w) => w[0] == letter.toLowerCase() || w[0] == letter
-    );
-    setShownWords(toShow);
-  }
+    return () => {
+      document.removeEventListener("keydown", handleKeyDown);
+    };
+  }, [selectedLetter]);
 
   return (
     <SideBarContainer>
@@ -76,7 +113,7 @@ export default function SideBar({
           {<FaMagnifyingGlass />}
         </Input>
         <DictionaryContainer>
-          {getWordsLoading || simpleSearchLoading ? (
+          {getWordsLoading || simpleSearchLoading || attWordsLoading ? (
             <LoadingContainer>
               <h1>Carregando...</h1>
               <FallingLines
@@ -95,19 +132,6 @@ export default function SideBar({
                       setSelectedLetter(i);
                       attWords(PORTUGUESEALPHABET[i]);
                     }}
-                    onKeyDown={(e) => {
-                      if (e.key === "ArrowDown") {
-                        if (selectedLetter < PORTUGUESEALPHABET.length -1) {
-                          setSelectedLetter(selectedLetter + 1);
-                          attWords(PORTUGUESEALPHABET[selectedLetter + 1]);
-                        }
-                      } else if (e.key === "ArrowUp") {
-                        if (selectedLetter > 0) {
-                          setSelectedLetter(selectedLetter - 1);
-                          attWords(PORTUGUESEALPHABET[selectedLetter - 1]);
-                        }
-                      }
-                    }}
                     selectedLetter={selectedLetter == i}
                     key={i}
                   >
@@ -117,16 +141,7 @@ export default function SideBar({
               </AlphabetContainer>
               <WordsContainer>
                 {shownWords.map((w, i) => (
-                  <Word
-                    isSelected={w == globalSelectedWord}
-                    onClick={() => {
-                      if (screen.width <= 600) {
-                      }
-                      setSelectedTab(0);
-                      navigate(`/palavra/${w}`);
-                    }}
-                    key={i}
-                  >
+                  <Word isSelected={i == globalSelectedWord} key={i}>
                     {w}
                   </Word>
                 ))}
@@ -230,7 +245,7 @@ const AlphabetContainer = styled.div`
   @media (max-width: 600px) {
     width: 30%;
     font-size: 4vw;
-    overflow-y: scroll;
+    overflow-y: hidden;
     height: 100%;
   }
 `;

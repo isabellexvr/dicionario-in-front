@@ -74,9 +74,7 @@ export default function Header({ setShowSearchModal }) {
             <FiSearch />
             Pesquisar
           </CommonButton>
-          <HighlightButton onClick={() => navigate("/cadastro")}>
-            Faça Parte
-          </HighlightButton>
+
         </>
       )}
     </HeaderContainer>
