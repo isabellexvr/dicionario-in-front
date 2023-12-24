@@ -414,3 +414,22 @@ export const ReverseSearchForm = styled.div`
     }
   }
 `;
+
+export const AddOrDeleteButton = styled.button`
+      all: unset;
+      background-color: ${colors.darkGrey};
+      opacity: 0.4;
+      color: white;
+      width: 10%;
+      height: 55%;
+      border-radius: 0.5vw;
+      margin: 0 auto;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+
+      > svg {
+        font-size: 1.5vw;
+      }
+`

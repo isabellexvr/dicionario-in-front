@@ -7,6 +7,8 @@ import { useEffect, useState } from "react";
 import { RiMenu4Line } from "react-icons/ri";
 import { FiSearch } from "react-icons/fi";
 import logo from "../../assets/logo.png"
+import { RiFileList2Fill } from "react-icons/ri";
+
 
 export default function Header({ setShowSearchModal }) {
   const navigate = useNavigate();
@@ -45,6 +47,7 @@ export default function Header({ setShowSearchModal }) {
           <HighlightButton onClick={() => navigate("/")}>
             Início
           </HighlightButton>
+
         </>
       ) : (
         <>
@@ -59,6 +62,7 @@ export default function Header({ setShowSearchModal }) {
               <HighlightButton onClick={() => navigate("/sobre")}>
                 Sobre
               </HighlightButton>
+              
             </>
           ) : (
             <>
@@ -68,6 +72,10 @@ export default function Header({ setShowSearchModal }) {
               </CommonButton>
             </>
           )}
+          <CommonButton onClick={() => navigate("/referencias")}>
+          <RiFileList2Fill />
+            Referências
+          </CommonButton>
           <CommonButton onClick={() => {
                   setShowSearchModal(true);
                 }}>

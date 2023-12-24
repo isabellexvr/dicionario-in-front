@@ -36,13 +36,10 @@ export default function WordPage({ selectedTab, setSelectedTab, globalSelectedWo
 
   const regex = /\(\d\) /g;
   const navigate = useNavigate();
-console.log(globalSelectedWord)
+
   useEffect(() => {
 
     async function getApiWordByName() {
-      //console.log(words)
-
-      //setGlobalSelectedWord(palavra);
 
       try {
         const data = await getWordByName(palavra);
@@ -139,11 +136,6 @@ console.log(globalSelectedWord)
 
             <DetailsFooter tabs={tabs} wordInfo={wordInfo} default={tabs[0]} navigate={navigate} selectedFooterTab={selectedFooterTab} setSelectedFooterTab={setSelectedFooterTab} />
           </WordDetailsContainer>
-{/*           {showComments && (
-            <>
-              <CommentsBar wordId={wordInfo.id} logged={userInfo} />
-            </>
-          )} */}
         </>
       )}
     </PageContainer>

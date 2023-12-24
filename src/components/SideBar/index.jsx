@@ -80,7 +80,8 @@ export default function SideBar({
     };
 
     attWords(PORTUGUESEALPHABET[selectedLetter]);
- navigate(`palavra/${words[globalSelectedWord]}`)
+    if (globalSelectedWord !== null)
+      navigate(`palavra/${words[globalSelectedWord]}`);
 
     document.addEventListener("keydown", handleKeyDown);
 

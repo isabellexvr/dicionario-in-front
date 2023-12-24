@@ -21,13 +21,14 @@ import { createPortal } from "react-dom";
 import SearchModal from "./components/SearchModal";
 import WordsProvider from "./contexts/WordsContext";
 import styled from "styled-components";
+import RefsPage from "./pages/RefsPage";
 
 function App() {
   const searchModal = document.getElementById("search-modal");
 
   const [selectedTab, setSelectedTab] = useState(0);
   const [showSearchModal, setShowSearchModal] = useState(false);
-  const [globalSelectedWord, setGlobalSelectedWord] = useState(0);
+  const [globalSelectedWord, setGlobalSelectedWord] = useState(null);
   const [letterOrWordSelection, setLetterOrWordSelection] = useState(0);
 
   useEffect(() => {
@@ -86,6 +87,7 @@ function App() {
               <Route path="cadastro" element={<SignUp />} />
               <Route path="login" element={<SignInPage />} />
               <Route path="sobre" element={<AboutPage />} />
+              <Route path="referencias" element={<RefsPage/>} />
             </Routes>
             {showSearchModal &&
               createPortal(

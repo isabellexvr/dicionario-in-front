@@ -10,6 +10,7 @@ import { Tooltip } from "react-tooltip";
 import { useNavigate } from "react-router-dom";
 import useReverseSearch from "../../services/hooks/api/words/useReverseSearch";
 import {
+  AddOrDeleteButton,
   AddedReverseSearchWords,
   CloseIcon,
   ModalBody,
@@ -57,7 +58,7 @@ export default function SearchModal({ setShowSearchModal }) {
     input.split(" ").forEach((e) => (inputHash[e] = true));
     setter({ ...words, ...inputHash });
   }
-
+  console.log(Object.keys(includedRSWords).length == 0);
   return (
     <>
       <SearchModalContainer onClick={() => setShowSearchModal(false)} />
@@ -227,19 +228,19 @@ export default function SearchModal({ setShowSearchModal }) {
                   }}
                 />
 
-                <button
+                <AddOrDeleteButton
                   onClick={() => {
                     addWords(
                       includedRSWordInput,
                       includedRSWords,
                       setIncludedRSWords
-                    )
+                    );
 
                     setIncludedRSWordInput("");
                   }}
                 >
                   <IoMdAdd />
-                </button>
+                </AddOrDeleteButton>
               </div>
 
               <div className="input">
@@ -248,6 +249,7 @@ export default function SearchModal({ setShowSearchModal }) {
                 <input
                   id="delete"
                   name="name"
+                  disabled={Object.keys(includedRSWords).length == 0}
                   value={excludedRSWordInput}
                   onChange={(e) => setExcludedRSWordInput(e.target.value)}
                   onKeyDown={(e) => {
@@ -262,7 +264,8 @@ export default function SearchModal({ setShowSearchModal }) {
                   }}
                 />
 
-                <button
+                <AddOrDeleteButton
+                  fuck={Object.keys(includedRSWords).length == 0}
                   onClick={() => {
                     addWords(
                       excludedRSWordInput,
@@ -273,7 +276,7 @@ export default function SearchModal({ setShowSearchModal }) {
                   }}
                 >
                   <RiSubtractFill />
-                </button>
+                </AddOrDeleteButton>
               </div>
               <div className="buttons">
                 <button
@@ -283,10 +286,8 @@ export default function SearchModal({ setShowSearchModal }) {
                       contains: Object.keys(includedRSWords),
                       doesNotContain: Object.keys(excludedRSWords),
                     };
-                    console.log(form);
                     const res = await reverseSearch(form);
                     setSearchResults(res.map((e) => e.Verbete));
-                    console.log(res);
                   }}
                   type="submit"
                 >
