@@ -42,6 +42,11 @@ export default function WordPage({ selectedTab, setSelectedTab, globalSelectedWo
     async function getApiWordByName() {
 
       try {
+        
+        if(globalSelectedWord === null){
+          setGlobalSelectedWord(words.indexOf(palavra))
+        }
+
         const data = await getWordByName(palavra);
         const tabsData = await getWordTabs(palavra);
         setSelectedFooterTab(0)
@@ -67,6 +72,7 @@ export default function WordPage({ selectedTab, setSelectedTab, globalSelectedWo
         console.log(err);
       }
     }
+
 
     getApiWordByName();
 

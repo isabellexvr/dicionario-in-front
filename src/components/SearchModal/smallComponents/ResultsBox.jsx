@@ -23,8 +23,9 @@ export default function ResultsBoxComponent({
         <Results>
           {searchResults.length > 0 ? (
             <ul>
-              {searchResults.map((r) => (
+              {searchResults.map((r, i) => (
                 <li
+                key={i}
                   onClick={() => {
                     navigate(`palavra/${r}`);
                     setShowSearchModal(false);

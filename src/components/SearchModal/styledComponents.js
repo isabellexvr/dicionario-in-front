@@ -328,7 +328,7 @@ export const ReverseSearchWord = styled.div`
   }
 `;
 
-export const ReverseSearchForm = styled.div`
+export const ReverseSearchFormStyle = styled.div`
   display: flex;
   width: 95%;
   height: 100%;

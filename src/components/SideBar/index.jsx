@@ -80,8 +80,6 @@ export default function SideBar({
     };
 
     attWords(PORTUGUESEALPHABET[selectedLetter]);
-    if (globalSelectedWord !== null)
-      navigate(`palavra/${words[globalSelectedWord]}`);
 
     document.addEventListener("keydown", handleKeyDown);
 
@@ -107,6 +105,7 @@ export default function SideBar({
       document.removeEventListener("keydown", handleKeyDown);
     };
   }, [selectedLetter, globalSelectedWord, letterOrWordSelection]);
+
 
   return (
     <SideBarContainer>
@@ -137,6 +136,7 @@ export default function SideBar({
                 {PORTUGUESEALPHABET.map((l, i) => (
                   <Letter
                     onClick={() => {
+                      setGlobalSelectedWord(null);
                       setSelectedLetter(i);
                       attWords(PORTUGUESEALPHABET[i]);
                     }}

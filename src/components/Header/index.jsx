@@ -6,11 +6,10 @@ import { jwtDecode } from "jwt-decode";
 import { useEffect, useState } from "react";
 import { RiMenu4Line } from "react-icons/ri";
 import { FiSearch } from "react-icons/fi";
-import logo from "../../assets/logo.png"
+import logo from "../../assets/logo.png";
 import { RiFileList2Fill } from "react-icons/ri";
 
-
-export default function Header({ setShowSearchModal }) {
+export default function Header({ setShowSearchModal, setGlobalSelectedWord }) {
   const navigate = useNavigate();
   const { userInfo } = useUserInfo();
   const [userInfos, setUserInfos] = useState({});
@@ -18,14 +17,13 @@ export default function Header({ setShowSearchModal }) {
   useEffect(() => {
     if (typeof userInfo == "string") {
       const decoded = jwtDecode(userInfo);
-      //console.log(decoded)
       setUserInfos(decoded);
     }
   }, [userInfo]);
 
   return (
     <HeaderContainer>
-      <Logo onClick={() => navigate("/")} alt="logo" src={logo}/>
+      <Logo onClick={() => navigate("/")} alt="logo" src={logo} />
       {typeof userInfo == "string" ? (
         <>
           <h1>
@@ -37,9 +35,11 @@ export default function Header({ setShowSearchModal }) {
               Admin
             </CommonButton>
           )}
-                    <CommonButton onClick={() => {
-                  setShowSearchModal(true);
-                }}>
+          <CommonButton
+            onClick={() => {
+              setShowSearchModal(true);
+            }}
+          >
             <FiSearch />
             Pesquisar
           </CommonButton>
@@ -47,42 +47,53 @@ export default function Header({ setShowSearchModal }) {
           <HighlightButton onClick={() => navigate("/")}>
             Início
           </HighlightButton>
-
         </>
       ) : (
         <>
           {screen.width <= 600 ? (
             <>
-              <RiMenu4Line
-                
-              />
+              <RiMenu4Line />
               <HighlightButton onClick={() => navigate("/")}>
                 Início
               </HighlightButton>
               <HighlightButton onClick={() => navigate("/sobre")}>
                 Sobre
               </HighlightButton>
-              
             </>
           ) : (
             <>
-              <CommonButton onClick={() => navigate("/")}>Início</CommonButton>
-              <CommonButton onClick={() => navigate("/sobre")}>
+              <CommonButton
+                onClick={() => {
+                  setGlobalSelectedWord(null);
+                  navigate("/");
+                }}
+              >
+                Início
+              </CommonButton>
+              <CommonButton
+                onClick={() => {
+                  setGlobalSelectedWord(null);
+                  navigate("/sobre");
+                }}
+              >
                 Sobre
               </CommonButton>
             </>
           )}
-          <CommonButton onClick={() => navigate("/referencias")}>
-          <RiFileList2Fill />
+          <CommonButton onClick={() => {
+            setGlobalSelectedWord(null);
+            navigate("/referencias")}}>
+            <RiFileList2Fill />
             Referências
           </CommonButton>
-          <CommonButton onClick={() => {
-                  setShowSearchModal(true);
-                }}>
+          <CommonButton
+            onClick={() => {
+              setShowSearchModal(true);
+            }}
+          >
             <FiSearch />
             Pesquisar
           </CommonButton>
-
         </>
       )}
     </HeaderContainer>
@@ -90,13 +101,12 @@ export default function Header({ setShowSearchModal }) {
 }
 
 const Logo = styled.img`
-  
   pointer-events: none;
   width: 15%;
   position: absolute;
   left: 3%;
   cursor: pointer;
-`
+`;
 
 const HeaderContainer = styled.div`
   background-color: white;
@@ -183,7 +193,7 @@ const CommonButton = styled.button`
   cursor: pointer;
   margin-right: 1.5vw;
   font-size: 1.1vw;
-  >svg{
+  > svg {
     font-size: 1.25vw;
     margin-right: 0.45vw;
   }

@@ -10,13 +10,9 @@ import { Tooltip } from "react-tooltip";
 import { useNavigate } from "react-router-dom";
 import useReverseSearch from "../../services/hooks/api/words/useReverseSearch";
 import {
-  AddOrDeleteButton,
-  AddedReverseSearchWords,
   CloseIcon,
   ModalBody,
   ModalHeader,
-  ReverseSearchForm,
-  ReverseSearchWord,
   SearchForm,
   SearchModalContainer,
   SearchModalWindow,
@@ -25,22 +21,17 @@ import {
   TabsContainer,
 } from "./styledComponents";
 import ResultsBoxComponent from "./smallComponents/ResultsBox";
+import ReverseSearchForm from "./smallComponents/ReverseSearchForm";
+import SimpleSearchForm from "./smallComponents/SimpleSearchForm";
 
 const SearchTypes = ["Pesquisa Simples", "Pesquisa Reversa"];
 
 export default function SearchModal({ setShowSearchModal }) {
   const [selectedTab, setSelectedTab] = useState(0);
 
-  const [simpleSearchForm, setSimpleSearchForm] = useState({});
 
   const [searchResults, setSearchResults] = useState([]);
   const [showResults, setShowResults] = useState(false);
-
-  const [includedRSWords, setIncludedRSWords] = useState({});
-  const [includedRSWordInput, setIncludedRSWordInput] = useState("");
-
-  const [excludedRSWords, setExcludedRSWords] = useState({});
-  const [excludedRSWordInput, setExcludedRSWordInput] = useState("");
 
   const { simpleSearch, simpleSearchLoading, simpleSearchError } =
     useSimpleSearch();
@@ -53,12 +44,6 @@ export default function SearchModal({ setShowSearchModal }) {
 
   const navigate = useNavigate();
 
-  function addWords(input, words, setter) {
-    const inputHash = {};
-    input.split(" ").forEach((e) => (inputHash[e] = true));
-    setter({ ...words, ...inputHash });
-  }
-  console.log(Object.keys(includedRSWords).length == 0);
   return (
     <>
       <SearchModalContainer onClick={() => setShowSearchModal(false)} />
@@ -101,208 +86,9 @@ export default function SearchModal({ setShowSearchModal }) {
         </TabsContainer>
         <ModalBody>
           {selectedTab === 0 ? (
-            <SearchForm
-              onSubmit={(e) =>
-                forms.sendFormWithQuery(
-                  e,
-                  simpleSearch,
-                  setSearchResults,
-                  simpleSearchForm,
-                  ""
-                )
-              }
-            >
-              <div className="input">
-                <label htmlFor="startsWith">Iniciado por:</label>
-                <label htmlFor="startsWith" className="icon-label">
-                  <TbBracketsContainStart />
-                </label>
-                <input
-                  onChange={(e) =>
-                    forms.handleForm(e, simpleSearchForm, setSimpleSearchForm)
-                  }
-                  id="startsWith"
-                  name="startsWith"
-                ></input>
-              </div>
-
-              <p>e/ou</p>
-
-              <div className="input">
-                <label htmlFor="endsWith">Terminado por:</label>
-                <label htmlFor="endsWith" className="icon-label">
-                  <TbBracketsContainEnd />
-                </label>
-                <input
-                  onChange={(e) =>
-                    forms.handleForm(e, simpleSearchForm, setSimpleSearchForm)
-                  }
-                  id="endsWith"
-                  name="endsWith"
-                ></input>
-              </div>
-              <div className="buttons">
-                <button
-                  onClick={() => {
-                    setShowResults(true);
-                  }}
-                  type="submit"
-                >
-                  Pesquisar
-                </button>
-                <button
-                  onClick={() => {
-                    setSimpleSearchForm({});
-                    setShowSearchModal(false);
-                  }}
-                >
-                  Cancelar
-                </button>
-              </div>
-            </SearchForm>
+            <SimpleSearchForm simpleSearch={simpleSearch} setSearchResults={setSearchResults} setShowResults={setShowResults}/>
           ) : (
-            <ReverseSearchForm onSubmit={(e) => e.preventDefault()}>
-              <h1>
-                Adicione palavras desejadas que estão dentro e/ou fora da
-                definição desejada:
-              </h1>
-
-              <AddedReverseSearchWords>
-                <div className="to-add">
-                  <h1>Palavras incluídas:</h1>
-                  {Object.keys(includedRSWords).map((w, i) => (
-                    <ReverseSearchWord key={i} isToAdd={true}>
-                      <h1>{w}</h1>
-                      <div
-                        className="close-icon"
-                        onClick={() => {
-                          const aux = { ...includedRSWords };
-                          delete aux[w];
-                          setIncludedRSWords(aux);
-                        }}
-                      >
-                        <IoMdCloseCircle />
-                      </div>
-                    </ReverseSearchWord>
-                  ))}
-                </div>
-                <div className="to-delete">
-                  <h1>Palavras excluídas:</h1>
-                  {Object.keys(excludedRSWords).map((w, i) => (
-                    <ReverseSearchWord key={i}>
-                      <h1>{w}</h1>
-                      <div
-                        className="close-icon"
-                        onClick={() => {
-                          const aux = { ...excludedRSWords };
-                          delete aux[w];
-                          setExcludedRSWords(aux);
-                        }}
-                      >
-                        <IoMdCloseCircle />
-                      </div>
-                    </ReverseSearchWord>
-                  ))}
-                </div>
-              </AddedReverseSearchWords>
-
-              <div className="input">
-                <label htmlFor="add">Incluir Palavra:</label>
-
-                <input
-                  id="add"
-                  name="name"
-                  value={includedRSWordInput}
-                  onChange={(e) => {
-                    setIncludedRSWordInput(e.target.value);
-                  }}
-                  onKeyDown={(e) => {
-                    if (e.key == "Enter") {
-                      addWords(
-                        includedRSWordInput,
-                        includedRSWords,
-                        setIncludedRSWords
-                      );
-                      setIncludedRSWordInput("");
-                    }
-                  }}
-                />
-
-                <AddOrDeleteButton
-                  onClick={() => {
-                    addWords(
-                      includedRSWordInput,
-                      includedRSWords,
-                      setIncludedRSWords
-                    );
-
-                    setIncludedRSWordInput("");
-                  }}
-                >
-                  <IoMdAdd />
-                </AddOrDeleteButton>
-              </div>
-
-              <div className="input">
-                <label htmlFor="delete">Excluir Palavra:</label>
-
-                <input
-                  id="delete"
-                  name="name"
-                  disabled={Object.keys(includedRSWords).length == 0}
-                  value={excludedRSWordInput}
-                  onChange={(e) => setExcludedRSWordInput(e.target.value)}
-                  onKeyDown={(e) => {
-                    if (e.key == "Enter") {
-                      addWords(
-                        excludedRSWordInput,
-                        excludedRSWords,
-                        setExcludedRSWords
-                      );
-                      setExcludedRSWordInput("");
-                    }
-                  }}
-                />
-
-                <AddOrDeleteButton
-                  fuck={Object.keys(includedRSWords).length == 0}
-                  onClick={() => {
-                    addWords(
-                      excludedRSWordInput,
-                      excludedRSWords,
-                      setExcludedRSWords
-                    );
-                    setExcludedRSWordInput("");
-                  }}
-                >
-                  <RiSubtractFill />
-                </AddOrDeleteButton>
-              </div>
-              <div className="buttons">
-                <button
-                  onClick={async () => {
-                    setShowResults(true);
-                    const form = {
-                      contains: Object.keys(includedRSWords),
-                      doesNotContain: Object.keys(excludedRSWords),
-                    };
-                    const res = await reverseSearch(form);
-                    setSearchResults(res.map((e) => e.Verbete));
-                  }}
-                  type="submit"
-                >
-                  Pesquisar
-                </button>
-                <button
-                  onClick={() => {
-                    setSimpleSearchForm({});
-                    setShowSearchModal(false);
-                  }}
-                >
-                  Cancelar
-                </button>
-              </div>
-            </ReverseSearchForm>
+            <ReverseSearchForm reverseSearch={reverseSearch} setSearchResults={setSearchResults} setShowResults={setShowResults}/>
           )}
         </ModalBody>
       </SearchModalWindow>

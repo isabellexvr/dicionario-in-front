@@ -45,12 +45,14 @@ function App() {
     };
   }, []);
 
+  //console.log(globalSelectedWord)
+
   return (
     <AppContainer>
       <UserInfoProvider>
         <WordsProvider>
           <BrowserRouter>
-            <Header setShowSearchModal={setShowSearchModal} />
+            <Header setShowSearchModal={setShowSearchModal} setGlobalSelectedWord={setGlobalSelectedWord} />
             <SideBar
               selectedTab={selectedTab}
               setSelectedTab={setSelectedTab}
