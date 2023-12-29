@@ -21,7 +21,7 @@ export default function HighlightWords({
             return (
               <Highlight
                 onClick={() => {
-                  
+
                   navigate(`/palavra/${word}`);
 
                   setSelectedLetter(
@@ -35,6 +35,7 @@ export default function HighlightWords({
                   );
 
                   setGlobalSelectedWord(filteredWord.indexOf(word));
+                  
                 }}
                 key={index}
               >

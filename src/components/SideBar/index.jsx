@@ -1,6 +1,6 @@
 import Input from "./smallComponents/Input";
 import useGetWords from "../../services/hooks/api/words/useGetWords.js";
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import PORTUGUESEALPHABET from "../../constants/portugueseAlphabet.js";
 import { useNavigate } from "react-router-dom";
 import { FaMagnifyingGlass } from "react-icons/fa6";
@@ -35,6 +35,7 @@ export default function SideBar({
   setApiWords,
 }) {
   const { getWords, getWordsLoading, getWordsError } = useGetWords();
+  const wordsContainer = useRef(null)
 
   const { words, setWords } = useWords();
 
@@ -52,7 +53,22 @@ export default function SideBar({
     );
     setShownWords(toShow);
   }
+
+  function handleScroll(clicked){
+    let targetDiv = wordsContainer.current.children[clicked]
+    if (targetDiv) {
+      targetDiv.scrollIntoView({ behavior: 'smooth', block: 'start' });
+    }
+  }
+
+
   useEffect(() => {
+
+    let targetDiv = wordsContainer.current.children[globalSelectedWord]
+    if (targetDiv) {
+      targetDiv.scrollIntoView({ behavior: 'smooth', block: 'start' });
+    }
+
     const handleKeyDown = (e) => {
       if (letterOrWordSelection === 0) {
         if (e.key === "ArrowDown") {
@@ -163,7 +179,7 @@ export default function SideBar({
                   </Letter>
                 ))}
               </AlphabetContainer>
-              <WordsContainer>
+              <WordsContainer ref={wordsContainer}>
                 {shownWords.map((w, i) => (
                   <Word
                     onClick={() => {
