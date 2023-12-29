@@ -27,6 +27,12 @@ export default function SideBar({
   globalSelectedWord,
   setGlobalSelectedWord,
   letterOrWordSelection,
+  selectedLetter,
+  setSelectedLetter,
+  shownWords,
+  setShownWords,
+  apiWords,
+  setApiWords,
 }) {
   const { getWords, getWordsLoading, getWordsError } = useGetWords();
 
@@ -35,9 +41,6 @@ export default function SideBar({
   const { simpleSearch, simpleSearchLoading, simpleSearchError } =
     useSimpleSearch();
 
-  const [apiWords, setApiWords] = useState([]);
-  const [shownWords, setShownWords] = useState([]);
-  const [selectedLetter, setSelectedLetter] = useState(0);
   const { setUserInfo } = useUserInfo();
   const [attWordsLoading, setAttWordsLoading] = useState(false);
 
@@ -70,8 +73,8 @@ export default function SideBar({
           }
         }
       } else if (letterOrWordSelection === 1) {
-        if(e.key === "Enter"){
-          navigate(`/palavra/${shownWords[globalSelectedWord]}`)
+        if (e.key === "Enter") {
+          navigate(`/palavra/${shownWords[globalSelectedWord]}`);
         }
         if (e.key === "ArrowDown") {
           if (globalSelectedWord < shownWords.length - 1) {
@@ -106,7 +109,8 @@ export default function SideBar({
         onlyWords.forEach((w) => {
           hashtable[w] = true;
         });
-        setWords(onlyWords);
+
+        setWords(hashtable);
       } catch (err) {
         console.log(err);
       }
@@ -177,8 +181,7 @@ export default function SideBar({
           )}
         </DictionaryContainer>
         <FooterIcons>
-          <FilterIcon
-          />
+          <FilterIcon />
         </FooterIcons>
       </>
     </SideBarContainer>

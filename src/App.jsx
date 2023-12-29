@@ -29,13 +29,21 @@ function App() {
   const [selectedTab, setSelectedTab] = useState(0);
   const [showSearchModal, setShowSearchModal] = useState(false);
   const [globalSelectedWord, setGlobalSelectedWord] = useState(null);
+
   const [letterOrWordSelection, setLetterOrWordSelection] = useState(0);
+
+  const [apiWords, setApiWords] = useState([]);
+
+  //sidebar:
+  const [selectedLetter, setSelectedLetter] = useState(0);
+  const [shownWords, setShownWords] = useState([]);
+  //console.log(globalSelectedWord)
 
   useEffect(() => {
     const handleKeyDown = (e) => {
-      if(e.key === "ArrowRight"){
+      if (e.key === "ArrowRight") {
         setLetterOrWordSelection(1);
-      }else if( e.key === "ArrowLeft"){
+      } else if (e.key === "ArrowLeft") {
         setLetterOrWordSelection(0);
       }
     };
@@ -50,13 +58,22 @@ function App() {
       <UserInfoProvider>
         <WordsProvider>
           <BrowserRouter>
-            <Header setShowSearchModal={setShowSearchModal} setGlobalSelectedWord={setGlobalSelectedWord} />
+            <Header
+              setShowSearchModal={setShowSearchModal}
+              setGlobalSelectedWord={setGlobalSelectedWord}
+            />
             <SideBar
               selectedTab={selectedTab}
               setSelectedTab={setSelectedTab}
               globalSelectedWord={globalSelectedWord}
               setGlobalSelectedWord={setGlobalSelectedWord}
               letterOrWordSelection={letterOrWordSelection}
+              selectedLetter={selectedLetter}
+              setSelectedLetter={setSelectedLetter}
+              shownWords={shownWords}
+              setShownWords={setShownWords}
+              apiWords={apiWords}
+              setApiWords={setApiWords}
             />
             <Routes>
               <Route path="/" element={<HomePage />} />
@@ -69,6 +86,12 @@ function App() {
                       setSelectedTab={setSelectedTab}
                       globalSelectedWord={globalSelectedWord}
                       setGlobalSelectedWord={setGlobalSelectedWord}
+                      selectedLetter={selectedLetter}
+                      setSelectedLetter={setSelectedLetter}
+                      shownWords={shownWords}
+                      setShownWords={setShownWords}
+                      apiWords={apiWords}
+                      setApiWords={setApiWords}
                     />
                   }
                 />
@@ -87,7 +110,7 @@ function App() {
               <Route path="cadastro" element={<SignUp />} />
               <Route path="login" element={<SignInPage />} />
               <Route path="sobre" element={<AboutPage />} />
-              <Route path="referencias" element={<RefsPage/>} />
+              <Route path="referencias" element={<RefsPage />} />
             </Routes>
             {showSearchModal &&
               createPortal(
@@ -114,5 +137,5 @@ function AuthorizedRoute({ children }) {
 }
 
 const AppContainer = styled.div`
-//background-color: red;
+  //background-color: red;
 `;

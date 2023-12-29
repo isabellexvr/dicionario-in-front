@@ -10,69 +10,83 @@ export default function DetailsFooter({
   defaultTab,
   navigate,
   selectedFooterTab,
-  setSelectedFooterTab
+  setSelectedFooterTab,
 }) {
-  //palavra pano ta com problema
+  //console.log(wordInfo);
+ // console.log(tabs[selectedFooterTab]);
+
   return (
-<>
- {tabs.length > 0 && (
-    <DetailsFooterContainer>
-      <TabsContainer>
-        {tabs.map((t, i) => (
-          <Tab
-            onClick={() => {
-              setSelectedFooterTab(i);
-            }}
-            isSelected={selectedFooterTab == i}
-            isFooter={true}
-            key={i}
-          >
-            {t}
-          </Tab>
-        ))}
-      </TabsContainer>
-      <div className="content">
-        <FooterDetails>
+    <>
+      {tabs.length > 0 && (
+        <DetailsFooterContainer>
+          <TabsContainer>
+            {tabs.map((t, i) => (
+              <Tab
+                onClick={() => {
+                  setSelectedFooterTab(i);
+                }}
+                isSelected={selectedFooterTab == i}
+                isFooter={true}
+                key={i}
+              >
+                {t}
+              </Tab>
+            ))}
+          </TabsContainer>
+          <div className="content">
+            <FooterDetails>
+              {tabs[selectedFooterTab] === "Inglês" &&
+                wordInfo[tabs[selectedFooterTab]]
+                  .split(",")
+                  .map((e) => <div>{e}</div>)}
 
-            {wordInfo[NameToColumns[tabs[selectedFooterTab]]]?.includes("v.") || wordInfo[NameToColumns[tabs[selectedFooterTab]]]?.includes("(") ? 
-            
-            (<Highlight
-              onClick={() =>
-                navigate(
-                  `/palavra/${wordInfo[NameToColumns[tabs[selectedFooterTab]]]?.slice(3)}`
-                )
-              }
-            >
-
-           { (wordInfo[NameToColumns[tabs[selectedFooterTab]]]?.slice(3).split(/\((\d+)\)|,|;/g)
-              .map((w, i) => (
-
-                <Highlight key={i} onClick={() => navigate(`/palavra/${w}`)}>
-                {w}{"\n"}
-                </Highlight>
-
-              )))}
-
-            </Highlight>) 
-            : 
-
-            (wordInfo[NameToColumns[tabs[selectedFooterTab]]]?.split(/\((\d+)\)|,|;/g)
-              .map((w, i) => (
-
-                <Highlight key={i} onClick={() => navigate(`/palavra/${w}`)}>
-                {w}{"\n"}
-                </Highlight>
-
-              )))}
-
-        </FooterDetails>
-      </div>
-    </DetailsFooterContainer>
-
-    )}
-
-</>
-   
+              {/*               {tabs[selectedFooterTab] !== "Inglês" &&
+                (wordInfo[NameToColumns[tabs[selectedFooterTab]]]?.includes(
+                  "v."
+                ) ||
+                wordInfo[NameToColumns[tabs[selectedFooterTab]]]?.includes(
+                  "("
+                ) ? (
+                  <Highlight
+                    onClick={() =>
+                      navigate(
+                        `/palavra/${wordInfo[
+                          NameToColumns[tabs[selectedFooterTab]]
+                        ]?.slice(3)}`
+                      )
+                    }
+                  >
+                    {wordInfo[NameToColumns[tabs[selectedFooterTab]]]
+                      ?.slice(3)
+                      .split(/\((\d+)\)|,|;| /g)
+                      .map((w, i) => (
+                        <Highlight
+                          key={i}
+                          onClick={() => navigate(`/palavra/${w}`)}
+                        >
+                          {w}
+                          {"\n"}
+                        </Highlight>
+                      ))}
+                  </Highlight>
+                ) : (
+                  wordInfo[NameToColumns[tabs[selectedFooterTab]]]
+                    ?.split(/\((\d+)\)|,|;| /g)
+                    .map((w, i) => (
+                      <Highlight
+                        key={i}
+                        onClick={() => navigate(`/palavra/${w}`)}
+                      >
+                        {w}
+                        {"\n"}
+                      </Highlight>
+                    ))
+                ))} */}
+            </FooterDetails>
+          </div>
+        </DetailsFooterContainer>
+      )}
+    </>
   );
 }
 
@@ -87,7 +101,6 @@ const DetailsFooterContainer = styled.div`
   width: 100%;
   height: fit-content;
   position: relative;
-
 `;
 
 const TabsContainer = styled.div`
@@ -100,12 +113,12 @@ const TabsContainer = styled.div`
 `;
 
 const FooterDetails = styled.div`
-margin-top: 2%;
-display: flex;
-flex-direction: column;
-flex-wrap: wrap;
-height: 90%;
-//background-color: yellow;
+  margin-top: 2%;
+  display: flex;
+  flex-direction: column;
+  flex-wrap: wrap;
+  height: 90%;
+  //background-color: yellow;
 
-width: 50%;
-`
+  width: 50%;
+`;

@@ -4,7 +4,6 @@ import colors from "../../constants/colors";
 import useGetWordByName from "../../services/hooks/api/words/useGetWordByName";
 import useGetWordTabs from "../../services/hooks/api/words/useGetWordTabs";
 import { useEffect, useState } from "react";
-import CommentsBar from "../../components/CommentsBar";
 import useUserInfo from "../../contexts/hooks/useUserInfo";
 import DetailsFooter from "./components/DetailsFooter";
 import useWords from "../../contexts/hooks/useWords";
@@ -12,7 +11,18 @@ import HighlightWords from "./components/LikableWords";
 
 const HeaderTabs = ["Definições/Acepções", "Tópicos em Iluminação Natural"];
 
-export default function WordPage({ selectedTab, setSelectedTab, globalSelectedWord, setGlobalSelectedWord }) {
+export default function WordPage({
+  selectedTab,
+  setSelectedTab,
+  globalSelectedWord,
+  setGlobalSelectedWord,
+  selectedLetter,
+  setSelectedLetter,
+  shownWords,
+  setShownWords,
+  apiWords,
+  setApiWords
+}) {
   const { palavra } = useParams();
 
   const { getWordByName, getWordByNameLoading, getWordByNameError } =
@@ -34,38 +44,50 @@ export default function WordPage({ selectedTab, setSelectedTab, globalSelectedWo
   const [selectedHeaderTab, setSelectedHeaderTab] = useState(0);
   const [selectedFooterTab, setSelectedFooterTab] = useState(0);
 
-  const regex = /\(\d\) /g;
+
+
+  const regex = /\(\d\)/g;
+
   const navigate = useNavigate();
 
   useEffect(() => {
-
     async function getApiWordByName() {
-
       try {
-        
-        if(globalSelectedWord === null){
-          setGlobalSelectedWord(words.indexOf(palavra))
-        }
+/*         if (globalSelectedWord === null) {
+          console.log('o vei nmrl ', Object.keys(words).indexOf(palavra))
+          setGlobalSelectedWord(Object.keys(words).indexOf(palavra));
+          setSelectedLetter(
+            PORTUGUESEALPHABET.indexOf(palavra[0].toUpperCase())
+          );
+          attWords(palavra[0], apiWords, setShownWords)
+
+        } */
 
         const data = await getWordByName(palavra);
+
         const tabsData = await getWordTabs(palavra);
-        setSelectedFooterTab(0)
+        setSelectedFooterTab(0);
 
         setWordInfo(data);
         setDefinicaoIN(data["topicoIluminacaoNatural"]);
         setTabs(tabsData.filter((e) => e !== null));
         const arr = [];
-        if (data.classeGram !== null) arr.push(data.classeGram);
-        if (data.genero_num !== null) arr.push(data.genero_num);
+        if (data["Classe Gramatical"] !== null)
+          arr.push(data["Classe Gramatical"]);
+        if (data["Gênero/Número"] !== null) arr.push(data["Gênero/Número"]);
 
         setGenClass(arr);
 
-        const thereAreMany = data?.definicao?.search("(1)");
+        //console.log(data["Definição"])
+
+        const thereAreMany = data["Definição"].search("(1)");
         if (thereAreMany == 1) {
-          const arr = data.definicao.split(regex);
+          const arr = data["Definição"].split(regex);
+          //console.log(arr)
           setDefinicoes(arr.slice(1));
         } else {
-          const arr = [data.definicao];
+          const arr = [data["Definição"]];
+          //console.log(arr)
           setDefinicoes(arr);
         }
       } catch (err) {
@@ -73,10 +95,8 @@ export default function WordPage({ selectedTab, setSelectedTab, globalSelectedWo
       }
     }
 
-
     getApiWordByName();
-
-  }, [palavra]);
+  }, [palavra, globalSelectedWord]);
 
   return (
     <PageContainer>
@@ -115,16 +135,26 @@ export default function WordPage({ selectedTab, setSelectedTab, globalSelectedWo
                     {definicoes.length == 1 && definicoes[0]?.includes("v.") ? (
                       <h3
                         onClick={() =>
-                          navigate(`/palavra/${wordInfo.remissivaImperativa}`)
+                          navigate(`/palavra/${wordInfo["Rem. Imperativa"]}`)
                         }
                       >
-                        v. {wordInfo.remissivaImperativa}
+                        v. {wordInfo["Rem. Imperativa"]}
                       </h3>
                     ) : (
                       <>
                         {definicoes?.map((d, i) => (
                           <h2>
-                            <strong>{i + 1}</strong>. <HighlightWords text={d} hashtable={words} navigate={navigate} />
+                            <strong>{i + 1}&nbsp; </strong>{" "}
+                            <HighlightWords
+                              text={d}
+                              hashtable={words}
+                              navigate={navigate}
+                              setGlobalSelectedWord={setGlobalSelectedWord}
+                              selectedLetter={selectedLetter}
+                              setSelectedLetter={setSelectedLetter}
+                              shownWords={shownWords}
+
+                            />
                             {"\n"}
                           </h2>
                         ))}
@@ -140,7 +170,14 @@ export default function WordPage({ selectedTab, setSelectedTab, globalSelectedWo
               )}
             </DetailsHeader>
 
-            <DetailsFooter tabs={tabs} wordInfo={wordInfo} default={tabs[0]} navigate={navigate} selectedFooterTab={selectedFooterTab} setSelectedFooterTab={setSelectedFooterTab} />
+            <DetailsFooter
+              tabs={tabs}
+              wordInfo={wordInfo}
+              default={tabs[0]}
+              navigate={navigate}
+              selectedFooterTab={selectedFooterTab}
+              setSelectedFooterTab={setSelectedFooterTab}
+            />
           </WordDetailsContainer>
         </>
       )}
@@ -180,7 +217,6 @@ const DetailsHeader = styled.div`
   padding: 2vw;
   padding-top: 2.7vw;
   box-sizing: border-box;
-  
 `;
 
 const TabsContainer = styled.div`
@@ -268,7 +304,7 @@ export const Details = styled.div`
     > strong {
       font-weight: 800;
     }
-    >a{
+    > a {
       color: red;
     }
   }
