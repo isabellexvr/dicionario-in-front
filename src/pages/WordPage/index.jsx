@@ -112,7 +112,7 @@ export default function WordPage({ selectedTab, setSelectedTab, globalSelectedWo
                     ))}
                   </AboutWord>
                   <Details>
-                    {definicoes.length == 1 && definicoes[0].includes("v.") ? (
+                    {definicoes.length == 1 && definicoes[0]?.includes("v.") ? (
                       <h3
                         onClick={() =>
                           navigate(`/palavra/${wordInfo.remissivaImperativa}`)
