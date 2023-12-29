@@ -45,8 +45,6 @@ function App() {
     };
   }, []);
 
-  //console.log(globalSelectedWord)
-
   return (
     <AppContainer>
       <UserInfoProvider>

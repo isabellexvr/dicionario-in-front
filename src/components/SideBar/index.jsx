@@ -71,12 +71,14 @@ export default function SideBar({
           }
         }
       } else if (letterOrWordSelection === 1) {
+        console.log("ola gay kkkk")
         if (e.key === "ArrowDown") {
           if (globalSelectedWord < shownWords.length - 1) {
             setGlobalSelectedWord((prevWord) => {
               const prev = prevWord + 1;
               return prev;
             });
+            navigate(`/palavra/${shownWords[globalSelectedWord + 1]}`)
           }
         } else if (e.key === "ArrowUp") {
           if (globalSelectedWord > 0) {
@@ -84,6 +86,7 @@ export default function SideBar({
               const prev = prevWord - 1;
               return prev;
             });
+            navigate(`/palavra/${shownWords[globalSelectedWord - 1]}`)
           }
         }
       }
