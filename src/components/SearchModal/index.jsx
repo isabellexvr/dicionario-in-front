@@ -1,11 +1,6 @@
 import { FiSearch } from "react-icons/fi";
 import { useState } from "react";
-import { IoMdCloseCircle } from "react-icons/io";
-import { TbBracketsContainStart, TbBracketsContainEnd } from "react-icons/tb";
-import forms from "../../helpers/forms";
 import useSimpleSearch from "../../services/hooks/api/words/useSimpleSearch";
-import { IoMdAdd } from "react-icons/io";
-import { RiSubtractFill } from "react-icons/ri";
 import { Tooltip } from "react-tooltip";
 import { useNavigate } from "react-router-dom";
 import useReverseSearch from "../../services/hooks/api/words/useReverseSearch";
@@ -13,7 +8,6 @@ import {
   CloseIcon,
   ModalBody,
   ModalHeader,
-  SearchForm,
   SearchModalContainer,
   SearchModalWindow,
   ShowResultsIcon,
@@ -29,9 +23,15 @@ const SearchTypes = ["Pesquisa Simples", "Pesquisa Reversa"];
 export default function SearchModal({ setShowSearchModal }) {
   const [selectedTab, setSelectedTab] = useState(0);
 
-
   const [searchResults, setSearchResults] = useState([]);
   const [showResults, setShowResults] = useState(false);
+
+  const [simpleSearchForm, setSimpleSearchForm] = useState({});
+
+  const [excludedRSWords, setExcludedRSWords] = useState({});
+  const [excludedRSWordInput, setExcludedRSWordInput] = useState("");
+  const [includedRSWords, setIncludedRSWords] = useState({});
+  const [includedRSWordInput, setIncludedRSWordInput] = useState("");
 
   const { simpleSearch, simpleSearchLoading, simpleSearchError } =
     useSimpleSearch();
@@ -43,6 +43,15 @@ export default function SearchModal({ setShowSearchModal }) {
   } = useReverseSearch();
 
   const navigate = useNavigate();
+
+  const handleCloseModal = () => {
+    setShowSearchModal(false);
+    setSimpleSearchForm({})
+    setExcludedRSWords({})
+    setExcludedRSWordInput("")
+    setIncludedRSWords({})
+    setIncludedRSWordInput("")
+  }
 
   return (
     <>
@@ -66,7 +75,13 @@ export default function SearchModal({ setShowSearchModal }) {
         />
         <Tooltip id="show-results" />
 
-        <CloseIcon onClick={() => setShowSearchModal(false)} />
+        <CloseIcon
+          data-tooltip-id="close-icon"
+          data-tooltip-content="Fechar pesquisa"
+          data-tooltip-place="top"
+          onClick={() => handleCloseModal()}
+        />
+        <Tooltip id="close-icon" />
         <ModalHeader>
           <FiSearch />
           Pesquisa
@@ -86,9 +101,27 @@ export default function SearchModal({ setShowSearchModal }) {
         </TabsContainer>
         <ModalBody>
           {selectedTab === 0 ? (
-            <SimpleSearchForm simpleSearch={simpleSearch} setSearchResults={setSearchResults} setShowResults={setShowResults}/>
+            <SimpleSearchForm
+              simpleSearch={simpleSearch}
+              setSearchResults={setSearchResults}
+              setShowResults={setShowResults}
+              simpleSearchForm={simpleSearchForm}
+              setSimpleSearchForm={setSimpleSearchForm}
+            />
           ) : (
-            <ReverseSearchForm reverseSearch={reverseSearch} setSearchResults={setSearchResults} setShowResults={setShowResults}/>
+            <ReverseSearchForm
+              reverseSearch={reverseSearch}
+              setSearchResults={setSearchResults}
+              setShowResults={setShowResults}
+              excludedRSWords={excludedRSWords}
+              setExcludedRSWords={setExcludedRSWords}
+              excludedRSWordInput={excludedRSWordInput}
+              setExcludedRSWordInput={setExcludedRSWordInput}
+              includedRSWords={includedRSWords}
+              setIncludedRSWords={setIncludedRSWords}
+              includedRSWordInput={includedRSWordInput}
+              setIncludedRSWordInput={setIncludedRSWordInput}
+            />
           )}
         </ModalBody>
       </SearchModalWindow>

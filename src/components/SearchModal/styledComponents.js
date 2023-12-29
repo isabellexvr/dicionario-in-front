@@ -5,6 +5,7 @@ import {
 import styled from "styled-components";
 import colors from "../../constants/colors";
 import { IoMdCloseCircle } from "react-icons/io";
+import { Tooltip } from "react-tooltip";
 
 export const ShowResultsIcon = styled(MdKeyboardDoubleArrowLeft)`
   left: 0.5vw;
@@ -134,7 +135,7 @@ export const ModalHeader = styled.div`
 export const TabsContainer = styled.div`
   display: flex;
   width: 95%;
-  height: 8%;
+  height: 7%;
   //background-color: ${colors.mediumGrey};
   //margin-bottom: 1vw;
 `;
@@ -260,9 +261,12 @@ export const AddedReverseSearchWords = styled.div`
     position: relative;
     > h1 {
       position: absolute;
-      top: 3%;
+      top: 5%;
       font-size: 0.75vw;
       font-weight: 700;
+      padding: 2%;
+      border-radius: 5%;
+      background-color: white;
     }
     display: flex;
     padding-top: 10%;
@@ -281,7 +285,10 @@ export const AddedReverseSearchWords = styled.div`
     position: relative;
     > h1 {
       position: absolute;
-      top: 3%;
+      top: 5%;
+      background-color: white;
+      padding: 2%;
+      border-radius: 5%;
       font-size: 0.75vw;
       font-weight: 700;
     }
@@ -340,7 +347,7 @@ export const ReverseSearchFormStyle = styled.div`
     width: 85%;
     font-size: 1vw;
     font-weight: 700;
-    margin-top: 2%;
+    margin-top: 3%;
     margin-bottom: 1%;
   }
 
@@ -350,6 +357,9 @@ export const ReverseSearchFormStyle = styled.div`
     display: flex;
     align-items: center;
     position: relative;
+    :disabled{
+      cursor: default;
+    }
     > input {
       all: unset;
       background-color: white;
@@ -375,6 +385,7 @@ export const ReverseSearchFormStyle = styled.div`
       align-items: center;
       justify-content: center;
       cursor: pointer;
+
 
       > svg {
         font-size: 1.5vw;
@@ -429,7 +440,13 @@ export const AddOrDeleteButton = styled.button`
       justify-content: center;
       cursor: pointer;
 
+
       > svg {
         font-size: 1.5vw;
       }
+`
+
+export const DeleteButtonTooltip = styled(Tooltip)`
+
+      max-width: 200px;
 `

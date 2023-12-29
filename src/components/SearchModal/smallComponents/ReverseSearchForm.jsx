@@ -1,24 +1,28 @@
 import {
   AddOrDeleteButton,
   AddedReverseSearchWords,
+  DeleteButtonTooltip,
   ReverseSearchFormStyle,
   ReverseSearchWord,
 } from "../styledComponents";
 import { IoMdAdd } from "react-icons/io";
 import { RiSubtractFill } from "react-icons/ri";
 import { IoMdCloseCircle } from "react-icons/io";
-import { useState } from "react";
+import { Tooltip } from "react-tooltip";
 
 export default function ReverseSearchForm({
   reverseSearch,
   setSearchResults,
   setShowResults,
+  excludedRSWords,
+  setExcludedRSWords,
+  excludedRSWordInput,
+  setExcludedRSWordInput,
+  includedRSWords,
+  setIncludedRSWords,
+  includedRSWordInput,
+  setIncludedRSWordInput,
 }) {
-  const [excludedRSWords, setExcludedRSWords] = useState({});
-  const [excludedRSWordInput, setExcludedRSWordInput] = useState("");
-  const [includedRSWords, setIncludedRSWords] = useState({});
-  const [includedRSWordInput, setIncludedRSWordInput] = useState("");
-
   function addWords(input, words, setter) {
     const inputHash = {};
     input.split(" ").forEach((e) => (inputHash[e] = true));
@@ -27,10 +31,7 @@ export default function ReverseSearchForm({
 
   return (
     <ReverseSearchFormStyle onSubmit={(e) => e.preventDefault()}>
-      <h1>
-        Adicione palavras desejadas que estão dentro e/ou fora da definição
-        desejada:
-      </h1>
+      <h1>Adicione ou exclua palavras específicas da sua pesquisa</h1>
 
       <AddedReverseSearchWords>
         <div className="to-add">
@@ -94,14 +95,23 @@ export default function ReverseSearchForm({
         />
 
         <AddOrDeleteButton
+          data-tooltip-id="add-button"
+          data-tooltip-content="Adicionar palavra"
+          data-tooltip-place="right"
           onClick={() => {
-            addWords(includedRSWordInput, includedRSWords, setIncludedRSWords);
+            if (includedRSWordInput !== "")
+              addWords(
+                includedRSWordInput,
+                includedRSWords,
+                setIncludedRSWords
+              );
 
             setIncludedRSWordInput("");
           }}
         >
           <IoMdAdd />
         </AddOrDeleteButton>
+        <Tooltip id="add-button" />
       </div>
 
       <div className="input">
@@ -126,13 +136,23 @@ export default function ReverseSearchForm({
         />
 
         <AddOrDeleteButton
+          data-tooltip-id="delete-button"
+          data-tooltip-content="Excluir palavra (requer ao menos uma palavra incluída)"
+          data-tooltip-place="right"
+          disabled={Object.keys(includedRSWords).length == 0}
           onClick={() => {
-            addWords(excludedRSWordInput, excludedRSWords, setExcludedRSWords);
+            if (excludedRSWordInput !== "")
+              addWords(
+                excludedRSWordInput,
+                excludedRSWords,
+                setExcludedRSWords
+              );
             setExcludedRSWordInput("");
           }}
         >
           <RiSubtractFill />
         </AddOrDeleteButton>
+        <DeleteButtonTooltip  id="delete-button" />
       </div>
       <div className="buttons">
         <button

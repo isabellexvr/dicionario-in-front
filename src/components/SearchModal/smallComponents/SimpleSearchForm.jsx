@@ -3,8 +3,8 @@ import { useState } from "react";
 import { SearchForm } from "../styledComponents";
 import { TbBracketsContainStart, TbBracketsContainEnd } from "react-icons/tb";
 
-export default function SimpleSearchForm({ simpleSearch, setSearchResults, setShowResults }) {
-  const [simpleSearchForm, setSimpleSearchForm] = useState({});
+export default function SimpleSearchForm({ simpleSearch, setSearchResults, setShowResults, simpleSearchForm, setSimpleSearchForm }) {
+
 
   return (
     <SearchForm
