@@ -1,9 +1,8 @@
 import Input from "./smallComponents/Input";
 import useGetWords from "../../services/hooks/api/words/useGetWords.js";
-import useGetWordsByFirstChar from "../../services/hooks/api/words/useGetWordsByFirstChar";
 import { useEffect, useState } from "react";
 import PORTUGUESEALPHABET from "../../constants/portugueseAlphabet.js";
-import { useNavigate, useParams } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import { FaMagnifyingGlass } from "react-icons/fa6";
 import { FallingLines } from "react-loader-spinner";
 import colors from "../../constants/colors";
@@ -71,14 +70,15 @@ export default function SideBar({
           }
         }
       } else if (letterOrWordSelection === 1) {
-        console.log("ola gay kkkk")
+        if(e.key === "Enter"){
+          navigate(`/palavra/${shownWords[globalSelectedWord]}`)
+        }
         if (e.key === "ArrowDown") {
           if (globalSelectedWord < shownWords.length - 1) {
             setGlobalSelectedWord((prevWord) => {
               const prev = prevWord + 1;
               return prev;
             });
-            navigate(`/palavra/${shownWords[globalSelectedWord + 1]}`)
           }
         } else if (e.key === "ArrowUp") {
           if (globalSelectedWord > 0) {
@@ -86,7 +86,6 @@ export default function SideBar({
               const prev = prevWord - 1;
               return prev;
             });
-            navigate(`/palavra/${shownWords[globalSelectedWord - 1]}`)
           }
         }
       }
