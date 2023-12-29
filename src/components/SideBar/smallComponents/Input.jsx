@@ -1,6 +1,7 @@
 import styled from "styled-components";
 import colors from "../../../constants/colors";
 import { useState } from "react";
+import PORTUGUESEALPHABET from "../../../constants/portugueseAlphabet";
 
 export default function Input({
   setShownWords,
@@ -9,12 +10,17 @@ export default function Input({
   placeholder,
   search,
   searchLoading,
+  setSelectedLetter
 }) {
-  async function handleInput() {
+  async function handleInput(searchInput) {
+
     try {
       const res = await search({},searchInput);
 
       setShownWords(res);
+      const letter = PORTUGUESEALPHABET.indexOf(searchInput[0].toUpperCase())
+      setSelectedLetter(letter)
+
     } catch (err) {
       console.log(err);
     }

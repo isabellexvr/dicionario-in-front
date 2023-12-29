@@ -125,6 +125,7 @@ export default function SideBar({
           placeholder="Pesquisa simples..."
           search={simpleSearch}
           simpleSearchLoading={simpleSearchLoading}
+          setSelectedLetter={setSelectedLetter}
         >
           {<FaMagnifyingGlass />}
         </Input>
