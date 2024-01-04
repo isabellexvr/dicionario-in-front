@@ -44,7 +44,7 @@ export default function WordPage({
   const [selectedHeaderTab, setSelectedHeaderTab] = useState(0);
   const [selectedFooterTab, setSelectedFooterTab] = useState(0);
 
-
+console.log(wordInfo)
 
   const regex = /\(\d\)/g;
 
@@ -53,16 +53,6 @@ export default function WordPage({
   useEffect(() => {
     async function getApiWordByName() {
       try {
-/*         if (globalSelectedWord === null) {
-          console.log('o vei nmrl ', Object.keys(words).indexOf(palavra))
-          setGlobalSelectedWord(Object.keys(words).indexOf(palavra));
-          setSelectedLetter(
-            PORTUGUESEALPHABET.indexOf(palavra[0].toUpperCase())
-          );
-          attWords(palavra[0], apiWords, setShownWords)
-
-        } */
-
         const data = await getWordByName(palavra);
 
         const tabsData = await getWordTabs(palavra);
@@ -77,8 +67,6 @@ export default function WordPage({
         if (data["Gênero/Número"] !== null) arr.push(data["Gênero/Número"]);
 
         setGenClass(arr);
-
-        //console.log(data["Definição"])
 
         const thereAreMany = data["Definição"].search("(1)");
         if (thereAreMany == 1) {

@@ -54,19 +54,11 @@ export default function SideBar({
     setShownWords(toShow);
   }
 
-  function handleScroll(clicked){
-    let targetDiv = wordsContainer.current.children[clicked]
-    if (targetDiv) {
-      targetDiv.scrollIntoView({ behavior: 'smooth', block: 'start' });
-    }
-  }
-
-
   useEffect(() => {
 
     let targetDiv = wordsContainer.current.children[globalSelectedWord]
     if (targetDiv) {
-      targetDiv.scrollIntoView({ behavior: 'smooth', block: 'start' });
+      targetDiv.scrollIntoView({ behavior: 'instant', block: 'center' });
     }
 
     const handleKeyDown = (e) => {

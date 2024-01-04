@@ -18,7 +18,7 @@ import ResultsBoxComponent from "./smallComponents/ResultsBox";
 import ReverseSearchForm from "./smallComponents/ReverseSearchForm";
 import SimpleSearchForm from "./smallComponents/SimpleSearchForm";
 
-const SearchTypes = ["Pesquisa Simples", "Pesquisa Reversa"];
+const SearchTypes = ["Pesquisa Simples", "Pesquisa Reversa", "Filtrar por Aba"];
 
 export default function SearchModal({ setShowSearchModal }) {
   const [selectedTab, setSelectedTab] = useState(0);
@@ -46,12 +46,12 @@ export default function SearchModal({ setShowSearchModal }) {
 
   const handleCloseModal = () => {
     setShowSearchModal(false);
-    setSimpleSearchForm({})
-    setExcludedRSWords({})
-    setExcludedRSWordInput("")
-    setIncludedRSWords({})
-    setIncludedRSWordInput("")
-  }
+    setSimpleSearchForm({});
+    setExcludedRSWords({});
+    setExcludedRSWordInput("");
+    setIncludedRSWords({});
+    setIncludedRSWordInput("");
+  };
 
   return (
     <>
@@ -84,7 +84,7 @@ export default function SearchModal({ setShowSearchModal }) {
         <Tooltip id="close-icon" />
         <ModalHeader>
           <FiSearch />
-          Pesquisa
+          Pesquisas / Filtros
         </ModalHeader>
         <TabsContainer>
           {SearchTypes.map((t, i) => (
@@ -100,7 +100,7 @@ export default function SearchModal({ setShowSearchModal }) {
           ))}
         </TabsContainer>
         <ModalBody>
-          {selectedTab === 0 ? (
+          {selectedTab === 0 && (
             <SimpleSearchForm
               simpleSearch={simpleSearch}
               setSearchResults={setSearchResults}
@@ -108,7 +108,9 @@ export default function SearchModal({ setShowSearchModal }) {
               simpleSearchForm={simpleSearchForm}
               setSimpleSearchForm={setSimpleSearchForm}
             />
-          ) : (
+          )}
+
+          {selectedTab == 1 && (
             <ReverseSearchForm
               reverseSearch={reverseSearch}
               setSearchResults={setSearchResults}

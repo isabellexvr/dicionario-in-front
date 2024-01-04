@@ -92,7 +92,7 @@ export default function Header({ setShowSearchModal, setGlobalSelectedWord }) {
             }}
           >
             <FiSearch />
-            Pesquisar
+            Pesquisas / Filtros
           </CommonButton>
         </>
       )}

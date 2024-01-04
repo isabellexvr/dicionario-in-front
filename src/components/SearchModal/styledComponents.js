@@ -117,7 +117,7 @@ export const SearchModalWindow = styled.div`
 
 export const ModalHeader = styled.div`
   height: 17%;
-  width: 60%;
+  width: 70%;
   //background-color: yellow;
   > svg {
     color: ${colors.yellow};
@@ -125,8 +125,9 @@ export const ModalHeader = styled.div`
   color: ${colors.lightGrey};
   font-weight: 700;
   text-align: center;
-  font-size: 3vw;
+  font-size: 2.2vw;
   display: flex;
+  
   margin-bottom: 1vw;
   align-items: center;
   justify-content: space-evenly;

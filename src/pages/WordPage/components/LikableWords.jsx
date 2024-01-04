@@ -11,11 +11,11 @@ export default function HighlightWords({
   setSelectedLetter,
   shownWords,
 }) {
-  const words = text?.split(/(\s+)/);
+  const test = text?.split(/([^A-Za-z\u00C0-\u017F]+)/)
 
   return (
     <p>
-      {words?.map((word, index) => {
+      {test?.map((word, index) => {
         if (!/\s+/.test(word)) {
           if (hashtable[word] !== undefined) {
             return (

@@ -13,7 +13,7 @@ export default function DetailsFooter({
   setSelectedFooterTab,
 }) {
   //console.log(wordInfo);
- // console.log(tabs[selectedFooterTab]);
+  // console.log(tabs[selectedFooterTab]);
 
   return (
     <>
@@ -36,6 +36,11 @@ export default function DetailsFooter({
           <div className="content">
             <FooterDetails>
               {tabs[selectedFooterTab] === "Inglês" &&
+                wordInfo[tabs[selectedFooterTab]]
+                  ?.split(",")
+                  .map((e) => <div>{e}</div>)}
+
+              {tabs[selectedFooterTab] === "Sinônimos/Variantes" &&
                 wordInfo[tabs[selectedFooterTab]]
                   .split(",")
                   .map((e) => <div>{e}</div>)}
