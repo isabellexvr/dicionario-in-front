@@ -47,6 +47,10 @@ const wordsApi = {
     const res = await api.get(`words/tabs/${word}`);
     return res.data;
   },
+  filterByTabs: async (body) => {
+    const res = await api.post(`words/filter-by-tabs`, body);
+    return res.data;
+  },
 };
 
 export default wordsApi;

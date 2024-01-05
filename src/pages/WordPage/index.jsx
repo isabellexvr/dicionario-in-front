@@ -44,8 +44,6 @@ export default function WordPage({
   const [selectedHeaderTab, setSelectedHeaderTab] = useState(0);
   const [selectedFooterTab, setSelectedFooterTab] = useState(0);
 
-console.log(wordInfo)
-
   const regex = /\(\d\)/g;
 
   const navigate = useNavigate();

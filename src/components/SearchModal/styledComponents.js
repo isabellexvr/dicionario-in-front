@@ -241,6 +241,35 @@ export const SearchForm = styled.form`
   }
 `;
 
+export const Buttons = styled.div`
+//background-color: red;
+    width: 50%;
+    margin-top: 20%;
+    margin: 0 auto;
+    font-weight: 600;
+    display: flex;
+    justify-content: space-evenly;
+    height: 11%;
+    font-size: 1vw;
+    > button:first-child {
+      background-color: ${colors.darkGrey};
+      color: white;
+      border: none;
+    }
+    > button {
+      all: unset;
+      padding: 0.6vw;
+      border-radius: 0.2vw;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+      background-color: white;
+      border: 1px solid ${colors.mediumGrey};
+      box-sizing: border-box;
+    }
+`
+
 export const AddedReverseSearchWords = styled.div`
   display: flex;
   justify-content: space-between;

@@ -17,6 +17,7 @@ import {
 import ResultsBoxComponent from "./smallComponents/ResultsBox";
 import ReverseSearchForm from "./smallComponents/ReverseSearchForm";
 import SimpleSearchForm from "./smallComponents/SimpleSearchForm";
+import TabsFilter from "./smallComponents/TabsFilter";
 
 const SearchTypes = ["Pesquisa Simples", "Pesquisa Reversa", "Filtrar por Aba"];
 
@@ -123,6 +124,13 @@ export default function SearchModal({ setShowSearchModal }) {
               setIncludedRSWords={setIncludedRSWords}
               includedRSWordInput={includedRSWordInput}
               setIncludedRSWordInput={setIncludedRSWordInput}
+            />
+          )}
+
+          {selectedTab == 2 && (
+            <TabsFilter
+              setSearchResults={setSearchResults}
+              setShowResults={setShowResults}
             />
           )}
         </ModalBody>
