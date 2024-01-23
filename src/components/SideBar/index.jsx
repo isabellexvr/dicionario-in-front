@@ -50,7 +50,7 @@ export default function SideBar({
   function attWords(letter) {
     const toShow = apiWords.filter(
       (w) => w[0] == letter.toLowerCase() || w[0] == letter
-    );
+    ).sort();
     setShownWords(toShow);
   }
 
