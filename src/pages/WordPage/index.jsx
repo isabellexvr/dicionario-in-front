@@ -8,8 +8,10 @@ import useUserInfo from "../../contexts/hooks/useUserInfo";
 import DetailsFooter from "./components/DetailsFooter";
 import useWords from "../../contexts/hooks/useWords";
 import HighlightWords from "./components/LikableWords";
+import { processArray } from "./helpers";
 
-const HeaderTabs = ["Definições/Acepções", "Tópicos em Iluminação Natural"];
+//const HeaderTabs = [];
+const diffConditions = ["a.", "adj.", "s.", "sm.", "adv."];
 
 export default function WordPage({
   selectedTab,
@@ -21,7 +23,7 @@ export default function WordPage({
   shownWords,
   setShownWords,
   apiWords,
-  setApiWords
+  setApiWords,
 }) {
   const { palavra } = useParams();
 
@@ -40,18 +42,31 @@ export default function WordPage({
   const [showComments, setShowComments] = useState(false);
   const [tabs, setTabs] = useState([0, 1]);
   const [genClass, setGenClass] = useState([]);
+  const [headerTabs, setHeaderTabs] = useState(["Definições/Acepções"]);
 
   const [selectedHeaderTab, setSelectedHeaderTab] = useState(0);
   const [selectedFooterTab, setSelectedFooterTab] = useState(0);
 
-  const regex = /\(\d\)/g;
+  const regex = /\(\d+[a-zA-Z]?\)/g;
 
   const navigate = useNavigate();
+  //console.log(definicaoIN);
 
   useEffect(() => {
+    //console.log("how much")
     async function getApiWordByName() {
       try {
         const data = await getWordByName(palavra);
+        console.log(data);
+
+        if (data["Tópico de Iluminação Natural"] !== null) {
+          setHeaderTabs([
+            "Definições/Acepções",
+            "Tópico de Iluminação Natural",
+          ]);
+        } else {
+          setHeaderTabs(["Definições/Acepções"]);
+        }
 
         const tabsData = await getWordTabs(palavra);
         setSelectedFooterTab(0);
@@ -66,40 +81,51 @@ export default function WordPage({
 
         setGenClass(arr);
 
-        const thereAreMany = data["Definição"].search("(1)");
-        if (thereAreMany == 1) {
+        //console.log(data);
+
+        const thereAreMany = data["Definição"].includes("(1)");
+        const test = diffConditions.some((e) => data["Definição"].includes(e));
+        //const areTheyDiff = data["Definição"].some("a.");
+        console.log(test);
+        if (thereAreMany) {
           const arr = data["Definição"].split(regex);
-          //console.log(arr)
-          setDefinicoes(arr.slice(1));
+          if (test) {
+            const result = processArray(arr, diffConditions);
+            setDefinicoes(result);
+          } else {
+            setDefinicoes(arr.filter((e) => e != "\n"));
+          }
+          //console.log(processArray(arr, diffConditions));
         } else {
           const arr = [data["Definição"]];
-          //console.log(arr)
+          //console.log("arr")
           setDefinicoes(arr);
         }
       } catch (err) {
         console.log(err);
       }
     }
-
     getApiWordByName();
-  }, [palavra, globalSelectedWord]);
+  }, [globalSelectedWord, palavra]);
+  console.log(definicoes);
 
   return (
     <PageContainer>
       {wordInfo.Verbete && (
         <>
+          {" "}
+          <Verbete>
+            <h1>{wordInfo.Verbete}</h1>
+          </Verbete>
           <WordDetailsContainer>
-            <Verbete>
-              <h1>{wordInfo.Verbete}</h1>
-            </Verbete>
             <TabsContainer>
-              {HeaderTabs.map((t, i) => (
+              {headerTabs.map((t, i) => (
                 <Tab
                   onClick={() => {
                     setSelectedTab(i);
                     setSelectedHeaderTab(i);
                   }}
-                  isSelected={selectedHeaderTab == i}
+                  isSelected={selectedTab == i}
                   key={i}
                 >
                   {t}
@@ -118,7 +144,9 @@ export default function WordPage({
                     ))}
                   </AboutWord>
                   <Details>
-                    {definicoes.length == 1 && definicoes[0]?.includes("v.") ? (
+                    {definicoes.length == 1 &&
+                    typeof definicoes[0] == "string" &&
+                    definicoes[0]?.includes("v.") ? (
                       <h3
                         onClick={() =>
                           navigate(`/palavra/${wordInfo["Rem. Imperativa"]}`)
@@ -128,30 +156,53 @@ export default function WordPage({
                       </h3>
                     ) : (
                       <>
-                        {definicoes?.map((d, i) => (
-                          <h2>
-                            <strong>{i + 1}&nbsp; </strong>{" "}
-                            <HighlightWords
-                              text={d}
-                              hashtable={words}
-                              navigate={navigate}
-                              setGlobalSelectedWord={setGlobalSelectedWord}
-                              selectedLetter={selectedLetter}
-                              setSelectedLetter={setSelectedLetter}
-                              shownWords={shownWords}
-
-                            />
-                            {"\n"}
-                          </h2>
-                        ))}
+                        {definicoes?.map((d, i) =>
+                          d.title ? (
+                            <>
+                              <DiffDefinitions>
+                                <div className="title">{d.title}</div>
+                                {d.arr.map((subD, i) => (
+                                  <div className="group">
+                                    <strong>{i + 1}.&nbsp; </strong>
+                                    <HighlightWords
+                                    text={subD}
+                                    hashtable={words}
+                                    navigate={navigate}
+                                    setGlobalSelectedWord={
+                                      setGlobalSelectedWord
+                                    }
+                                    selectedLetter={selectedLetter}
+                                    setSelectedLetter={setSelectedLetter}
+                                    shownWords={shownWords}
+                                  />
+                                  </div>
+                                  
+                                ))}
+                              </DiffDefinitions>
+                            </>
+                          ) : (
+                            <h2>
+                              <strong>{i + 1}&nbsp; </strong>{" "}
+                              <HighlightWords
+                                text={d}
+                                hashtable={words}
+                                navigate={navigate}
+                                setGlobalSelectedWord={setGlobalSelectedWord}
+                                selectedLetter={selectedLetter}
+                                setSelectedLetter={setSelectedLetter}
+                                shownWords={shownWords}
+                              />
+                              {"\n"}
+                            </h2>
+                          )
+                        )}
                       </>
                     )}
                   </Details>
                 </>
               ) : (
                 <Details>
-                  <h1>{HeaderTabs[selectedHeaderTab]}</h1>
-                  <h2>{wordInfo[selectedHeaderTab]}</h2>
+                  <h2>{wordInfo["Tópico de Iluminação Natural"]}</h2>
                 </Details>
               )}
             </DetailsHeader>
@@ -171,11 +222,35 @@ export default function WordPage({
   );
 }
 
+const DiffDefinitions = styled.div`
+
+>.group{
+    >p{
+    //background-color: red;
+    margin-top: 1%;
+    margin-bottom: 1%;
+  }
+  >strong{
+    //color: red;
+    font-weight: 700;
+    font-size: 14px;
+  }
+  display: flex;
+  align-items: center;
+}
+  >.title{
+    font-weight: 700;
+    //margin-bottom: 1%;
+    margin-top: 1%;
+    color: ${colors.darkYellow};
+  }
+
+`
+
 const Verbete = styled.div`
-  position: absolute;
-  top: -4vw;
-  left: 0vw;
+  width: 80%;
   color: ${colors.darkGrey};
+  padding-bottom: 1%;
   font-size: 3.2vw;
   font-weight: 800;
 `;
@@ -186,6 +261,7 @@ const PageContainer = styled.section`
   box-sizing: border-box;
   font-family: "Roboto", sans-serif;
   display: flex;
+  flex-direction: column;
   align-items: center;
   justify-content: center;
   padding-left: 20vw;
@@ -199,10 +275,12 @@ const PageContainer = styled.section`
 
 const DetailsHeader = styled.div`
   width: 100%;
-  height: fit-content;
+  max-height: 100%;
+  overflow-y: scroll;
   padding: 2vw;
   padding-top: 2.7vw;
   box-sizing: border-box;
+  //background-color: yellow;
 `;
 
 const TabsContainer = styled.div`
@@ -272,7 +350,7 @@ export const Details = styled.div`
   width: 85%;
   margin-top: 1vw;
   display: flex;
-  height: fit-content;
+
   flex-direction: column;
   color: ${colors.darkThemeGrey};
   > h1 {

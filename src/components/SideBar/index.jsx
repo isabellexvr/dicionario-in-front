@@ -177,6 +177,7 @@ export default function SideBar({
                     onClick={() => {
                       navigate(`/palavra/${w}`);
                       setGlobalSelectedWord(i);
+                      setSelectedTab(0);
                     }}
                     isSelected={i == globalSelectedWord}
                     key={i}

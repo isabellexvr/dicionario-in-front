@@ -138,7 +138,37 @@ export const NameToColumns = {
   OBSRCC: "obsrcc",
 };
 
-export const checkRemissivaImperativa = (arr, words) => {
-  
+export function processArray(inputArray, diffConditions) {
+  const finalArray = [];
+  let currentObject = {};
 
-};
+  for (const item of inputArray) {
+    let foundSubstring = false;
+
+    for (const condition of diffConditions) {
+      if (item.includes(condition)) {
+        // If a substring is found, start a new object in the finalArray
+        if (currentObject.title) {
+          finalArray.push({ title: currentObject.title, arr: currentObject.arr });
+        }
+
+        // Update currentObject with the new substring and an empty array
+        currentObject = { title: condition, arr: [] };
+        foundSubstring = true;
+        break;
+      }
+    }
+
+    if (!foundSubstring) {
+      // If no substring is found, push the current string to the currentObject's array
+      currentObject.arr.push(item);
+    }
+  }
+
+  // Push the last object to the finalArray (if any)
+  if (currentObject.title) {
+    finalArray.push({ title: currentObject.title, arr: currentObject.arr });
+  }
+
+  return finalArray;
+}
